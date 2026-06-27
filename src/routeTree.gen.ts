@@ -13,8 +13,10 @@ import { Route as RegisterRouteImport } from './routes/register'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as DashboardSettingsRouteImport } from './routes/dashboard.settings'
 import { Route as DashboardResumesRouteImport } from './routes/dashboard.resumes'
 import { Route as DashboardProfileRouteImport } from './routes/dashboard.profile'
@@ -23,6 +25,12 @@ import { Route as DashboardExportsRouteImport } from './routes/dashboard.exports
 import { Route as DashboardCoverLettersRouteImport } from './routes/dashboard.cover-letters'
 import { Route as DashboardAtsRouteImport } from './routes/dashboard.ats'
 import { Route as DashboardApiKeysRouteImport } from './routes/dashboard.api-keys'
+import { Route as AdminUsersRouteImport } from './routes/admin.users'
+import { Route as AdminTemplatesRouteImport } from './routes/admin.templates'
+import { Route as AdminSystemLogsRouteImport } from './routes/admin.system-logs'
+import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
+import { Route as AdminAuditLogsRouteImport } from './routes/admin.audit-logs'
+import { Route as AdminAnalyticsRouteImport } from './routes/admin.analytics'
 import { Route as DashboardResumesNewRouteImport } from './routes/dashboard.resumes.new'
 import { Route as DashboardResumesNewManualRouteImport } from './routes/dashboard.resumes.new.manual'
 
@@ -46,6 +54,11 @@ const DashboardRoute = DashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -55,6 +68,11 @@ const DashboardIndexRoute = DashboardIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => DashboardRoute,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
 } as any)
 const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
   id: '/settings',
@@ -96,6 +114,36 @@ const DashboardApiKeysRoute = DashboardApiKeysRouteImport.update({
   path: '/api-keys',
   getParentRoute: () => DashboardRoute,
 } as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminTemplatesRoute = AdminTemplatesRouteImport.update({
+  id: '/templates',
+  path: '/templates',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSystemLogsRoute = AdminSystemLogsRouteImport.update({
+  id: '/system-logs',
+  path: '/system-logs',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSettingsRoute = AdminSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAuditLogsRoute = AdminAuditLogsRouteImport.update({
+  id: '/audit-logs',
+  path: '/audit-logs',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAnalyticsRoute = AdminAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => AdminRoute,
+} as any)
 const DashboardResumesNewRoute = DashboardResumesNewRouteImport.update({
   id: '/new',
   path: '/new',
@@ -110,10 +158,17 @@ const DashboardResumesNewManualRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
   '/dashboard': typeof DashboardRouteWithChildren
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/admin/analytics': typeof AdminAnalyticsRoute
+  '/admin/audit-logs': typeof AdminAuditLogsRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/system-logs': typeof AdminSystemLogsRoute
+  '/admin/templates': typeof AdminTemplatesRoute
+  '/admin/users': typeof AdminUsersRoute
   '/dashboard/api-keys': typeof DashboardApiKeysRoute
   '/dashboard/ats': typeof DashboardAtsRoute
   '/dashboard/cover-letters': typeof DashboardCoverLettersRoute
@@ -122,6 +177,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/resumes': typeof DashboardResumesRouteWithChildren
   '/dashboard/settings': typeof DashboardSettingsRoute
+  '/admin/': typeof AdminIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/dashboard/resumes/new': typeof DashboardResumesNewRouteWithChildren
   '/dashboard/resumes/new/manual': typeof DashboardResumesNewManualRoute
@@ -131,6 +187,12 @@ export interface FileRoutesByTo {
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/admin/analytics': typeof AdminAnalyticsRoute
+  '/admin/audit-logs': typeof AdminAuditLogsRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/system-logs': typeof AdminSystemLogsRoute
+  '/admin/templates': typeof AdminTemplatesRoute
+  '/admin/users': typeof AdminUsersRoute
   '/dashboard/api-keys': typeof DashboardApiKeysRoute
   '/dashboard/ats': typeof DashboardAtsRoute
   '/dashboard/cover-letters': typeof DashboardCoverLettersRoute
@@ -139,6 +201,7 @@ export interface FileRoutesByTo {
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/resumes': typeof DashboardResumesRouteWithChildren
   '/dashboard/settings': typeof DashboardSettingsRoute
+  '/admin': typeof AdminIndexRoute
   '/dashboard': typeof DashboardIndexRoute
   '/dashboard/resumes/new': typeof DashboardResumesNewRouteWithChildren
   '/dashboard/resumes/new/manual': typeof DashboardResumesNewManualRoute
@@ -146,10 +209,17 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
   '/dashboard': typeof DashboardRouteWithChildren
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/admin/analytics': typeof AdminAnalyticsRoute
+  '/admin/audit-logs': typeof AdminAuditLogsRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/system-logs': typeof AdminSystemLogsRoute
+  '/admin/templates': typeof AdminTemplatesRoute
+  '/admin/users': typeof AdminUsersRoute
   '/dashboard/api-keys': typeof DashboardApiKeysRoute
   '/dashboard/ats': typeof DashboardAtsRoute
   '/dashboard/cover-letters': typeof DashboardCoverLettersRoute
@@ -158,6 +228,7 @@ export interface FileRoutesById {
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/resumes': typeof DashboardResumesRouteWithChildren
   '/dashboard/settings': typeof DashboardSettingsRoute
+  '/admin/': typeof AdminIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/dashboard/resumes/new': typeof DashboardResumesNewRouteWithChildren
   '/dashboard/resumes/new/manual': typeof DashboardResumesNewManualRoute
@@ -166,10 +237,17 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/dashboard'
     | '/forgot-password'
     | '/login'
     | '/register'
+    | '/admin/analytics'
+    | '/admin/audit-logs'
+    | '/admin/settings'
+    | '/admin/system-logs'
+    | '/admin/templates'
+    | '/admin/users'
     | '/dashboard/api-keys'
     | '/dashboard/ats'
     | '/dashboard/cover-letters'
@@ -178,6 +256,7 @@ export interface FileRouteTypes {
     | '/dashboard/profile'
     | '/dashboard/resumes'
     | '/dashboard/settings'
+    | '/admin/'
     | '/dashboard/'
     | '/dashboard/resumes/new'
     | '/dashboard/resumes/new/manual'
@@ -187,6 +266,12 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/login'
     | '/register'
+    | '/admin/analytics'
+    | '/admin/audit-logs'
+    | '/admin/settings'
+    | '/admin/system-logs'
+    | '/admin/templates'
+    | '/admin/users'
     | '/dashboard/api-keys'
     | '/dashboard/ats'
     | '/dashboard/cover-letters'
@@ -195,16 +280,24 @@ export interface FileRouteTypes {
     | '/dashboard/profile'
     | '/dashboard/resumes'
     | '/dashboard/settings'
+    | '/admin'
     | '/dashboard'
     | '/dashboard/resumes/new'
     | '/dashboard/resumes/new/manual'
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/dashboard'
     | '/forgot-password'
     | '/login'
     | '/register'
+    | '/admin/analytics'
+    | '/admin/audit-logs'
+    | '/admin/settings'
+    | '/admin/system-logs'
+    | '/admin/templates'
+    | '/admin/users'
     | '/dashboard/api-keys'
     | '/dashboard/ats'
     | '/dashboard/cover-letters'
@@ -213,6 +306,7 @@ export interface FileRouteTypes {
     | '/dashboard/profile'
     | '/dashboard/resumes'
     | '/dashboard/settings'
+    | '/admin/'
     | '/dashboard/'
     | '/dashboard/resumes/new'
     | '/dashboard/resumes/new/manual'
@@ -220,6 +314,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
   DashboardRoute: typeof DashboardRouteWithChildren
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   LoginRoute: typeof LoginRoute
@@ -256,6 +351,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -269,6 +371,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/'
       preLoaderRoute: typeof DashboardIndexRouteImport
       parentRoute: typeof DashboardRoute
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/dashboard/settings': {
       id: '/dashboard/settings'
@@ -326,6 +435,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardApiKeysRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/templates': {
+      id: '/admin/templates'
+      path: '/templates'
+      fullPath: '/admin/templates'
+      preLoaderRoute: typeof AdminTemplatesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/system-logs': {
+      id: '/admin/system-logs'
+      path: '/system-logs'
+      fullPath: '/admin/system-logs'
+      preLoaderRoute: typeof AdminSystemLogsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/settings': {
+      id: '/admin/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminSettingsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/audit-logs': {
+      id: '/admin/audit-logs'
+      path: '/audit-logs'
+      fullPath: '/admin/audit-logs'
+      preLoaderRoute: typeof AdminAuditLogsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/analytics': {
+      id: '/admin/analytics'
+      path: '/analytics'
+      fullPath: '/admin/analytics'
+      preLoaderRoute: typeof AdminAnalyticsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/dashboard/resumes/new': {
       id: '/dashboard/resumes/new'
       path: '/new'
@@ -342,6 +493,28 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface AdminRouteChildren {
+  AdminAnalyticsRoute: typeof AdminAnalyticsRoute
+  AdminAuditLogsRoute: typeof AdminAuditLogsRoute
+  AdminSettingsRoute: typeof AdminSettingsRoute
+  AdminSystemLogsRoute: typeof AdminSystemLogsRoute
+  AdminTemplatesRoute: typeof AdminTemplatesRoute
+  AdminUsersRoute: typeof AdminUsersRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminAnalyticsRoute: AdminAnalyticsRoute,
+  AdminAuditLogsRoute: AdminAuditLogsRoute,
+  AdminSettingsRoute: AdminSettingsRoute,
+  AdminSystemLogsRoute: AdminSystemLogsRoute,
+  AdminTemplatesRoute: AdminTemplatesRoute,
+  AdminUsersRoute: AdminUsersRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface DashboardResumesNewRouteChildren {
   DashboardResumesNewManualRoute: typeof DashboardResumesNewManualRoute
@@ -395,6 +568,7 @@ const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
   DashboardRoute: DashboardRouteWithChildren,
   ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,
