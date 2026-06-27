@@ -15,6 +15,16 @@ import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
+import { Route as DashboardSettingsRouteImport } from './routes/dashboard.settings'
+import { Route as DashboardResumesRouteImport } from './routes/dashboard.resumes'
+import { Route as DashboardProfileRouteImport } from './routes/dashboard.profile'
+import { Route as DashboardInterviewRouteImport } from './routes/dashboard.interview'
+import { Route as DashboardExportsRouteImport } from './routes/dashboard.exports'
+import { Route as DashboardCoverLettersRouteImport } from './routes/dashboard.cover-letters'
+import { Route as DashboardAtsRouteImport } from './routes/dashboard.ats'
+import { Route as DashboardApiKeysRouteImport } from './routes/dashboard.api-keys'
+import { Route as DashboardResumesNewRouteImport } from './routes/dashboard.resumes.new'
+import { Route as DashboardResumesNewManualRouteImport } from './routes/dashboard.resumes.new.manual'
 
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
@@ -46,6 +56,57 @@ const DashboardIndexRoute = DashboardIndexRouteImport.update({
   path: '/',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardResumesRoute = DashboardResumesRouteImport.update({
+  id: '/resumes',
+  path: '/resumes',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardProfileRoute = DashboardProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardInterviewRoute = DashboardInterviewRouteImport.update({
+  id: '/interview',
+  path: '/interview',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardExportsRoute = DashboardExportsRouteImport.update({
+  id: '/exports',
+  path: '/exports',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardCoverLettersRoute = DashboardCoverLettersRouteImport.update({
+  id: '/cover-letters',
+  path: '/cover-letters',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardAtsRoute = DashboardAtsRouteImport.update({
+  id: '/ats',
+  path: '/ats',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardApiKeysRoute = DashboardApiKeysRouteImport.update({
+  id: '/api-keys',
+  path: '/api-keys',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardResumesNewRoute = DashboardResumesNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => DashboardResumesRoute,
+} as any)
+const DashboardResumesNewManualRoute =
+  DashboardResumesNewManualRouteImport.update({
+    id: '/manual',
+    path: '/manual',
+    getParentRoute: () => DashboardResumesNewRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -53,14 +114,34 @@ export interface FileRoutesByFullPath {
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/dashboard/api-keys': typeof DashboardApiKeysRoute
+  '/dashboard/ats': typeof DashboardAtsRoute
+  '/dashboard/cover-letters': typeof DashboardCoverLettersRoute
+  '/dashboard/exports': typeof DashboardExportsRoute
+  '/dashboard/interview': typeof DashboardInterviewRoute
+  '/dashboard/profile': typeof DashboardProfileRoute
+  '/dashboard/resumes': typeof DashboardResumesRouteWithChildren
+  '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/dashboard/resumes/new': typeof DashboardResumesNewRouteWithChildren
+  '/dashboard/resumes/new/manual': typeof DashboardResumesNewManualRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/dashboard/api-keys': typeof DashboardApiKeysRoute
+  '/dashboard/ats': typeof DashboardAtsRoute
+  '/dashboard/cover-letters': typeof DashboardCoverLettersRoute
+  '/dashboard/exports': typeof DashboardExportsRoute
+  '/dashboard/interview': typeof DashboardInterviewRoute
+  '/dashboard/profile': typeof DashboardProfileRoute
+  '/dashboard/resumes': typeof DashboardResumesRouteWithChildren
+  '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/dashboard/resumes/new': typeof DashboardResumesNewRouteWithChildren
+  '/dashboard/resumes/new/manual': typeof DashboardResumesNewManualRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -69,7 +150,17 @@ export interface FileRoutesById {
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/dashboard/api-keys': typeof DashboardApiKeysRoute
+  '/dashboard/ats': typeof DashboardAtsRoute
+  '/dashboard/cover-letters': typeof DashboardCoverLettersRoute
+  '/dashboard/exports': typeof DashboardExportsRoute
+  '/dashboard/interview': typeof DashboardInterviewRoute
+  '/dashboard/profile': typeof DashboardProfileRoute
+  '/dashboard/resumes': typeof DashboardResumesRouteWithChildren
+  '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/dashboard/resumes/new': typeof DashboardResumesNewRouteWithChildren
+  '/dashboard/resumes/new/manual': typeof DashboardResumesNewManualRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -79,9 +170,34 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/login'
     | '/register'
+    | '/dashboard/api-keys'
+    | '/dashboard/ats'
+    | '/dashboard/cover-letters'
+    | '/dashboard/exports'
+    | '/dashboard/interview'
+    | '/dashboard/profile'
+    | '/dashboard/resumes'
+    | '/dashboard/settings'
     | '/dashboard/'
+    | '/dashboard/resumes/new'
+    | '/dashboard/resumes/new/manual'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/forgot-password' | '/login' | '/register' | '/dashboard'
+  to:
+    | '/'
+    | '/forgot-password'
+    | '/login'
+    | '/register'
+    | '/dashboard/api-keys'
+    | '/dashboard/ats'
+    | '/dashboard/cover-letters'
+    | '/dashboard/exports'
+    | '/dashboard/interview'
+    | '/dashboard/profile'
+    | '/dashboard/resumes'
+    | '/dashboard/settings'
+    | '/dashboard'
+    | '/dashboard/resumes/new'
+    | '/dashboard/resumes/new/manual'
   id:
     | '__root__'
     | '/'
@@ -89,7 +205,17 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/login'
     | '/register'
+    | '/dashboard/api-keys'
+    | '/dashboard/ats'
+    | '/dashboard/cover-letters'
+    | '/dashboard/exports'
+    | '/dashboard/interview'
+    | '/dashboard/profile'
+    | '/dashboard/resumes'
+    | '/dashboard/settings'
     | '/dashboard/'
+    | '/dashboard/resumes/new'
+    | '/dashboard/resumes/new/manual'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -144,14 +270,122 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardIndexRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/settings': {
+      id: '/dashboard/settings'
+      path: '/settings'
+      fullPath: '/dashboard/settings'
+      preLoaderRoute: typeof DashboardSettingsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/resumes': {
+      id: '/dashboard/resumes'
+      path: '/resumes'
+      fullPath: '/dashboard/resumes'
+      preLoaderRoute: typeof DashboardResumesRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/profile': {
+      id: '/dashboard/profile'
+      path: '/profile'
+      fullPath: '/dashboard/profile'
+      preLoaderRoute: typeof DashboardProfileRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/interview': {
+      id: '/dashboard/interview'
+      path: '/interview'
+      fullPath: '/dashboard/interview'
+      preLoaderRoute: typeof DashboardInterviewRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/exports': {
+      id: '/dashboard/exports'
+      path: '/exports'
+      fullPath: '/dashboard/exports'
+      preLoaderRoute: typeof DashboardExportsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/cover-letters': {
+      id: '/dashboard/cover-letters'
+      path: '/cover-letters'
+      fullPath: '/dashboard/cover-letters'
+      preLoaderRoute: typeof DashboardCoverLettersRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/ats': {
+      id: '/dashboard/ats'
+      path: '/ats'
+      fullPath: '/dashboard/ats'
+      preLoaderRoute: typeof DashboardAtsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/api-keys': {
+      id: '/dashboard/api-keys'
+      path: '/api-keys'
+      fullPath: '/dashboard/api-keys'
+      preLoaderRoute: typeof DashboardApiKeysRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/resumes/new': {
+      id: '/dashboard/resumes/new'
+      path: '/new'
+      fullPath: '/dashboard/resumes/new'
+      preLoaderRoute: typeof DashboardResumesNewRouteImport
+      parentRoute: typeof DashboardResumesRoute
+    }
+    '/dashboard/resumes/new/manual': {
+      id: '/dashboard/resumes/new/manual'
+      path: '/manual'
+      fullPath: '/dashboard/resumes/new/manual'
+      preLoaderRoute: typeof DashboardResumesNewManualRouteImport
+      parentRoute: typeof DashboardResumesNewRoute
+    }
   }
 }
 
+interface DashboardResumesNewRouteChildren {
+  DashboardResumesNewManualRoute: typeof DashboardResumesNewManualRoute
+}
+
+const DashboardResumesNewRouteChildren: DashboardResumesNewRouteChildren = {
+  DashboardResumesNewManualRoute: DashboardResumesNewManualRoute,
+}
+
+const DashboardResumesNewRouteWithChildren =
+  DashboardResumesNewRoute._addFileChildren(DashboardResumesNewRouteChildren)
+
+interface DashboardResumesRouteChildren {
+  DashboardResumesNewRoute: typeof DashboardResumesNewRouteWithChildren
+}
+
+const DashboardResumesRouteChildren: DashboardResumesRouteChildren = {
+  DashboardResumesNewRoute: DashboardResumesNewRouteWithChildren,
+}
+
+const DashboardResumesRouteWithChildren =
+  DashboardResumesRoute._addFileChildren(DashboardResumesRouteChildren)
+
 interface DashboardRouteChildren {
+  DashboardApiKeysRoute: typeof DashboardApiKeysRoute
+  DashboardAtsRoute: typeof DashboardAtsRoute
+  DashboardCoverLettersRoute: typeof DashboardCoverLettersRoute
+  DashboardExportsRoute: typeof DashboardExportsRoute
+  DashboardInterviewRoute: typeof DashboardInterviewRoute
+  DashboardProfileRoute: typeof DashboardProfileRoute
+  DashboardResumesRoute: typeof DashboardResumesRouteWithChildren
+  DashboardSettingsRoute: typeof DashboardSettingsRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardApiKeysRoute: DashboardApiKeysRoute,
+  DashboardAtsRoute: DashboardAtsRoute,
+  DashboardCoverLettersRoute: DashboardCoverLettersRoute,
+  DashboardExportsRoute: DashboardExportsRoute,
+  DashboardInterviewRoute: DashboardInterviewRoute,
+  DashboardProfileRoute: DashboardProfileRoute,
+  DashboardResumesRoute: DashboardResumesRouteWithChildren,
+  DashboardSettingsRoute: DashboardSettingsRoute,
   DashboardIndexRoute: DashboardIndexRoute,
 }
 
