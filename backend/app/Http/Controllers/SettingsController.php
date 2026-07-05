@@ -5,28 +5,16 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AccountUpdateRequest;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\View\View;
 
 class SettingsController extends Controller
 {
     /**
-     * Display the account settings form.
-     */
-    public function index(Request $request): View
-    {
-        return view('settings.index', [
-            'user' => $request->user(),
-        ]);
-    }
-
-    /**
      * Update the user's account information (email).
      */
-    public function updateAccount(AccountUpdateRequest $request): RedirectResponse
+    public function updateAccount(AccountUpdateRequest $request): JsonResponse
     {
         $request->user()->fill($request->validated());
 
@@ -36,13 +24,13 @@ class SettingsController extends Controller
 
         $request->user()->save();
 
-        return Redirect::route('settings.index')->with('status', 'account-updated');
+        return response()->json(['message' => 'Account updated successfully']);
     }
 
     /**
      * Delete the user's account.
      */
-    public function destroy(Request $request): RedirectResponse
+    public function destroy(Request $request): JsonResponse
     {
         $request->validateWithBag('userDeletion', [
             'password' => ['required', 'current_password'],
@@ -50,13 +38,13 @@ class SettingsController extends Controller
 
         $user = $request->user();
 
-        Auth::logout();
+        Auth::guard('web')->logout();
 
         $user->delete();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return Redirect::to('/');
+        return response()->json(['message' => 'Account deleted']);
     }
 }

@@ -34,6 +34,8 @@ class GoogleController extends Controller
      */
     public function callback(): RedirectResponse
     {
+        $frontendUrl = config('app.frontend_url', 'http://127.0.0.1:5173');
+
         try {
             $googleUser = Socialite::driver('google')->user();
         } catch (Throwable $e) {
@@ -41,8 +43,7 @@ class GoogleController extends Controller
                 'error' => $e->getMessage(),
             ]);
 
-            return redirect()->route('login')
-                ->withErrors(['email' => 'Google authentication failed. Please try again.']);
+            return redirect()->intended($frontendUrl.'/login?error=google_auth_failed');
         }
 
         /** @var User|null $user */
@@ -74,6 +75,6 @@ class GoogleController extends Controller
         request()->session()->regenerate();
         $user->recordLogin();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        return redirect()->intended($frontendUrl.'/dashboard');
     }
 }

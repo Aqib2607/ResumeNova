@@ -6,26 +6,17 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
     /**
-     * Display the login view.
-     */
-    public function create(): View
-    {
-        return view('auth.login');
-    }
-
-    /**
      * Handle an incoming authentication request.
      * Session is regenerated on login to prevent session fixation.
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(LoginRequest $request): JsonResponse
     {
         $request->authenticate();
 
@@ -34,14 +25,14 @@ class AuthenticatedSessionController extends Controller
         // Record the login timestamp on the authenticated user.
         $request->user()->recordLogin();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        return response()->json(['user' => $request->user()]);
     }
 
     /**
      * Destroy an authenticated session.
      * Session is fully invalidated and a new CSRF token is generated.
      */
-    public function destroy(Request $request): RedirectResponse
+    public function destroy(Request $request): JsonResponse
     {
         Auth::guard('web')->logout();
 
@@ -49,6 +40,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return response()->json(['message' => 'Logged out successfully']);
     }
 }

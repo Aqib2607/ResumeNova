@@ -8,26 +8,17 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
 {
-    /**
-     * Display the registration view.
-     */
-    public function create(): View
-    {
-        return view('auth.register');
-    }
-
     /**
      * Handle an incoming registration request.
      *
      * Validation is fully handled by RegisterRequest.
      */
-    public function store(RegisterRequest $request): RedirectResponse
+    public function store(RegisterRequest $request): JsonResponse
     {
         $user = User::create([
             'name'     => $request->validated('name'),
@@ -41,6 +32,6 @@ class RegisteredUserController extends Controller
 
         $user->recordLogin();
 
-        return redirect(route('dashboard', absolute: false));
+        return response()->json(['user' => $user], 201);
     }
 }

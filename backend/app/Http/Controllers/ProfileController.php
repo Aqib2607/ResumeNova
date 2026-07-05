@@ -6,10 +6,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Services\ProfileService;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
@@ -18,29 +16,19 @@ class ProfileController extends Controller
     ) {}
 
     /**
-     * Display the user's public profile.
+     * Get the user's public profile.
      */
-    public function index(Request $request): View
+    public function index(Request $request): JsonResponse
     {
         $user = $request->user()->load('profile');
         
-        return view('profile.index', compact('user'));
-    }
-
-    /**
-     * Display the user's profile editing form.
-     */
-    public function edit(Request $request): View
-    {
-        $user = $request->user()->load('profile');
-
-        return view('profile.edit', compact('user'));
+        return response()->json(['user' => $user]);
     }
 
     /**
      * Update the user's profile information and avatar.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function update(ProfileUpdateRequest $request): JsonResponse
     {
         $user = $request->user();
         
@@ -59,6 +47,6 @@ class ProfileController extends Controller
             $request->file('avatar')
         );
 
-        return Redirect::route('profile.edit')->with('status', 'Profile successfully updated.');
+        return response()->json(['message' => 'Profile successfully updated', 'user' => $user->fresh('profile')]);
     }
 }

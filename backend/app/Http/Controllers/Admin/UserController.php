@@ -7,18 +7,17 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
-use Illuminate\View\View;
 
 class UserController extends Controller
 {
     /**
      * Display a listing of the users.
      */
-    public function index(): View
+    public function index(): JsonResponse
     {
         Gate::authorize('viewAny', User::class);
 
@@ -26,13 +25,13 @@ class UserController extends Controller
             ->latest()
             ->paginate(15);
 
-        return view('admin.users.index', compact('users'));
+        return response()->json($users);
     }
 
     /**
      * Display the specified user.
      */
-    public function show(User $user): View
+    public function show(User $user): JsonResponse
     {
         Gate::authorize('view', $user);
 
@@ -42,13 +41,16 @@ class UserController extends Controller
         
         $assignableRoles = UserRole::cases();
 
-        return view('admin.users.show', compact('user', 'assignableRoles'));
+        return response()->json([
+            'user' => $user,
+            'assignableRoles' => $assignableRoles,
+        ]);
     }
 
     /**
      * Assign a new role to the user.
      */
-    public function assignRole(Request $request, User $user): RedirectResponse
+    public function assignRole(Request $request, User $user): JsonResponse
     {
         Gate::authorize('assignRole', $user);
 
@@ -64,13 +66,13 @@ class UserController extends Controller
 
         $user->update(['role' => $validated['role']]);
 
-        return back()->with('status', 'Role successfully updated.');
+        return response()->json(['message' => 'Role successfully updated', 'user' => $user->fresh()]);
     }
 
     /**
      * Suspend the user.
      */
-    public function suspend(User $user): RedirectResponse
+    public function suspend(User $user): JsonResponse
     {
         Gate::authorize('suspend', $user);
 
@@ -78,13 +80,13 @@ class UserController extends Controller
             $user->update(['suspended_at' => now()]);
         }
 
-        return back()->with('status', 'User suspended.');
+        return response()->json(['message' => 'User suspended']);
     }
 
     /**
      * Reactivate the user.
      */
-    public function reactivate(User $user): RedirectResponse
+    public function reactivate(User $user): JsonResponse
     {
         Gate::authorize('reactivate', $user);
 
@@ -92,6 +94,6 @@ class UserController extends Controller
             $user->update(['suspended_at' => null]);
         }
 
-        return back()->with('status', 'User reactivated.');
+        return response()->json(['message' => 'User reactivated']);
     }
 }

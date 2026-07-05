@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
 
 class NotificationController extends Controller
 {
@@ -15,32 +15,32 @@ class NotificationController extends Controller
     ) {}
 
     /**
-     * Display a listing of notifications.
+     * Get a listing of notifications.
      */
-    public function index(Request $request): View
+    public function index(Request $request): JsonResponse
     {
         $notifications = $this->notificationService->getPaginatedForUser($request->user()->id);
 
-        return view('notifications.index', compact('notifications'));
+        return response()->json($notifications);
     }
 
     /**
      * Mark a specific notification as read.
      */
-    public function markAsRead(Request $request, string $id)
+    public function markAsRead(Request $request, string $id): JsonResponse
     {
         $this->notificationService->markAsRead($request->user()->id, $id);
 
-        return back();
+        return response()->json(['message' => 'Notification marked as read']);
     }
 
     /**
      * Mark all notifications as read.
      */
-    public function markAllAsRead(Request $request)
+    public function markAllAsRead(Request $request): JsonResponse
     {
         $this->notificationService->markAllAsRead($request->user()->id);
 
-        return back()->with('status', 'All notifications marked as read.');
+        return response()->json(['message' => 'All notifications marked as read']);
     }
 }

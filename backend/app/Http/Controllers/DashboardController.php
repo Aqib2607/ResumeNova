@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Services\DashboardService;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
 
 class DashboardController extends Controller
 {
@@ -15,12 +15,12 @@ class DashboardController extends Controller
     ) {}
 
     /**
-     * Display the user dashboard.
+     * Get the user dashboard data.
      */
-    public function index(Request $request): View
+    public function index(Request $request): JsonResponse
     {
         $dashboardData = $this->dashboardService->getDashboardData($request->user());
 
-        return view('dashboard.index', compact('dashboardData'));
+        return response()->json($dashboardData);
     }
 }
