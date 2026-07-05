@@ -19,7 +19,7 @@ class GoogleController extends Controller
      */
     public function redirect(): RedirectResponse
     {
-        return Socialite::driver('google')->redirect();
+        return Socialite::driver('google')->stateless()->redirect();
     }
 
     /**
@@ -37,7 +37,7 @@ class GoogleController extends Controller
         $frontendUrl = config('app.frontend_url', 'http://127.0.0.1:5173');
 
         try {
-            $googleUser = Socialite::driver('google')->user();
+            $googleUser = Socialite::driver('google')->stateless()->user();
         } catch (Throwable $e) {
             Log::warning('Google OAuth callback failed.', [
                 'error' => $e->getMessage(),
@@ -70,11 +70,10 @@ class GoogleController extends Controller
             ]);
         }
 
-        // Login, regenerate session, record timestamp.
-        Auth::login($user, remember: true);
-        request()->session()->regenerate();
+        // Login via token instead of session.
         $user->recordLogin();
+        $token = $user->createToken('google_oauth_token')->plainTextToken;
 
-        return redirect()->intended($frontendUrl.'/dashboard');
+        return redirect()->intended($frontendUrl.'/oauth/callback?token='.$token);
     }
 }

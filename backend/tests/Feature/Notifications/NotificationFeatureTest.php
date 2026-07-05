@@ -7,7 +7,6 @@ namespace Tests\Feature\Notifications;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Notifications\Notification;
-use Illuminate\Notifications\Messages\MailMessage;
 use Tests\TestCase;
 
 class TestNotification extends Notification
@@ -20,14 +19,15 @@ class NotificationFeatureTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_notifications_page_can_be_rendered(): void
+    public function test_notifications_data_can_be_retrieved(): void
     {
         $user = User::factory()->create();
+        $user->notify(new TestNotification());
 
-        $response = $this->actingAs($user)->get(route('notifications.index'));
+        $response = $this->actingAs($user)->getJson('/api/notifications');
 
         $response->assertStatus(200);
-        $response->assertSee('No notifications');
+        $response->assertJsonStructure(['data', 'links', 'current_page', 'total']);
     }
 
     public function test_notification_can_be_marked_as_read(): void
@@ -40,9 +40,9 @@ class NotificationFeatureTest extends TestCase
 
         $this->assertTrue($notification->unread());
 
-        $response = $this->actingAs($user)->patch(route('notifications.read', $notification->id));
+        $response = $this->actingAs($user)->patchJson("/api/notifications/{$notification->id}/read");
         
-        $response->assertRedirect();
+        $response->assertStatus(200);
         
         $notification->refresh();
         $this->assertFalse($notification->unread());
@@ -58,9 +58,9 @@ class NotificationFeatureTest extends TestCase
 
         $this->assertSame(3, $user->unreadNotifications()->count());
 
-        $response = $this->actingAs($user)->post(route('notifications.read.all'));
+        $response = $this->actingAs($user)->postJson('/api/notifications/read-all');
         
-        $response->assertRedirect();
+        $response->assertStatus(200);
         
         $this->assertSame(0, $user->unreadNotifications()->count());
     }

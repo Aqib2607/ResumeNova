@@ -24,7 +24,13 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { demoApiKeys, demoExports, demoNotifications, demoResumes, demoUser } from "@/lib/demo-data";
+import {
+  demoApiKeys,
+  demoExports,
+  demoNotifications,
+  demoResumes,
+  demoUser,
+} from "@/lib/demo-data";
 
 export const Route = createFileRoute("/dashboard/")({
   component: DashboardHome,
@@ -111,9 +117,22 @@ function DashboardHome() {
                     <stop offset="100%" stopColor="var(--color-primary)" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid stroke="var(--color-border)" strokeDasharray="3 3" vertical={false} />
-                <XAxis dataKey="d" tick={{ fontSize: 11, fill: "var(--color-muted-foreground)" }} tickLine={false} axisLine={false} />
-                <YAxis tick={{ fontSize: 11, fill: "var(--color-muted-foreground)" }} tickLine={false} axisLine={false} />
+                <CartesianGrid
+                  stroke="var(--color-border)"
+                  strokeDasharray="3 3"
+                  vertical={false}
+                />
+                <XAxis
+                  dataKey="d"
+                  tick={{ fontSize: 11, fill: "var(--color-muted-foreground)" }}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <YAxis
+                  tick={{ fontSize: 11, fill: "var(--color-muted-foreground)" }}
+                  tickLine={false}
+                  axisLine={false}
+                />
                 <Tooltip
                   contentStyle={{
                     background: "var(--color-card)",
@@ -122,7 +141,13 @@ function DashboardHome() {
                     fontSize: 12,
                   }}
                 />
-                <Area type="monotone" dataKey="v" stroke="var(--color-primary)" strokeWidth={2} fill="url(#gd)" />
+                <Area
+                  type="monotone"
+                  dataKey="v"
+                  stroke="var(--color-primary)"
+                  strokeWidth={2}
+                  fill="url(#gd)"
+                />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -157,7 +182,10 @@ function DashboardHome() {
         <div className="rounded-xl border border-border bg-card p-5 lg:col-span-2">
           <div className="mb-4 flex items-center justify-between">
             <p className="text-sm font-semibold">Recent resumes</p>
-            <Link to="/dashboard/resumes" className="text-xs font-medium text-primary hover:underline">
+            <Link
+              to="/dashboard/resumes"
+              className="text-xs font-medium text-primary hover:underline"
+            >
               View all
             </Link>
           </div>
@@ -203,7 +231,10 @@ function DashboardHome() {
         <div className="rounded-xl border border-border bg-card p-5">
           <div className="mb-4 flex items-center justify-between">
             <p className="text-sm font-semibold">Recent exports</p>
-            <Link to="/dashboard/exports" className="text-xs font-medium text-primary hover:underline">
+            <Link
+              to="/dashboard/exports"
+              className="text-xs font-medium text-primary hover:underline"
+            >
               View all
             </Link>
           </div>

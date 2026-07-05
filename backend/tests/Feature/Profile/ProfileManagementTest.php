@@ -16,20 +16,31 @@ class ProfileManagementTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_profile_page_is_displayed(): void
+    public function test_profile_information_can_be_retrieved(): void
     {
         $user = User::factory()->create();
+        $user->profile()->create([
+            'headline' => 'Software Engineer',
+            'bio' => 'Building cool things',
+        ]);
 
-        $response = $this->actingAs($user)->get('/profile/edit');
+        $response = $this->actingAs($user)->getJson('/api/profile');
 
-        $response->assertOk();
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'user' => [
+                'id', 'name', 'email', 'avatar',
+                'profile' => ['headline', 'bio', 'location', 'website', 'social_links']
+            ]
+        ]);
+        $response->assertJsonPath('user.profile.headline', 'Software Engineer');
     }
 
     public function test_profile_information_can_be_updated(): void
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->patch('/profile', [
+        $response = $this->actingAs($user)->patchJson('/api/profile', [
             'name' => 'Test User',
             'headline' => 'Test Headline',
             'bio' => 'A nice bio',
@@ -40,8 +51,8 @@ class ProfileManagementTest extends TestCase
             ]
         ]);
 
-        $response->assertSessionHasNoErrors();
-        $response->assertRedirect('/profile/edit');
+        $response->assertStatus(200)
+                 ->assertJson(['message' => 'Profile successfully updated']);
 
         $user->refresh();
 
@@ -64,16 +75,16 @@ class ProfileManagementTest extends TestCase
 
         $file = UploadedFile::fake()->create('avatar.jpg', 100, 'image/jpeg');
 
-        $response = $this->actingAs($user)->patch('/profile', [
+        $response = $this->actingAs($user)->patchJson('/api/profile', [
             'name' => 'Test User',
             'avatar' => $file,
         ]);
 
-        $response->assertSessionHasNoErrors();
+        $response->assertStatus(200);
         
         $user->refresh();
         $this->assertNotNull($user->avatar);
-        Storage::disk('public')->assertExists($user->avatar);
+        $this->assertTrue(Storage::disk('public')->exists($user->avatar));
     }
 
     public function test_audit_log_is_created_on_profile_update(): void
@@ -82,7 +93,7 @@ class ProfileManagementTest extends TestCase
 
         $this->assertDatabaseCount('audit_logs', 0);
 
-        $this->actingAs($user)->patch('/profile', [
+        $this->actingAs($user)->patchJson('/api/profile', [
             'name' => 'Test User',
             'headline' => 'Audit Test',
         ]);

@@ -21,7 +21,11 @@ export const Route = createFileRoute("/dashboard/profile")({
 });
 
 function ProfilePage() {
-  const initials = demoUser.name.split(" ").map((p) => p[0]).join("").slice(0, 2);
+  const initials = demoUser.name
+    .split(" ")
+    .map((p) => p[0])
+    .join("")
+    .slice(0, 2);
 
   return (
     <div>

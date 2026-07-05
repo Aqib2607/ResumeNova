@@ -11,8 +11,8 @@ test('role assignment writes to role audit logs', function () {
     $target = User::factory()->create(['role' => UserRole::User]);
 
     $this->actingAs($admin)
-        ->patch("/admin/users/{$target->id}/role", ['role' => UserRole::Admin->value])
-        ->assertRedirect();
+        ->patchJson("/api/admin/users/{$target->id}/role", ['role' => UserRole::Admin->value])
+        ->assertStatus(200);
 
     expect($target->fresh()->role)->toBe(UserRole::Admin);
     
@@ -29,8 +29,8 @@ test('suspend sets suspended_at timestamp and logs event', function () {
     $target = User::factory()->create(['role' => UserRole::User, 'suspended_at' => null]);
 
     $this->actingAs($admin)
-        ->post("/admin/users/{$target->id}/suspend")
-        ->assertRedirect();
+        ->postJson("/api/admin/users/{$target->id}/suspend")
+        ->assertStatus(200);
 
     expect($target->fresh()->isSuspended())->toBeTrue();
     
@@ -46,8 +46,8 @@ test('reactivate clears suspended_at timestamp and logs event', function () {
     $target = User::factory()->create(['role' => UserRole::User, 'suspended_at' => now()]);
 
     $this->actingAs($admin)
-        ->post("/admin/users/{$target->id}/reactivate")
-        ->assertRedirect();
+        ->postJson("/api/admin/users/{$target->id}/reactivate")
+        ->assertStatus(200);
 
     expect($target->fresh()->isSuspended())->toBeFalse();
     

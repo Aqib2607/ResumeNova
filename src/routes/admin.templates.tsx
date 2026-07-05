@@ -10,10 +10,34 @@ export const Route = createFileRoute("/admin/templates")({
 });
 
 const TEMPLATES = [
-  { id: "modern-professional", name: "Modern Professional", accent: "bg-primary", uses: 28140, status: "live" },
-  { id: "corporate-executive", name: "Corporate Executive", accent: "bg-foreground", uses: 19320, status: "live" },
-  { id: "ats-professional", name: "ATS Professional", accent: "bg-success", uses: 31280, status: "live" },
-  { id: "creative-professional", name: "Creative Professional", accent: "bg-warning", uses: 12490, status: "live" },
+  {
+    id: "modern-professional",
+    name: "Modern Professional",
+    accent: "bg-primary",
+    uses: 28140,
+    status: "live",
+  },
+  {
+    id: "corporate-executive",
+    name: "Corporate Executive",
+    accent: "bg-foreground",
+    uses: 19320,
+    status: "live",
+  },
+  {
+    id: "ats-professional",
+    name: "ATS Professional",
+    accent: "bg-success",
+    uses: 31280,
+    status: "live",
+  },
+  {
+    id: "creative-professional",
+    name: "Creative Professional",
+    accent: "bg-warning",
+    uses: 12490,
+    status: "live",
+  },
   { id: "academic", name: "Academic CV", accent: "bg-chart-5", uses: 0, status: "draft" },
 ];
 

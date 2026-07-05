@@ -56,7 +56,10 @@ function RegisterPage() {
         </>
       }
     >
-      <SEO title="Create account" description="Sign up for ResumeNova to start building AI-powered resumes." />
+      <SEO
+        title="Create account"
+        description="Sign up for ResumeNova to start building AI-powered resumes."
+      />
       <Button variant="outline" className="w-full" type="button">
         Continue with Google
       </Button>
@@ -80,7 +83,9 @@ function RegisterPage() {
           <div className="space-y-1.5">
             <Label htmlFor="password">Password</Label>
             <Input id="password" type="password" {...register("password")} />
-            {errors.password && <p className="text-xs text-destructive">{errors.password.message}</p>}
+            {errors.password && (
+              <p className="text-xs text-destructive">{errors.password.message}</p>
+            )}
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="confirm">Confirm</Label>

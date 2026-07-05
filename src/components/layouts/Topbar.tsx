@@ -52,7 +52,12 @@ export function Topbar({ onMenuClick }: TopbarProps) {
       <div className="flex items-center gap-1.5">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="relative h-9 w-9" aria-label="Notifications">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="relative h-9 w-9"
+              aria-label="Notifications"
+            >
               <Bell className="h-4 w-4" />
               {unread > 0 && (
                 <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-destructive ring-2 ring-background" />
@@ -88,7 +93,9 @@ export function Topbar({ onMenuClick }: TopbarProps) {
                   {initials}
                 </AvatarFallback>
               </Avatar>
-              <span className="hidden text-sm font-medium md:inline">{demoUser.name.split(" ")[0]}</span>
+              <span className="hidden text-sm font-medium md:inline">
+                {demoUser.name.split(" ")[0]}
+              </span>
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">

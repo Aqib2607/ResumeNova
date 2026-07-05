@@ -109,7 +109,11 @@ function ApiKeysPage() {
                       className="text-muted-foreground hover:text-foreground"
                       aria-label="Toggle reveal"
                     >
-                      {reveal[k.id] ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+                      {reveal[k.id] ? (
+                        <EyeOff className="h-3.5 w-3.5" />
+                      ) : (
+                        <Eye className="h-3.5 w-3.5" />
+                      )}
                     </button>
                   </div>
                 </TableCell>
@@ -123,7 +127,9 @@ function ApiKeysPage() {
                     {k.status.replace("_", " ")}
                   </Badge>
                 </TableCell>
-                <TableCell className="text-right tabular-nums">{k.usage_count.toLocaleString()}</TableCell>
+                <TableCell className="text-right tabular-nums">
+                  {k.usage_count.toLocaleString()}
+                </TableCell>
                 <TableCell>
                   <div className="flex justify-end gap-1">
                     <Dialog>
@@ -144,8 +150,8 @@ function ApiKeysPage() {
                         <AlertDialogHeader>
                           <AlertDialogTitle>Delete API key?</AlertDialogTitle>
                           <AlertDialogDescription>
-                            This permanently removes "{k.name}". Active routing may switch to the next
-                            priority key.
+                            This permanently removes "{k.name}". Active routing may switch to the
+                            next priority key.
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
@@ -165,7 +171,8 @@ function ApiKeysPage() {
       </div>
 
       <p className="mt-4 text-xs text-muted-foreground">
-        Drag rows to re-order priority. Keys are encrypted at rest and never exposed to the frontend.
+        Drag rows to re-order priority. Keys are encrypted at rest and never exposed to the
+        frontend.
       </p>
     </div>
   );

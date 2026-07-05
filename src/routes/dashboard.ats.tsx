@@ -83,7 +83,9 @@ function AtsAnalyzerPage() {
                 </p>
                 <p className="mt-1 text-5xl font-semibold tracking-tight">{a.score}</p>
               </div>
-              <Badge className="bg-warning/10 text-warning hover:bg-warning/15">Good · improvable</Badge>
+              <Badge className="bg-warning/10 text-warning hover:bg-warning/15">
+                Good · improvable
+              </Badge>
             </div>
             <Progress value={a.score} className="mt-5" />
             <div className="mt-6 grid grid-cols-3 divide-x divide-border rounded-lg border border-border bg-surface text-center">
@@ -117,7 +119,9 @@ function AtsAnalyzerPage() {
                     <TableCell className="font-medium">{k.keyword}</TableCell>
                     <TableCell>
                       {k.in_resume ? (
-                        <Badge className="bg-success/10 text-success hover:bg-success/15">Yes</Badge>
+                        <Badge className="bg-success/10 text-success hover:bg-success/15">
+                          Yes
+                        </Badge>
                       ) : (
                         <Badge className="bg-destructive/10 text-destructive hover:bg-destructive/15">
                           No

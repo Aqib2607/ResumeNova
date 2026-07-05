@@ -18,7 +18,7 @@ class EnsureUserIsActive
     public function handle(Request $request, Closure $next): Response
     {
         if ($request->user() && $request->user()->isSuspended()) {
-            return redirect()->route('suspended');
+            abort(403, 'Your account is suspended.');
         }
 
         return $next($request);

@@ -29,7 +29,7 @@ function fakeSocialiteUser(
 // ──────────────────────────────────────────────────────────────────────────────
 
 it('redirects unauthenticated users to google consent screen', function () {
-    $response = $this->get(route('auth.google'));
+    $response = $this->getJson(route('auth.google'));
 
     $response->assertRedirect();
     expect($response->headers->get('Location'))->toContain('accounts.google.com');
@@ -39,8 +39,8 @@ it('google redirect is protected by guest middleware', function () {
     $user = User::factory()->create();
 
     $this->actingAs($user)
-        ->get(route('auth.google'))
-        ->assertRedirect(route('dashboard'));
+        ->getJson(route('auth.google'))
+        ->assertRedirect();
 });
 
 // ──────────────────────────────────────────────────────────────────────────────
@@ -53,12 +53,13 @@ it('creates a new user from google profile on first oauth login', function () {
         email: 'newuser@google.com',
     );
 
-    Socialite::shouldReceive('driver->user')->andReturn($socialiteUser);
+    $provider = Mockery::mock(\Laravel\Socialite\Contracts\Provider::class);
+    $provider->shouldReceive('stateless')->andReturnSelf();
+    $provider->shouldReceive('user')->andReturn($socialiteUser);
+    Socialite::shouldReceive('driver')->with('google')->andReturn($provider);
 
-    $this->get(route('auth.google.callback'))
-        ->assertRedirect(route('dashboard'));
-
-    $this->assertAuthenticated();
+    $this->getJson(route('auth.google.callback'))
+        ->assertRedirectContains(config('app.frontend_url').'/oauth/callback?token=');
 
     $user = User::where('email', 'newuser@google.com')->first();
 
@@ -80,12 +81,13 @@ it('logs in an existing user matched by google_id', function () {
 
     $socialiteUser = fakeSocialiteUser(id: '111222333', email: 'existing@example.com');
 
-    Socialite::shouldReceive('driver->user')->andReturn($socialiteUser);
+    $provider = Mockery::mock(\Laravel\Socialite\Contracts\Provider::class);
+    $provider->shouldReceive('stateless')->andReturnSelf();
+    $provider->shouldReceive('user')->andReturn($socialiteUser);
+    Socialite::shouldReceive('driver')->with('google')->andReturn($provider);
 
-    $this->get(route('auth.google.callback'))
-        ->assertRedirect(route('dashboard'));
-
-    $this->assertAuthenticatedAs($user);
+    $this->getJson(route('auth.google.callback'))
+        ->assertRedirectContains(config('app.frontend_url').'/oauth/callback?token=');
 });
 
 // ──────────────────────────────────────────────────────────────────────────────
@@ -103,12 +105,13 @@ it('links google_id to an existing email-only account', function () {
         email: 'earlybird@example.com',
     );
 
-    Socialite::shouldReceive('driver->user')->andReturn($socialiteUser);
+    $provider = Mockery::mock(\Laravel\Socialite\Contracts\Provider::class);
+    $provider->shouldReceive('stateless')->andReturnSelf();
+    $provider->shouldReceive('user')->andReturn($socialiteUser);
+    Socialite::shouldReceive('driver')->with('google')->andReturn($provider);
 
-    $this->get(route('auth.google.callback'))
-        ->assertRedirect(route('dashboard'));
-
-    $this->assertAuthenticatedAs($user);
+    $this->getJson(route('auth.google.callback'))
+        ->assertRedirectContains(config('app.frontend_url').'/oauth/callback?token=');
 
     expect($user->fresh()->google_id)->toBe('999888777');
 });
@@ -123,9 +126,12 @@ it('records last_login_at after google oauth login', function () {
         email: 'timestamped@example.com',
     );
 
-    Socialite::shouldReceive('driver->user')->andReturn($socialiteUser);
+    $provider = Mockery::mock(\Laravel\Socialite\Contracts\Provider::class);
+    $provider->shouldReceive('stateless')->andReturnSelf();
+    $provider->shouldReceive('user')->andReturn($socialiteUser);
+    Socialite::shouldReceive('driver')->with('google')->andReturn($provider);
 
-    $this->get(route('auth.google.callback'));
+    $this->getJson(route('auth.google.callback'));
 
     $user = User::where('email', 'timestamped@example.com')->first();
 
@@ -137,10 +143,11 @@ it('records last_login_at after google oauth login', function () {
 // ──────────────────────────────────────────────────────────────────────────────
 
 it('redirects to login with error when google oauth callback fails', function () {
-    Socialite::shouldReceive('driver->user')
-        ->andThrow(new \Exception('OAuth error'));
+    $provider = Mockery::mock(\Laravel\Socialite\Contracts\Provider::class);
+    $provider->shouldReceive('stateless')->andReturnSelf();
+    $provider->shouldReceive('user')->andThrow(new \Exception('OAuth error'));
+    Socialite::shouldReceive('driver')->with('google')->andReturn($provider);
 
-    $this->get(route('auth.google.callback'))
-        ->assertRedirect(route('login'))
-        ->assertSessionHasErrors('email');
+    $this->getJson(route('auth.google.callback'))
+        ->assertRedirect(config('app.frontend_url').'/login?error=google_auth_failed');
 });

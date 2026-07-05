@@ -68,7 +68,10 @@ function ResumesPage() {
                   ))}
                 </div>
               </div>
-              <Badge className="absolute right-3 top-3 bg-background/90 text-foreground" variant="outline">
+              <Badge
+                className="absolute right-3 top-3 bg-background/90 text-foreground"
+                variant="outline"
+              >
                 v{r.version}
               </Badge>
             </div>
@@ -76,7 +79,8 @@ function ResumesPage() {
               <div className="min-w-0">
                 <p className="truncate text-sm font-semibold">{r.title}</p>
                 <p className="mt-0.5 truncate text-xs text-muted-foreground">
-                  {r.template.replace(/-/g, " ")} · updated {new Date(r.updated_at).toLocaleDateString()}
+                  {r.template.replace(/-/g, " ")} · updated{" "}
+                  {new Date(r.updated_at).toLocaleDateString()}
                 </p>
               </div>
               <DropdownMenu>

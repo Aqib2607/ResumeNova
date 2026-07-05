@@ -9,9 +9,17 @@ export const Route = createFileRoute("/admin/system-logs")({
 
 const LINES = [
   { lvl: "info", t: "2026-06-27T09:14:02Z", msg: "queue:worker started (workers=8)" },
-  { lvl: "warn", t: "2026-06-27T08:51:39Z", msg: "ai_router: groq returned 429, switching to anthropic" },
+  {
+    lvl: "warn",
+    t: "2026-06-27T08:51:39Z",
+    msg: "ai_router: groq returned 429, switching to anthropic",
+  },
   { lvl: "info", t: "2026-06-27T08:50:12Z", msg: "export.pdf job r_01 completed in 2.4s" },
-  { lvl: "error", t: "2026-06-26T22:31:08Z", msg: "stripe.webhook: signature mismatch from 203.0.113.99" },
+  {
+    lvl: "error",
+    t: "2026-06-26T22:31:08Z",
+    msg: "stripe.webhook: signature mismatch from 203.0.113.99",
+  },
   { lvl: "info", t: "2026-06-26T22:30:11Z", msg: "ats.analyze finished score=78 user=u_02" },
   { lvl: "debug", t: "2026-06-26T22:29:54Z", msg: "cache:miss key=ats:r_01:hash:9af2" },
 ];

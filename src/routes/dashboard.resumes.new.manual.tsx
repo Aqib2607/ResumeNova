@@ -105,12 +105,36 @@ function ManualBuilderPage() {
 
             <TabsContent value="basics" className="mt-5 space-y-4">
               <div className="grid gap-4 sm:grid-cols-2">
-                <Field label="Full name" value={resume.basics.full_name} onChange={(v) => updateBasics({ full_name: v })} />
-                <Field label="Headline" value={resume.basics.headline} onChange={(v) => updateBasics({ headline: v })} />
-                <Field label="Email" value={resume.basics.email} onChange={(v) => updateBasics({ email: v })} />
-                <Field label="Phone" value={resume.basics.phone} onChange={(v) => updateBasics({ phone: v })} />
-                <Field label="Location" value={resume.basics.location} onChange={(v) => updateBasics({ location: v })} />
-                <Field label="LinkedIn" value={resume.basics.linkedin ?? ""} onChange={(v) => updateBasics({ linkedin: v })} />
+                <Field
+                  label="Full name"
+                  value={resume.basics.full_name}
+                  onChange={(v) => updateBasics({ full_name: v })}
+                />
+                <Field
+                  label="Headline"
+                  value={resume.basics.headline}
+                  onChange={(v) => updateBasics({ headline: v })}
+                />
+                <Field
+                  label="Email"
+                  value={resume.basics.email}
+                  onChange={(v) => updateBasics({ email: v })}
+                />
+                <Field
+                  label="Phone"
+                  value={resume.basics.phone}
+                  onChange={(v) => updateBasics({ phone: v })}
+                />
+                <Field
+                  label="Location"
+                  value={resume.basics.location}
+                  onChange={(v) => updateBasics({ location: v })}
+                />
+                <Field
+                  label="LinkedIn"
+                  value={resume.basics.linkedin ?? ""}
+                  onChange={(v) => updateBasics({ linkedin: v })}
+                />
               </div>
               <div className="space-y-1.5">
                 <Label>Professional summary</Label>
@@ -169,7 +193,10 @@ function ManualBuilderPage() {
             <TabsContent value="education" className="mt-5 space-y-3">
               {resume.education.map((ed) => (
                 <div key={ed.id} className="rounded-lg border border-border p-4 text-sm">
-                  <p className="font-semibold">{ed.degree}{ed.field ? `, ${ed.field}` : ""}</p>
+                  <p className="font-semibold">
+                    {ed.degree}
+                    {ed.field ? `, ${ed.field}` : ""}
+                  </p>
                   <p className="text-muted-foreground">
                     {ed.school} · {ed.start_date} – {ed.end_date}
                   </p>
@@ -250,10 +277,17 @@ function ResumePreview({ resume }: { resume: Resume }) {
   return (
     <div className="font-sans text-[11px] leading-relaxed">
       <header className={`border-b-2 ${accent} pb-3`}>
-        <h1 className="text-2xl font-bold tracking-tight">{resume.basics.full_name || "Your name"}</h1>
+        <h1 className="text-2xl font-bold tracking-tight">
+          {resume.basics.full_name || "Your name"}
+        </h1>
         <p className="text-[12px] text-[#0F172A]/70">{resume.basics.headline}</p>
         <p className="mt-1.5 text-[10px] text-[#0F172A]/60">
-          {[resume.basics.email, resume.basics.phone, resume.basics.location, resume.basics.linkedin]
+          {[
+            resume.basics.email,
+            resume.basics.phone,
+            resume.basics.location,
+            resume.basics.linkedin,
+          ]
             .filter(Boolean)
             .join(" · ")}
         </p>

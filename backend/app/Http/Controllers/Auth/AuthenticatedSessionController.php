@@ -20,25 +20,28 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
-        $request->session()->regenerate();
-
         // Record the login timestamp on the authenticated user.
         $request->user()->recordLogin();
 
-        return response()->json(['user' => $request->user()]);
+        $token = $request->user()->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'user' => $request->user(),
+            'token' => $token,
+        ]);
     }
 
     /**
      * Destroy an authenticated session.
-     * Session is fully invalidated and a new CSRF token is generated.
      */
     public function destroy(Request $request): JsonResponse
     {
-        Auth::guard('web')->logout();
-
-        $request->session()->invalidate();
-
-        $request->session()->regenerateToken();
+        if ($user = $request->user()) {
+            $token = $user->currentAccessToken();
+            if ($token && method_exists($token, 'delete')) {
+                $token->delete();
+            }
+        }
 
         return response()->json(['message' => 'Logged out successfully']);
     }

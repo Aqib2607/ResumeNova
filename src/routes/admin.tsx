@@ -55,7 +55,12 @@ function AdminLayout() {
               <Logo showWordmark={false} />
               <span className="text-sm font-semibold">Admin</span>
             </Link>
-            <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setOpen(false)}>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="lg:hidden"
+              onClick={() => setOpen(false)}
+            >
               <X className="h-4 w-4" />
             </Button>
           </div>

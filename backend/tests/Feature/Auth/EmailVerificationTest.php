@@ -1,17 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Models\User;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\URL;
-
-test('email verification screen can be rendered', function () {
-    $user = User::factory()->unverified()->create();
-
-    $response = $this->actingAs($user)->get('/verify-email');
-
-    $response->assertStatus(200);
-});
 
 test('email can be verified', function () {
     $user = User::factory()->unverified()->create();
@@ -24,11 +18,12 @@ test('email can be verified', function () {
         ['id' => $user->id, 'hash' => sha1($user->email)]
     );
 
-    $response = $this->actingAs($user)->get($verificationUrl);
+    $response = $this->actingAs($user)->getJson($verificationUrl);
 
     Event::assertDispatched(Verified::class);
     expect($user->fresh()->hasVerifiedEmail())->toBeTrue();
-    $response->assertRedirect(route('dashboard', absolute: false).'?verified=1');
+    // Verification redirects back to the frontend app
+    $response->assertRedirect(config('app.frontend_url').'/dashboard?verified=1');
 });
 
 test('email is not verified with invalid hash', function () {
@@ -40,7 +35,7 @@ test('email is not verified with invalid hash', function () {
         ['id' => $user->id, 'hash' => sha1('wrong-email')]
     );
 
-    $this->actingAs($user)->get($verificationUrl);
+    $this->actingAs($user)->getJson($verificationUrl);
 
     expect($user->fresh()->hasVerifiedEmail())->toBeFalse();
 });

@@ -23,10 +23,7 @@ export interface AuthSession {
 
 // ---------- Resume ----------
 export type ResumeTemplate =
-  | "modern-professional"
-  | "corporate-executive"
-  | "ats-professional"
-  | "creative-professional";
+  "modern-professional" | "corporate-executive" | "ats-professional" | "creative-professional";
 
 export interface ResumeBasics {
   full_name: string;

@@ -32,7 +32,9 @@ export function AuthLayout({ title, subtitle, children, footer }: AuthLayoutProp
             <h1 className="text-2xl font-semibold tracking-tight text-foreground">{title}</h1>
             <p className="mt-1.5 text-sm text-muted-foreground">{subtitle}</p>
             <div className="mt-8">{children}</div>
-            {footer && <div className="mt-6 text-center text-sm text-muted-foreground">{footer}</div>}
+            {footer && (
+              <div className="mt-6 text-center text-sm text-muted-foreground">{footer}</div>
+            )}
           </div>
         </div>
       </div>

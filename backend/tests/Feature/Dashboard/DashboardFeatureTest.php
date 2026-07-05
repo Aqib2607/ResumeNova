@@ -12,24 +12,29 @@ class DashboardFeatureTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_dashboard_page_can_be_rendered(): void
+    public function test_dashboard_data_can_be_retrieved(): void
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->get(route('dashboard'));
+        $response = $this->actingAs($user)->getJson('/api/dashboard');
 
         $response->assertStatus(200);
-        $response->assertSee('Profile Completion');
-        $response->assertSee('Recent Activity');
+        $response->assertJsonStructure([
+            'profile_completion',
+            'recent_activity',
+            'notifications',
+            'metrics'
+        ]);
     }
 
-    public function test_suspended_users_cannot_access_dashboard(): void
+    public function test_suspended_users_receive_403_for_dashboard(): void
     {
         $user = User::factory()->suspended()->create();
 
-        $response = $this->actingAs($user)->get(route('dashboard'));
+        $response = $this->actingAs($user)->getJson('/api/dashboard');
 
-        $response->assertRedirect(route('suspended'));
+        $response->assertStatus(403)
+                 ->assertJson(['message' => 'Your account is suspended.']);
     }
 
     public function test_dashboard_displays_correct_completion_percentage(): void
@@ -39,9 +44,9 @@ class DashboardFeatureTest extends TestCase
         // new user has name only = 1/6 = ~17%
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->get(route('dashboard'));
+        $response = $this->actingAs($user)->getJson('/api/dashboard');
         $response->assertStatus(200);
-        $response->assertSee('17%');
+        $response->assertJsonPath('profile_completion', 17);
 
         // Let's create a full profile
         $user->profile()->create([
@@ -53,8 +58,8 @@ class DashboardFeatureTest extends TestCase
         // And an avatar
         $user->update(['avatar' => 'avatars/test.jpg']);
 
-        $response = $this->actingAs($user)->get(route('dashboard'));
+        $response = $this->actingAs($user)->getJson('/api/dashboard');
         $response->assertStatus(200);
-        $response->assertSee('100%');
+        $response->assertJsonPath('profile_completion', 100);
     }
 }

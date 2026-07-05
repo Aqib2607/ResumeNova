@@ -35,19 +35,59 @@ export const Route = createFileRoute("/admin/users")({
 });
 
 const USERS = [
-  { id: "u_01", name: "Aarav Mehta", email: "aarav@resumenova.app", role: "admin", status: "active", joined: "2025-01-12" },
-  { id: "u_02", name: "Priya Shah", email: "priya@acme.io", role: "user", status: "active", joined: "2025-04-19" },
-  { id: "u_03", name: "Marcus Turner", email: "marcus@hexcorp.dev", role: "user", status: "active", joined: "2025-09-02" },
-  { id: "u_04", name: "Léa Martin", email: "lea@design.fr", role: "user", status: "suspended", joined: "2025-11-30" },
-  { id: "u_05", name: "Kenji Watanabe", email: "kenji@tsuki.jp", role: "user", status: "active", joined: "2026-02-08" },
-  { id: "u_06", name: "Sofia Romero", email: "sofia@plata.mx", role: "user", status: "invited", joined: "2026-06-19" },
+  {
+    id: "u_01",
+    name: "Aarav Mehta",
+    email: "aarav@resumenova.app",
+    role: "admin",
+    status: "active",
+    joined: "2025-01-12",
+  },
+  {
+    id: "u_02",
+    name: "Priya Shah",
+    email: "priya@acme.io",
+    role: "user",
+    status: "active",
+    joined: "2025-04-19",
+  },
+  {
+    id: "u_03",
+    name: "Marcus Turner",
+    email: "marcus@hexcorp.dev",
+    role: "user",
+    status: "active",
+    joined: "2025-09-02",
+  },
+  {
+    id: "u_04",
+    name: "Léa Martin",
+    email: "lea@design.fr",
+    role: "user",
+    status: "suspended",
+    joined: "2025-11-30",
+  },
+  {
+    id: "u_05",
+    name: "Kenji Watanabe",
+    email: "kenji@tsuki.jp",
+    role: "user",
+    status: "active",
+    joined: "2026-02-08",
+  },
+  {
+    id: "u_06",
+    name: "Sofia Romero",
+    email: "sofia@plata.mx",
+    role: "user",
+    status: "invited",
+    joined: "2026-06-19",
+  },
 ];
 
 function AdminUsers() {
   const [q, setQ] = useState("");
-  const filtered = USERS.filter((u) =>
-    (u.name + u.email).toLowerCase().includes(q.toLowerCase()),
-  );
+  const filtered = USERS.filter((u) => (u.name + u.email).toLowerCase().includes(q.toLowerCase()));
 
   return (
     <div>
@@ -61,7 +101,12 @@ function AdminUsers() {
       <div className="mb-4 flex flex-wrap items-center gap-2">
         <div className="relative w-full max-w-xs">
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search users…" className="h-9 pl-9" />
+          <Input
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="Search users…"
+            className="h-9 pl-9"
+          />
         </div>
         <Select defaultValue="all">
           <SelectTrigger className="h-9 w-36">
@@ -104,7 +149,10 @@ function AdminUsers() {
                 <TableCell className="font-medium">{u.name}</TableCell>
                 <TableCell className="text-muted-foreground">{u.email}</TableCell>
                 <TableCell>
-                  <Badge variant={u.role === "admin" ? "default" : "secondary"} className="capitalize">
+                  <Badge
+                    variant={u.role === "admin" ? "default" : "secondary"}
+                    className="capitalize"
+                  >
                     {u.role}
                   </Badge>
                 </TableCell>

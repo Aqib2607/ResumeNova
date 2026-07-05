@@ -46,9 +46,22 @@ function AdminAnalytics() {
           <div className="mt-4 h-64">
             <ResponsiveContainer>
               <BarChart data={conversion} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
-                <CartesianGrid stroke="var(--color-border)" strokeDasharray="3 3" vertical={false} />
-                <XAxis dataKey="d" tickLine={false} axisLine={false} tick={{ fontSize: 11, fill: "var(--color-muted-foreground)" }} />
-                <YAxis tickLine={false} axisLine={false} tick={{ fontSize: 11, fill: "var(--color-muted-foreground)" }} />
+                <CartesianGrid
+                  stroke="var(--color-border)"
+                  strokeDasharray="3 3"
+                  vertical={false}
+                />
+                <XAxis
+                  dataKey="d"
+                  tickLine={false}
+                  axisLine={false}
+                  tick={{ fontSize: 11, fill: "var(--color-muted-foreground)" }}
+                />
+                <YAxis
+                  tickLine={false}
+                  axisLine={false}
+                  tick={{ fontSize: 11, fill: "var(--color-muted-foreground)" }}
+                />
                 <Tooltip
                   contentStyle={{
                     background: "var(--color-card)",
@@ -76,7 +89,13 @@ function AdminAnalytics() {
                     fontSize: 12,
                   }}
                 />
-                <Pie data={breakdown} dataKey="v" innerRadius={50} outerRadius={80} paddingAngle={2}>
+                <Pie
+                  data={breakdown}
+                  dataKey="v"
+                  innerRadius={50}
+                  outerRadius={80}
+                  paddingAngle={2}
+                >
                   {breakdown.map((b, i) => (
                     <Cell key={i} fill={b.color} />
                   ))}

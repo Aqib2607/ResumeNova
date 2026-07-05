@@ -73,9 +73,21 @@ const templates = [
 ];
 
 const steps = [
-  { n: "01", title: "Import or build", desc: "Start from your LinkedIn, an existing PDF, or a blank slate." },
-  { n: "02", title: "Tailor with AI", desc: "Paste a job description — we rewrite bullets to match." },
-  { n: "03", title: "Score & ship", desc: "Run the ATS analyzer, export to PDF or DOCX, apply with confidence." },
+  {
+    n: "01",
+    title: "Import or build",
+    desc: "Start from your LinkedIn, an existing PDF, or a blank slate.",
+  },
+  {
+    n: "02",
+    title: "Tailor with AI",
+    desc: "Paste a job description — we rewrite bullets to match.",
+  },
+  {
+    n: "03",
+    title: "Score & ship",
+    desc: "Run the ATS analyzer, export to PDF or DOCX, apply with confidence.",
+  },
 ];
 
 const testimonials = [
@@ -124,16 +136,28 @@ function Nav() {
       <div className="container-page flex h-16 items-center justify-between">
         <Logo />
         <nav className="hidden items-center gap-7 md:flex">
-          <a href="#features" className="text-sm font-medium text-foreground/70 transition hover:text-foreground">
+          <a
+            href="#features"
+            className="text-sm font-medium text-foreground/70 transition hover:text-foreground"
+          >
             Features
           </a>
-          <a href="#templates" className="text-sm font-medium text-foreground/70 transition hover:text-foreground">
+          <a
+            href="#templates"
+            className="text-sm font-medium text-foreground/70 transition hover:text-foreground"
+          >
             Templates
           </a>
-          <a href="#how" className="text-sm font-medium text-foreground/70 transition hover:text-foreground">
+          <a
+            href="#how"
+            className="text-sm font-medium text-foreground/70 transition hover:text-foreground"
+          >
             How it works
           </a>
-          <a href="#faq" className="text-sm font-medium text-foreground/70 transition hover:text-foreground">
+          <a
+            href="#faq"
+            className="text-sm font-medium text-foreground/70 transition hover:text-foreground"
+          >
             FAQ
           </a>
         </nav>
@@ -156,10 +180,34 @@ function Nav() {
       {open && (
         <div className="border-t border-border bg-background md:hidden">
           <div className="container-page space-y-1 py-3">
-            <a href="#features" className="block py-2 text-sm font-medium" onClick={() => setOpen(false)}>Features</a>
-            <a href="#templates" className="block py-2 text-sm font-medium" onClick={() => setOpen(false)}>Templates</a>
-            <a href="#how" className="block py-2 text-sm font-medium" onClick={() => setOpen(false)}>How it works</a>
-            <a href="#faq" className="block py-2 text-sm font-medium" onClick={() => setOpen(false)}>FAQ</a>
+            <a
+              href="#features"
+              className="block py-2 text-sm font-medium"
+              onClick={() => setOpen(false)}
+            >
+              Features
+            </a>
+            <a
+              href="#templates"
+              className="block py-2 text-sm font-medium"
+              onClick={() => setOpen(false)}
+            >
+              Templates
+            </a>
+            <a
+              href="#how"
+              className="block py-2 text-sm font-medium"
+              onClick={() => setOpen(false)}
+            >
+              How it works
+            </a>
+            <a
+              href="#faq"
+              className="block py-2 text-sm font-medium"
+              onClick={() => setOpen(false)}
+            >
+              FAQ
+            </a>
             <div className="flex gap-2 pt-2">
               <Button variant="outline" className="flex-1" asChild>
                 <Link to="/login">Login</Link>
@@ -244,14 +292,16 @@ function Hero() {
             </div>
             <div className="grid gap-0 md:grid-cols-[220px_1fr]">
               <div className="hidden border-r border-border bg-sidebar p-3 md:block">
-                {["Dashboard", "My Resumes", "ATS Analyzer", "Cover Letters", "API Keys"].map((l, i) => (
-                  <div
-                    key={l}
-                    className={`mb-1 rounded-md px-3 py-2 text-xs font-medium ${i === 1 ? "bg-primary/10 text-primary" : "text-foreground/70"}`}
-                  >
-                    {l}
-                  </div>
-                ))}
+                {["Dashboard", "My Resumes", "ATS Analyzer", "Cover Letters", "API Keys"].map(
+                  (l, i) => (
+                    <div
+                      key={l}
+                      className={`mb-1 rounded-md px-3 py-2 text-xs font-medium ${i === 1 ? "bg-primary/10 text-primary" : "text-foreground/70"}`}
+                    >
+                      {l}
+                    </div>
+                  ),
+                )}
               </div>
               <div className="p-5">
                 <div className="mb-4 flex items-center justify-between">
@@ -264,14 +314,19 @@ function Hero() {
                 <div className="space-y-2">
                   {[88, 64, 75, 92, 50, 70].map((w, i) => (
                     <div key={i} className="h-2.5 rounded-full bg-muted">
-                      <div className="h-full rounded-full bg-primary/80" style={{ width: `${w}%` }} />
+                      <div
+                        className="h-full rounded-full bg-primary/80"
+                        style={{ width: `${w}%` }}
+                      />
                     </div>
                   ))}
                 </div>
                 <div className="mt-5 grid grid-cols-3 gap-3">
                   {["Skills matched", "Missing", "Recommendations"].map((t, i) => (
                     <div key={t} className="rounded-lg border border-border p-3">
-                      <p className="text-[11px] uppercase tracking-wide text-muted-foreground">{t}</p>
+                      <p className="text-[11px] uppercase tracking-wide text-muted-foreground">
+                        {t}
+                      </p>
                       <p className="mt-1 text-lg font-semibold text-foreground">{[18, 4, 7][i]}</p>
                     </div>
                   ))}
@@ -295,7 +350,8 @@ function Features() {
             Everything you need to land the role
           </h2>
           <p className="mt-3 text-muted-foreground">
-            From the first draft to the interview prep — ResumeNova is the toolkit modern candidates use.
+            From the first draft to the interview prep — ResumeNova is the toolkit modern candidates
+            use.
           </p>
         </div>
         <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -333,7 +389,8 @@ function Templates() {
             </h2>
           </div>
           <p className="max-w-md text-sm text-muted-foreground">
-            Every template is ATS-safe with selectable text, embedded fonts, and a single-column fallback.
+            Every template is ATS-safe with selectable text, embedded fonts, and a single-column
+            fallback.
           </p>
         </div>
 
@@ -382,8 +439,12 @@ function HowItWorks() {
     <section id="how" className="border-t border-border bg-surface py-20 md:py-24">
       <div className="container-page">
         <div className="mx-auto max-w-2xl text-center">
-          <p className="text-xs font-semibold uppercase tracking-wider text-primary">How it works</p>
-          <h2 className="mt-2 text-3xl font-semibold tracking-tight md:text-4xl">Three steps to a tailored resume</h2>
+          <p className="text-xs font-semibold uppercase tracking-wider text-primary">
+            How it works
+          </p>
+          <h2 className="mt-2 text-3xl font-semibold tracking-tight md:text-4xl">
+            Three steps to a tailored resume
+          </h2>
         </div>
         <div className="relative mt-12 grid gap-6 md:grid-cols-3">
           <div className="absolute left-8 right-8 top-12 hidden h-px bg-gradient-to-r from-transparent via-border to-transparent md:block" />
@@ -414,13 +475,15 @@ function AtsShowcase() {
     <section className="border-t border-border py-20 md:py-24">
       <div className="container-page grid items-center gap-12 lg:grid-cols-2">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wider text-primary">ATS Analyzer</p>
+          <p className="text-xs font-semibold uppercase tracking-wider text-primary">
+            ATS Analyzer
+          </p>
           <h2 className="mt-2 text-3xl font-semibold tracking-tight md:text-4xl">
             Before & after, scored honestly.
           </h2>
           <p className="mt-3 text-muted-foreground">
-            Most resumes never reach a human. The ATS Analyzer shows you exactly what your target system sees
-            and tells you what to fix — line by line.
+            Most resumes never reach a human. The ATS Analyzer shows you exactly what your target
+            system sees and tells you what to fix — line by line.
           </p>
           <ul className="mt-6 space-y-2.5">
             {[
@@ -439,7 +502,12 @@ function AtsShowcase() {
 
         <div className="grid gap-4 sm:grid-cols-2">
           {[
-            { label: "Before", score: 42, tone: "destructive", missing: ["Accessibility", "GraphQL", "Localization"] },
+            {
+              label: "Before",
+              score: 42,
+              tone: "destructive",
+              missing: ["Accessibility", "GraphQL", "Localization"],
+            },
             { label: "After", score: 92, tone: "success", missing: ["—"] },
           ].map((c) => (
             <div key={c.label} className="rounded-xl border border-border bg-card p-5">
@@ -493,7 +561,9 @@ function Testimonials() {
     <section className="border-t border-border bg-surface py-20 md:py-24">
       <div className="container-page">
         <div className="mx-auto max-w-2xl text-center">
-          <p className="text-xs font-semibold uppercase tracking-wider text-primary">Loved by candidates</p>
+          <p className="text-xs font-semibold uppercase tracking-wider text-primary">
+            Loved by candidates
+          </p>
           <h2 className="mt-2 text-3xl font-semibold tracking-tight md:text-4xl">
             Built with feedback from 180,000+ job seekers
           </h2>
@@ -530,7 +600,9 @@ function FAQ() {
       <div className="container-page mx-auto max-w-3xl">
         <div className="text-center">
           <p className="text-xs font-semibold uppercase tracking-wider text-primary">FAQ</p>
-          <h2 className="mt-2 text-3xl font-semibold tracking-tight md:text-4xl">Frequently asked</h2>
+          <h2 className="mt-2 text-3xl font-semibold tracking-tight md:text-4xl">
+            Frequently asked
+          </h2>
         </div>
         <Accordion type="single" collapsible className="mt-10">
           {faqs.map((f, i) => (
@@ -601,7 +673,10 @@ function Footer() {
               <ul className="mt-3 space-y-2">
                 {c.l.map((i) => (
                   <li key={i}>
-                    <a href="#" className="text-sm text-muted-foreground transition hover:text-foreground">
+                    <a
+                      href="#"
+                      className="text-sm text-muted-foreground transition hover:text-foreground"
+                    >
                       {i}
                     </a>
                   </li>
@@ -611,7 +686,9 @@ function Footer() {
           ))}
         </div>
         <div className="mt-10 flex flex-col items-start justify-between gap-3 border-t border-border pt-6 sm:flex-row sm:items-center">
-          <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} ResumeNova. All rights reserved.</p>
+          <p className="text-xs text-muted-foreground">
+            © {new Date().getFullYear()} ResumeNova. All rights reserved.
+          </p>
           <p className="text-xs text-muted-foreground">Made with care for job seekers.</p>
         </div>
       </div>

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
@@ -8,18 +10,16 @@ test('password can be updated', function () {
 
     $response = $this
         ->actingAs($user)
-        ->from('/profile')
-        ->put('/password', [
+        ->putJson('/api/password', [
             'current_password' => 'password',
-            'password' => 'new-password',
-            'password_confirmation' => 'new-password',
+            'password' => 'Password1!',
+            'password_confirmation' => 'Password1!',
         ]);
 
-    $response
-        ->assertSessionHasNoErrors()
-        ->assertRedirect('/profile');
+    $response->assertStatus(200)
+             ->assertJsonStructure(['status']);
 
-    $this->assertTrue(Hash::check('new-password', $user->refresh()->password));
+    $this->assertTrue(Hash::check('Password1!', $user->refresh()->password));
 });
 
 test('correct password must be provided to update password', function () {
@@ -27,14 +27,12 @@ test('correct password must be provided to update password', function () {
 
     $response = $this
         ->actingAs($user)
-        ->from('/profile')
-        ->put('/password', [
+        ->putJson('/api/password', [
             'current_password' => 'wrong-password',
-            'password' => 'new-password',
-            'password_confirmation' => 'new-password',
+            'password' => 'Password1!',
+            'password_confirmation' => 'Password1!',
         ]);
 
-    $response
-        ->assertSessionHasErrorsIn('updatePassword', 'current_password')
-        ->assertRedirect('/profile');
+    $response->assertStatus(422)
+             ->assertJsonValidationErrors(['current_password']);
 });

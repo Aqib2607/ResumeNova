@@ -4,8 +4,7 @@
 // ============================================================
 
 export const API_BASE_URL =
-  (typeof import.meta !== "undefined" && (import.meta as any).env?.VITE_API_URL) ||
-  "/api";
+  (typeof import.meta !== "undefined" && (import.meta as any).env?.VITE_API_URL) || "/api";
 
 export class ApiError extends Error {
   status: number;

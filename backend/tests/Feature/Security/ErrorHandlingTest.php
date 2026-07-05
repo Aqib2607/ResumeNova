@@ -2,31 +2,31 @@
 
 use Illuminate\Support\Facades\Route;
 
-test('404 error page is rendered for undefined routes', function () {
-    $response = $this->get('/this-route-should-never-exist');
+test('404 error response is returned for undefined routes', function () {
+    $response = $this->getJson('/api/this-route-should-never-exist');
 
     $response->assertStatus(404);
-    $response->assertSeeText('Page Not Found');
+    $response->assertJsonStructure(['message']);
 });
 
-test('403 error page is rendered for unauthorized access', function () {
-    Route::get('/test-403', function () {
-        abort(403);
+test('403 error response is returned for unauthorized access', function () {
+    Route::get('/api/test-403', function () {
+        abort(403, 'Forbidden action.');
     });
 
-    $response = $this->get('/test-403');
+    $response = $this->getJson('/api/test-403');
     
     $response->assertStatus(403);
-    $response->assertSeeText('Forbidden');
+    $response->assertJson(['message' => 'Forbidden action.']);
 });
 
-test('500 error page is rendered for server errors', function () {
-    Route::get('/test-500', function () {
-        abort(500);
+test('500 error response is returned for server errors', function () {
+    Route::get('/api/test-500', function () {
+        abort(500, 'Server Error.');
     });
 
-    $response = $this->get('/test-500');
+    $response = $this->getJson('/api/test-500');
     
     $response->assertStatus(500);
-    $response->assertSeeText('Server Error');
+    $response->assertJson(['message' => 'Server Error.']);
 });

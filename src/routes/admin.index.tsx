@@ -53,7 +53,9 @@ function AdminOverview() {
         ].map((s) => (
           <div key={s.l} className="rounded-xl border border-border bg-card p-5">
             <div className="flex items-center justify-between">
-              <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{s.l}</p>
+              <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                {s.l}
+              </p>
               <s.i className="h-4 w-4 text-muted-foreground" />
             </div>
             <p className="mt-3 text-2xl font-semibold tracking-tight">{s.v}</p>
@@ -69,9 +71,22 @@ function AdminOverview() {
           <div className="mt-4 h-64">
             <ResponsiveContainer>
               <LineChart data={signups} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
-                <CartesianGrid stroke="var(--color-border)" strokeDasharray="3 3" vertical={false} />
-                <XAxis dataKey="d" tickLine={false} axisLine={false} tick={{ fontSize: 11, fill: "var(--color-muted-foreground)" }} />
-                <YAxis tickLine={false} axisLine={false} tick={{ fontSize: 11, fill: "var(--color-muted-foreground)" }} />
+                <CartesianGrid
+                  stroke="var(--color-border)"
+                  strokeDasharray="3 3"
+                  vertical={false}
+                />
+                <XAxis
+                  dataKey="d"
+                  tickLine={false}
+                  axisLine={false}
+                  tick={{ fontSize: 11, fill: "var(--color-muted-foreground)" }}
+                />
+                <YAxis
+                  tickLine={false}
+                  axisLine={false}
+                  tick={{ fontSize: 11, fill: "var(--color-muted-foreground)" }}
+                />
                 <Tooltip
                   contentStyle={{
                     background: "var(--color-card)",
@@ -80,7 +95,13 @@ function AdminOverview() {
                     fontSize: 12,
                   }}
                 />
-                <Line type="monotone" dataKey="v" stroke="var(--color-primary)" strokeWidth={2.5} dot={{ r: 3 }} />
+                <Line
+                  type="monotone"
+                  dataKey="v"
+                  stroke="var(--color-primary)"
+                  strokeWidth={2.5}
+                  dot={{ r: 3 }}
+                />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -92,9 +113,22 @@ function AdminOverview() {
           <div className="mt-4 h-64">
             <ResponsiveContainer>
               <BarChart data={usage} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
-                <CartesianGrid stroke="var(--color-border)" strokeDasharray="3 3" vertical={false} />
-                <XAxis dataKey="d" tickLine={false} axisLine={false} tick={{ fontSize: 11, fill: "var(--color-muted-foreground)" }} />
-                <YAxis tickLine={false} axisLine={false} tick={{ fontSize: 11, fill: "var(--color-muted-foreground)" }} />
+                <CartesianGrid
+                  stroke="var(--color-border)"
+                  strokeDasharray="3 3"
+                  vertical={false}
+                />
+                <XAxis
+                  dataKey="d"
+                  tickLine={false}
+                  axisLine={false}
+                  tick={{ fontSize: 11, fill: "var(--color-muted-foreground)" }}
+                />
+                <YAxis
+                  tickLine={false}
+                  axisLine={false}
+                  tick={{ fontSize: 11, fill: "var(--color-muted-foreground)" }}
+                />
                 <Tooltip
                   contentStyle={{
                     background: "var(--color-card)",

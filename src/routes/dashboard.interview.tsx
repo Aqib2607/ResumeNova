@@ -56,7 +56,9 @@ function InterviewPage() {
       <div className="mb-5 grid gap-4 sm:grid-cols-[minmax(0,1fr)_auto_auto]">
         <div className="rounded-xl border border-border bg-card p-4">
           <div className="flex items-center justify-between">
-            <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Progress</p>
+            <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+              Progress
+            </p>
             <p className="text-xs text-muted-foreground">
               {done} / {total} completed
             </p>

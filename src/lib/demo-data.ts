@@ -113,7 +113,8 @@ export const demoResumes: Resume[] = [
       email: "aarav.mehta@resumenova.app",
       phone: "+1 415 555 0142",
       location: "San Francisco, CA",
-      summary: "Backend engineer specializing in high-throughput payment and search infrastructure.",
+      summary:
+        "Backend engineer specializing in high-throughput payment and search infrastructure.",
     },
     experiences: [],
     education: [],
@@ -252,8 +253,7 @@ export const demoInterviewQuestions: InterviewQuestion[] = [
     question: "Tell me about a time you disagreed with a senior leader. How did you resolve it?",
     hints: ["Use the STAR framework", "End with what you learned"],
     completed: true,
-    user_answer:
-      "At Stripe, our VP wanted to ship the merchant dashboard with…",
+    user_answer: "At Stripe, our VP wanted to ship the merchant dashboard with…",
   },
   {
     id: "q_02",

@@ -27,7 +27,15 @@ export const Route = createFileRoute("/dashboard/settings")({
   component: SettingsPage,
 });
 
-function Section({ title, description, children }: { title: string; description?: string; children: React.ReactNode }) {
+function Section({
+  title,
+  description,
+  children,
+}: {
+  title: string;
+  description?: string;
+  children: React.ReactNode;
+}) {
   return (
     <div className="rounded-xl border border-border bg-card p-6">
       <p className="text-sm font-semibold">{title}</p>
@@ -37,7 +45,15 @@ function Section({ title, description, children }: { title: string; description?
   );
 }
 
-function Row({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) {
+function Row({
+  label,
+  hint,
+  children,
+}: {
+  label: string;
+  hint?: string;
+  children: React.ReactNode;
+}) {
   return (
     <div className="flex flex-col gap-2 border-t border-border pt-4 first:border-0 first:pt-0 sm:flex-row sm:items-center sm:justify-between">
       <div>
@@ -53,7 +69,10 @@ function SettingsPage() {
   return (
     <div>
       <SEO title="Settings" />
-      <PageHeader title="Settings" description="Manage preferences, notifications, and account state." />
+      <PageHeader
+        title="Settings"
+        description="Manage preferences, notifications, and account state."
+      />
 
       <div className="grid gap-6 lg:grid-cols-2">
         <Section title="Appearance" description="Theme preferences (system-wide).">
@@ -114,17 +133,17 @@ function SettingsPage() {
           </Row>
         </Section>
 
-        <Section
-          title="Danger zone"
-          description="Account-level actions that can't be undone."
-        >
+        <Section title="Danger zone" description="Account-level actions that can't be undone.">
           <Row label="Export all data" hint="Receive a ZIP of resumes, analyses and letters.">
             <Button variant="outline">Request export</Button>
           </Row>
           <Row label="Delete account" hint="Permanently remove your account and data.">
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button variant="outline" className="border-destructive/40 text-destructive hover:bg-destructive/10 hover:text-destructive">
+                <Button
+                  variant="outline"
+                  className="border-destructive/40 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                >
                   Delete account
                 </Button>
               </AlertDialogTrigger>
@@ -132,7 +151,8 @@ function SettingsPage() {
                 <AlertDialogHeader>
                   <AlertDialogTitle>Delete your account?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    This permanently removes your resumes, exports, and analyses. This action cannot be undone.
+                    This permanently removes your resumes, exports, and analyses. This action cannot
+                    be undone.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
