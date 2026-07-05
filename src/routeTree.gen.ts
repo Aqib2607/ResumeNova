@@ -8,499 +8,500 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from "./routes/__root";
-import { Route as RegisterRouteImport } from "./routes/register";
-import { Route as LoginRouteImport } from "./routes/login";
-import { Route as ForgotPasswordRouteImport } from "./routes/forgot-password";
-import { Route as DashboardRouteImport } from "./routes/dashboard";
-import { Route as AdminRouteImport } from "./routes/admin";
-import { Route as IndexRouteImport } from "./routes/index";
-import { Route as DashboardIndexRouteImport } from "./routes/dashboard.index";
-import { Route as AdminIndexRouteImport } from "./routes/admin.index";
-import { Route as DashboardSettingsRouteImport } from "./routes/dashboard.settings";
-import { Route as DashboardResumesRouteImport } from "./routes/dashboard.resumes";
-import { Route as DashboardProfileRouteImport } from "./routes/dashboard.profile";
-import { Route as DashboardInterviewRouteImport } from "./routes/dashboard.interview";
-import { Route as DashboardExportsRouteImport } from "./routes/dashboard.exports";
-import { Route as DashboardCoverLettersRouteImport } from "./routes/dashboard.cover-letters";
-import { Route as DashboardAtsRouteImport } from "./routes/dashboard.ats";
-import { Route as DashboardApiKeysRouteImport } from "./routes/dashboard.api-keys";
-import { Route as AdminUsersRouteImport } from "./routes/admin.users";
-import { Route as AdminTemplatesRouteImport } from "./routes/admin.templates";
-import { Route as AdminSystemLogsRouteImport } from "./routes/admin.system-logs";
-import { Route as AdminSettingsRouteImport } from "./routes/admin.settings";
-import { Route as AdminAuditLogsRouteImport } from "./routes/admin.audit-logs";
-import { Route as AdminAnalyticsRouteImport } from "./routes/admin.analytics";
-import { Route as DashboardResumesNewRouteImport } from "./routes/dashboard.resumes.new";
-import { Route as DashboardResumesNewManualRouteImport } from "./routes/dashboard.resumes.new.manual";
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as RegisterRouteImport } from './routes/register'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
+import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as DashboardSettingsRouteImport } from './routes/dashboard.settings'
+import { Route as DashboardResumesRouteImport } from './routes/dashboard.resumes'
+import { Route as DashboardProfileRouteImport } from './routes/dashboard.profile'
+import { Route as DashboardInterviewRouteImport } from './routes/dashboard.interview'
+import { Route as DashboardExportsRouteImport } from './routes/dashboard.exports'
+import { Route as DashboardCoverLettersRouteImport } from './routes/dashboard.cover-letters'
+import { Route as DashboardAtsRouteImport } from './routes/dashboard.ats'
+import { Route as DashboardApiKeysRouteImport } from './routes/dashboard.api-keys'
+import { Route as AdminUsersRouteImport } from './routes/admin.users'
+import { Route as AdminTemplatesRouteImport } from './routes/admin.templates'
+import { Route as AdminSystemLogsRouteImport } from './routes/admin.system-logs'
+import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
+import { Route as AdminAuditLogsRouteImport } from './routes/admin.audit-logs'
+import { Route as AdminAnalyticsRouteImport } from './routes/admin.analytics'
+import { Route as DashboardResumesNewRouteImport } from './routes/dashboard.resumes.new'
+import { Route as DashboardResumesNewManualRouteImport } from './routes/dashboard.resumes.new.manual'
 
 const RegisterRoute = RegisterRouteImport.update({
-  id: "/register",
-  path: "/register",
+  id: '/register',
+  path: '/register',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const LoginRoute = LoginRouteImport.update({
-  id: "/login",
-  path: "/login",
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
-  id: "/forgot-password",
-  path: "/forgot-password",
+  id: '/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const DashboardRoute = DashboardRouteImport.update({
-  id: "/dashboard",
-  path: "/dashboard",
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const AdminRoute = AdminRouteImport.update({
-  id: "/admin",
-  path: "/admin",
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const IndexRoute = IndexRouteImport.update({
-  id: "/",
-  path: "/",
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
-  id: "/",
-  path: "/",
+  id: '/',
+  path: '/',
   getParentRoute: () => DashboardRoute,
-} as any);
+} as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
-  id: "/",
-  path: "/",
+  id: '/',
+  path: '/',
   getParentRoute: () => AdminRoute,
-} as any);
+} as any)
 const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
-  id: "/settings",
-  path: "/settings",
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => DashboardRoute,
-} as any);
+} as any)
 const DashboardResumesRoute = DashboardResumesRouteImport.update({
-  id: "/resumes",
-  path: "/resumes",
+  id: '/resumes',
+  path: '/resumes',
   getParentRoute: () => DashboardRoute,
-} as any);
+} as any)
 const DashboardProfileRoute = DashboardProfileRouteImport.update({
-  id: "/profile",
-  path: "/profile",
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => DashboardRoute,
-} as any);
+} as any)
 const DashboardInterviewRoute = DashboardInterviewRouteImport.update({
-  id: "/interview",
-  path: "/interview",
+  id: '/interview',
+  path: '/interview',
   getParentRoute: () => DashboardRoute,
-} as any);
+} as any)
 const DashboardExportsRoute = DashboardExportsRouteImport.update({
-  id: "/exports",
-  path: "/exports",
+  id: '/exports',
+  path: '/exports',
   getParentRoute: () => DashboardRoute,
-} as any);
+} as any)
 const DashboardCoverLettersRoute = DashboardCoverLettersRouteImport.update({
-  id: "/cover-letters",
-  path: "/cover-letters",
+  id: '/cover-letters',
+  path: '/cover-letters',
   getParentRoute: () => DashboardRoute,
-} as any);
+} as any)
 const DashboardAtsRoute = DashboardAtsRouteImport.update({
-  id: "/ats",
-  path: "/ats",
+  id: '/ats',
+  path: '/ats',
   getParentRoute: () => DashboardRoute,
-} as any);
+} as any)
 const DashboardApiKeysRoute = DashboardApiKeysRouteImport.update({
-  id: "/api-keys",
-  path: "/api-keys",
+  id: '/api-keys',
+  path: '/api-keys',
   getParentRoute: () => DashboardRoute,
-} as any);
+} as any)
 const AdminUsersRoute = AdminUsersRouteImport.update({
-  id: "/users",
-  path: "/users",
+  id: '/users',
+  path: '/users',
   getParentRoute: () => AdminRoute,
-} as any);
+} as any)
 const AdminTemplatesRoute = AdminTemplatesRouteImport.update({
-  id: "/templates",
-  path: "/templates",
+  id: '/templates',
+  path: '/templates',
   getParentRoute: () => AdminRoute,
-} as any);
+} as any)
 const AdminSystemLogsRoute = AdminSystemLogsRouteImport.update({
-  id: "/system-logs",
-  path: "/system-logs",
+  id: '/system-logs',
+  path: '/system-logs',
   getParentRoute: () => AdminRoute,
-} as any);
+} as any)
 const AdminSettingsRoute = AdminSettingsRouteImport.update({
-  id: "/settings",
-  path: "/settings",
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => AdminRoute,
-} as any);
+} as any)
 const AdminAuditLogsRoute = AdminAuditLogsRouteImport.update({
-  id: "/audit-logs",
-  path: "/audit-logs",
+  id: '/audit-logs',
+  path: '/audit-logs',
   getParentRoute: () => AdminRoute,
-} as any);
+} as any)
 const AdminAnalyticsRoute = AdminAnalyticsRouteImport.update({
-  id: "/analytics",
-  path: "/analytics",
+  id: '/analytics',
+  path: '/analytics',
   getParentRoute: () => AdminRoute,
-} as any);
+} as any)
 const DashboardResumesNewRoute = DashboardResumesNewRouteImport.update({
-  id: "/new",
-  path: "/new",
+  id: '/new',
+  path: '/new',
   getParentRoute: () => DashboardResumesRoute,
-} as any);
-const DashboardResumesNewManualRoute = DashboardResumesNewManualRouteImport.update({
-  id: "/manual",
-  path: "/manual",
-  getParentRoute: () => DashboardResumesNewRoute,
-} as any);
+} as any)
+const DashboardResumesNewManualRoute =
+  DashboardResumesNewManualRouteImport.update({
+    id: '/manual',
+    path: '/manual',
+    getParentRoute: () => DashboardResumesNewRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  "/": typeof IndexRoute;
-  "/admin": typeof AdminRouteWithChildren;
-  "/dashboard": typeof DashboardRouteWithChildren;
-  "/forgot-password": typeof ForgotPasswordRoute;
-  "/login": typeof LoginRoute;
-  "/register": typeof RegisterRoute;
-  "/admin/analytics": typeof AdminAnalyticsRoute;
-  "/admin/audit-logs": typeof AdminAuditLogsRoute;
-  "/admin/settings": typeof AdminSettingsRoute;
-  "/admin/system-logs": typeof AdminSystemLogsRoute;
-  "/admin/templates": typeof AdminTemplatesRoute;
-  "/admin/users": typeof AdminUsersRoute;
-  "/dashboard/api-keys": typeof DashboardApiKeysRoute;
-  "/dashboard/ats": typeof DashboardAtsRoute;
-  "/dashboard/cover-letters": typeof DashboardCoverLettersRoute;
-  "/dashboard/exports": typeof DashboardExportsRoute;
-  "/dashboard/interview": typeof DashboardInterviewRoute;
-  "/dashboard/profile": typeof DashboardProfileRoute;
-  "/dashboard/resumes": typeof DashboardResumesRouteWithChildren;
-  "/dashboard/settings": typeof DashboardSettingsRoute;
-  "/admin/": typeof AdminIndexRoute;
-  "/dashboard/": typeof DashboardIndexRoute;
-  "/dashboard/resumes/new": typeof DashboardResumesNewRouteWithChildren;
-  "/dashboard/resumes/new/manual": typeof DashboardResumesNewManualRoute;
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
+  '/admin/analytics': typeof AdminAnalyticsRoute
+  '/admin/audit-logs': typeof AdminAuditLogsRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/system-logs': typeof AdminSystemLogsRoute
+  '/admin/templates': typeof AdminTemplatesRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/dashboard/api-keys': typeof DashboardApiKeysRoute
+  '/dashboard/ats': typeof DashboardAtsRoute
+  '/dashboard/cover-letters': typeof DashboardCoverLettersRoute
+  '/dashboard/exports': typeof DashboardExportsRoute
+  '/dashboard/interview': typeof DashboardInterviewRoute
+  '/dashboard/profile': typeof DashboardProfileRoute
+  '/dashboard/resumes': typeof DashboardResumesRouteWithChildren
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/admin/': typeof AdminIndexRoute
+  '/dashboard/': typeof DashboardIndexRoute
+  '/dashboard/resumes/new': typeof DashboardResumesNewRouteWithChildren
+  '/dashboard/resumes/new/manual': typeof DashboardResumesNewManualRoute
 }
 export interface FileRoutesByTo {
-  "/": typeof IndexRoute;
-  "/forgot-password": typeof ForgotPasswordRoute;
-  "/login": typeof LoginRoute;
-  "/register": typeof RegisterRoute;
-  "/admin/analytics": typeof AdminAnalyticsRoute;
-  "/admin/audit-logs": typeof AdminAuditLogsRoute;
-  "/admin/settings": typeof AdminSettingsRoute;
-  "/admin/system-logs": typeof AdminSystemLogsRoute;
-  "/admin/templates": typeof AdminTemplatesRoute;
-  "/admin/users": typeof AdminUsersRoute;
-  "/dashboard/api-keys": typeof DashboardApiKeysRoute;
-  "/dashboard/ats": typeof DashboardAtsRoute;
-  "/dashboard/cover-letters": typeof DashboardCoverLettersRoute;
-  "/dashboard/exports": typeof DashboardExportsRoute;
-  "/dashboard/interview": typeof DashboardInterviewRoute;
-  "/dashboard/profile": typeof DashboardProfileRoute;
-  "/dashboard/resumes": typeof DashboardResumesRouteWithChildren;
-  "/dashboard/settings": typeof DashboardSettingsRoute;
-  "/admin": typeof AdminIndexRoute;
-  "/dashboard": typeof DashboardIndexRoute;
-  "/dashboard/resumes/new": typeof DashboardResumesNewRouteWithChildren;
-  "/dashboard/resumes/new/manual": typeof DashboardResumesNewManualRoute;
+  '/': typeof IndexRoute
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
+  '/admin/analytics': typeof AdminAnalyticsRoute
+  '/admin/audit-logs': typeof AdminAuditLogsRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/system-logs': typeof AdminSystemLogsRoute
+  '/admin/templates': typeof AdminTemplatesRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/dashboard/api-keys': typeof DashboardApiKeysRoute
+  '/dashboard/ats': typeof DashboardAtsRoute
+  '/dashboard/cover-letters': typeof DashboardCoverLettersRoute
+  '/dashboard/exports': typeof DashboardExportsRoute
+  '/dashboard/interview': typeof DashboardInterviewRoute
+  '/dashboard/profile': typeof DashboardProfileRoute
+  '/dashboard/resumes': typeof DashboardResumesRouteWithChildren
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/admin': typeof AdminIndexRoute
+  '/dashboard': typeof DashboardIndexRoute
+  '/dashboard/resumes/new': typeof DashboardResumesNewRouteWithChildren
+  '/dashboard/resumes/new/manual': typeof DashboardResumesNewManualRoute
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport;
-  "/": typeof IndexRoute;
-  "/admin": typeof AdminRouteWithChildren;
-  "/dashboard": typeof DashboardRouteWithChildren;
-  "/forgot-password": typeof ForgotPasswordRoute;
-  "/login": typeof LoginRoute;
-  "/register": typeof RegisterRoute;
-  "/admin/analytics": typeof AdminAnalyticsRoute;
-  "/admin/audit-logs": typeof AdminAuditLogsRoute;
-  "/admin/settings": typeof AdminSettingsRoute;
-  "/admin/system-logs": typeof AdminSystemLogsRoute;
-  "/admin/templates": typeof AdminTemplatesRoute;
-  "/admin/users": typeof AdminUsersRoute;
-  "/dashboard/api-keys": typeof DashboardApiKeysRoute;
-  "/dashboard/ats": typeof DashboardAtsRoute;
-  "/dashboard/cover-letters": typeof DashboardCoverLettersRoute;
-  "/dashboard/exports": typeof DashboardExportsRoute;
-  "/dashboard/interview": typeof DashboardInterviewRoute;
-  "/dashboard/profile": typeof DashboardProfileRoute;
-  "/dashboard/resumes": typeof DashboardResumesRouteWithChildren;
-  "/dashboard/settings": typeof DashboardSettingsRoute;
-  "/admin/": typeof AdminIndexRoute;
-  "/dashboard/": typeof DashboardIndexRoute;
-  "/dashboard/resumes/new": typeof DashboardResumesNewRouteWithChildren;
-  "/dashboard/resumes/new/manual": typeof DashboardResumesNewManualRoute;
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
+  '/admin/analytics': typeof AdminAnalyticsRoute
+  '/admin/audit-logs': typeof AdminAuditLogsRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/system-logs': typeof AdminSystemLogsRoute
+  '/admin/templates': typeof AdminTemplatesRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/dashboard/api-keys': typeof DashboardApiKeysRoute
+  '/dashboard/ats': typeof DashboardAtsRoute
+  '/dashboard/cover-letters': typeof DashboardCoverLettersRoute
+  '/dashboard/exports': typeof DashboardExportsRoute
+  '/dashboard/interview': typeof DashboardInterviewRoute
+  '/dashboard/profile': typeof DashboardProfileRoute
+  '/dashboard/resumes': typeof DashboardResumesRouteWithChildren
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/admin/': typeof AdminIndexRoute
+  '/dashboard/': typeof DashboardIndexRoute
+  '/dashboard/resumes/new': typeof DashboardResumesNewRouteWithChildren
+  '/dashboard/resumes/new/manual': typeof DashboardResumesNewManualRoute
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath;
+  fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | "/"
-    | "/admin"
-    | "/dashboard"
-    | "/forgot-password"
-    | "/login"
-    | "/register"
-    | "/admin/analytics"
-    | "/admin/audit-logs"
-    | "/admin/settings"
-    | "/admin/system-logs"
-    | "/admin/templates"
-    | "/admin/users"
-    | "/dashboard/api-keys"
-    | "/dashboard/ats"
-    | "/dashboard/cover-letters"
-    | "/dashboard/exports"
-    | "/dashboard/interview"
-    | "/dashboard/profile"
-    | "/dashboard/resumes"
-    | "/dashboard/settings"
-    | "/admin/"
-    | "/dashboard/"
-    | "/dashboard/resumes/new"
-    | "/dashboard/resumes/new/manual";
-  fileRoutesByTo: FileRoutesByTo;
+    | '/'
+    | '/admin'
+    | '/dashboard'
+    | '/forgot-password'
+    | '/login'
+    | '/register'
+    | '/admin/analytics'
+    | '/admin/audit-logs'
+    | '/admin/settings'
+    | '/admin/system-logs'
+    | '/admin/templates'
+    | '/admin/users'
+    | '/dashboard/api-keys'
+    | '/dashboard/ats'
+    | '/dashboard/cover-letters'
+    | '/dashboard/exports'
+    | '/dashboard/interview'
+    | '/dashboard/profile'
+    | '/dashboard/resumes'
+    | '/dashboard/settings'
+    | '/admin/'
+    | '/dashboard/'
+    | '/dashboard/resumes/new'
+    | '/dashboard/resumes/new/manual'
+  fileRoutesByTo: FileRoutesByTo
   to:
-    | "/"
-    | "/forgot-password"
-    | "/login"
-    | "/register"
-    | "/admin/analytics"
-    | "/admin/audit-logs"
-    | "/admin/settings"
-    | "/admin/system-logs"
-    | "/admin/templates"
-    | "/admin/users"
-    | "/dashboard/api-keys"
-    | "/dashboard/ats"
-    | "/dashboard/cover-letters"
-    | "/dashboard/exports"
-    | "/dashboard/interview"
-    | "/dashboard/profile"
-    | "/dashboard/resumes"
-    | "/dashboard/settings"
-    | "/admin"
-    | "/dashboard"
-    | "/dashboard/resumes/new"
-    | "/dashboard/resumes/new/manual";
+    | '/'
+    | '/forgot-password'
+    | '/login'
+    | '/register'
+    | '/admin/analytics'
+    | '/admin/audit-logs'
+    | '/admin/settings'
+    | '/admin/system-logs'
+    | '/admin/templates'
+    | '/admin/users'
+    | '/dashboard/api-keys'
+    | '/dashboard/ats'
+    | '/dashboard/cover-letters'
+    | '/dashboard/exports'
+    | '/dashboard/interview'
+    | '/dashboard/profile'
+    | '/dashboard/resumes'
+    | '/dashboard/settings'
+    | '/admin'
+    | '/dashboard'
+    | '/dashboard/resumes/new'
+    | '/dashboard/resumes/new/manual'
   id:
-    | "__root__"
-    | "/"
-    | "/admin"
-    | "/dashboard"
-    | "/forgot-password"
-    | "/login"
-    | "/register"
-    | "/admin/analytics"
-    | "/admin/audit-logs"
-    | "/admin/settings"
-    | "/admin/system-logs"
-    | "/admin/templates"
-    | "/admin/users"
-    | "/dashboard/api-keys"
-    | "/dashboard/ats"
-    | "/dashboard/cover-letters"
-    | "/dashboard/exports"
-    | "/dashboard/interview"
-    | "/dashboard/profile"
-    | "/dashboard/resumes"
-    | "/dashboard/settings"
-    | "/admin/"
-    | "/dashboard/"
-    | "/dashboard/resumes/new"
-    | "/dashboard/resumes/new/manual";
-  fileRoutesById: FileRoutesById;
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/dashboard'
+    | '/forgot-password'
+    | '/login'
+    | '/register'
+    | '/admin/analytics'
+    | '/admin/audit-logs'
+    | '/admin/settings'
+    | '/admin/system-logs'
+    | '/admin/templates'
+    | '/admin/users'
+    | '/dashboard/api-keys'
+    | '/dashboard/ats'
+    | '/dashboard/cover-letters'
+    | '/dashboard/exports'
+    | '/dashboard/interview'
+    | '/dashboard/profile'
+    | '/dashboard/resumes'
+    | '/dashboard/settings'
+    | '/admin/'
+    | '/dashboard/'
+    | '/dashboard/resumes/new'
+    | '/dashboard/resumes/new/manual'
+  fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute;
-  AdminRoute: typeof AdminRouteWithChildren;
-  DashboardRoute: typeof DashboardRouteWithChildren;
-  ForgotPasswordRoute: typeof ForgotPasswordRoute;
-  LoginRoute: typeof LoginRoute;
-  RegisterRoute: typeof RegisterRoute;
+  IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  DashboardRoute: typeof DashboardRouteWithChildren
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
+  LoginRoute: typeof LoginRoute
+  RegisterRoute: typeof RegisterRoute
 }
 
-declare module "@tanstack/react-router" {
+declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    "/register": {
-      id: "/register";
-      path: "/register";
-      fullPath: "/register";
-      preLoaderRoute: typeof RegisterRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/login": {
-      id: "/login";
-      path: "/login";
-      fullPath: "/login";
-      preLoaderRoute: typeof LoginRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/forgot-password": {
-      id: "/forgot-password";
-      path: "/forgot-password";
-      fullPath: "/forgot-password";
-      preLoaderRoute: typeof ForgotPasswordRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/dashboard": {
-      id: "/dashboard";
-      path: "/dashboard";
-      fullPath: "/dashboard";
-      preLoaderRoute: typeof DashboardRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/admin": {
-      id: "/admin";
-      path: "/admin";
-      fullPath: "/admin";
-      preLoaderRoute: typeof AdminRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/": {
-      id: "/";
-      path: "/";
-      fullPath: "/";
-      preLoaderRoute: typeof IndexRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/dashboard/": {
-      id: "/dashboard/";
-      path: "/";
-      fullPath: "/dashboard/";
-      preLoaderRoute: typeof DashboardIndexRouteImport;
-      parentRoute: typeof DashboardRoute;
-    };
-    "/admin/": {
-      id: "/admin/";
-      path: "/";
-      fullPath: "/admin/";
-      preLoaderRoute: typeof AdminIndexRouteImport;
-      parentRoute: typeof AdminRoute;
-    };
-    "/dashboard/settings": {
-      id: "/dashboard/settings";
-      path: "/settings";
-      fullPath: "/dashboard/settings";
-      preLoaderRoute: typeof DashboardSettingsRouteImport;
-      parentRoute: typeof DashboardRoute;
-    };
-    "/dashboard/resumes": {
-      id: "/dashboard/resumes";
-      path: "/resumes";
-      fullPath: "/dashboard/resumes";
-      preLoaderRoute: typeof DashboardResumesRouteImport;
-      parentRoute: typeof DashboardRoute;
-    };
-    "/dashboard/profile": {
-      id: "/dashboard/profile";
-      path: "/profile";
-      fullPath: "/dashboard/profile";
-      preLoaderRoute: typeof DashboardProfileRouteImport;
-      parentRoute: typeof DashboardRoute;
-    };
-    "/dashboard/interview": {
-      id: "/dashboard/interview";
-      path: "/interview";
-      fullPath: "/dashboard/interview";
-      preLoaderRoute: typeof DashboardInterviewRouteImport;
-      parentRoute: typeof DashboardRoute;
-    };
-    "/dashboard/exports": {
-      id: "/dashboard/exports";
-      path: "/exports";
-      fullPath: "/dashboard/exports";
-      preLoaderRoute: typeof DashboardExportsRouteImport;
-      parentRoute: typeof DashboardRoute;
-    };
-    "/dashboard/cover-letters": {
-      id: "/dashboard/cover-letters";
-      path: "/cover-letters";
-      fullPath: "/dashboard/cover-letters";
-      preLoaderRoute: typeof DashboardCoverLettersRouteImport;
-      parentRoute: typeof DashboardRoute;
-    };
-    "/dashboard/ats": {
-      id: "/dashboard/ats";
-      path: "/ats";
-      fullPath: "/dashboard/ats";
-      preLoaderRoute: typeof DashboardAtsRouteImport;
-      parentRoute: typeof DashboardRoute;
-    };
-    "/dashboard/api-keys": {
-      id: "/dashboard/api-keys";
-      path: "/api-keys";
-      fullPath: "/dashboard/api-keys";
-      preLoaderRoute: typeof DashboardApiKeysRouteImport;
-      parentRoute: typeof DashboardRoute;
-    };
-    "/admin/users": {
-      id: "/admin/users";
-      path: "/users";
-      fullPath: "/admin/users";
-      preLoaderRoute: typeof AdminUsersRouteImport;
-      parentRoute: typeof AdminRoute;
-    };
-    "/admin/templates": {
-      id: "/admin/templates";
-      path: "/templates";
-      fullPath: "/admin/templates";
-      preLoaderRoute: typeof AdminTemplatesRouteImport;
-      parentRoute: typeof AdminRoute;
-    };
-    "/admin/system-logs": {
-      id: "/admin/system-logs";
-      path: "/system-logs";
-      fullPath: "/admin/system-logs";
-      preLoaderRoute: typeof AdminSystemLogsRouteImport;
-      parentRoute: typeof AdminRoute;
-    };
-    "/admin/settings": {
-      id: "/admin/settings";
-      path: "/settings";
-      fullPath: "/admin/settings";
-      preLoaderRoute: typeof AdminSettingsRouteImport;
-      parentRoute: typeof AdminRoute;
-    };
-    "/admin/audit-logs": {
-      id: "/admin/audit-logs";
-      path: "/audit-logs";
-      fullPath: "/admin/audit-logs";
-      preLoaderRoute: typeof AdminAuditLogsRouteImport;
-      parentRoute: typeof AdminRoute;
-    };
-    "/admin/analytics": {
-      id: "/admin/analytics";
-      path: "/analytics";
-      fullPath: "/admin/analytics";
-      preLoaderRoute: typeof AdminAnalyticsRouteImport;
-      parentRoute: typeof AdminRoute;
-    };
-    "/dashboard/resumes/new": {
-      id: "/dashboard/resumes/new";
-      path: "/new";
-      fullPath: "/dashboard/resumes/new";
-      preLoaderRoute: typeof DashboardResumesNewRouteImport;
-      parentRoute: typeof DashboardResumesRoute;
-    };
-    "/dashboard/resumes/new/manual": {
-      id: "/dashboard/resumes/new/manual";
-      path: "/manual";
-      fullPath: "/dashboard/resumes/new/manual";
-      preLoaderRoute: typeof DashboardResumesNewManualRouteImport;
-      parentRoute: typeof DashboardResumesNewRoute;
-    };
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/dashboard/settings': {
+      id: '/dashboard/settings'
+      path: '/settings'
+      fullPath: '/dashboard/settings'
+      preLoaderRoute: typeof DashboardSettingsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/resumes': {
+      id: '/dashboard/resumes'
+      path: '/resumes'
+      fullPath: '/dashboard/resumes'
+      preLoaderRoute: typeof DashboardResumesRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/profile': {
+      id: '/dashboard/profile'
+      path: '/profile'
+      fullPath: '/dashboard/profile'
+      preLoaderRoute: typeof DashboardProfileRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/interview': {
+      id: '/dashboard/interview'
+      path: '/interview'
+      fullPath: '/dashboard/interview'
+      preLoaderRoute: typeof DashboardInterviewRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/exports': {
+      id: '/dashboard/exports'
+      path: '/exports'
+      fullPath: '/dashboard/exports'
+      preLoaderRoute: typeof DashboardExportsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/cover-letters': {
+      id: '/dashboard/cover-letters'
+      path: '/cover-letters'
+      fullPath: '/dashboard/cover-letters'
+      preLoaderRoute: typeof DashboardCoverLettersRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/ats': {
+      id: '/dashboard/ats'
+      path: '/ats'
+      fullPath: '/dashboard/ats'
+      preLoaderRoute: typeof DashboardAtsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/api-keys': {
+      id: '/dashboard/api-keys'
+      path: '/api-keys'
+      fullPath: '/dashboard/api-keys'
+      preLoaderRoute: typeof DashboardApiKeysRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/templates': {
+      id: '/admin/templates'
+      path: '/templates'
+      fullPath: '/admin/templates'
+      preLoaderRoute: typeof AdminTemplatesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/system-logs': {
+      id: '/admin/system-logs'
+      path: '/system-logs'
+      fullPath: '/admin/system-logs'
+      preLoaderRoute: typeof AdminSystemLogsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/settings': {
+      id: '/admin/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminSettingsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/audit-logs': {
+      id: '/admin/audit-logs'
+      path: '/audit-logs'
+      fullPath: '/admin/audit-logs'
+      preLoaderRoute: typeof AdminAuditLogsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/analytics': {
+      id: '/admin/analytics'
+      path: '/analytics'
+      fullPath: '/admin/analytics'
+      preLoaderRoute: typeof AdminAnalyticsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/dashboard/resumes/new': {
+      id: '/dashboard/resumes/new'
+      path: '/new'
+      fullPath: '/dashboard/resumes/new'
+      preLoaderRoute: typeof DashboardResumesNewRouteImport
+      parentRoute: typeof DashboardResumesRoute
+    }
+    '/dashboard/resumes/new/manual': {
+      id: '/dashboard/resumes/new/manual'
+      path: '/manual'
+      fullPath: '/dashboard/resumes/new/manual'
+      preLoaderRoute: typeof DashboardResumesNewManualRouteImport
+      parentRoute: typeof DashboardResumesNewRoute
+    }
   }
 }
 
 interface AdminRouteChildren {
-  AdminAnalyticsRoute: typeof AdminAnalyticsRoute;
-  AdminAuditLogsRoute: typeof AdminAuditLogsRoute;
-  AdminSettingsRoute: typeof AdminSettingsRoute;
-  AdminSystemLogsRoute: typeof AdminSystemLogsRoute;
-  AdminTemplatesRoute: typeof AdminTemplatesRoute;
-  AdminUsersRoute: typeof AdminUsersRoute;
-  AdminIndexRoute: typeof AdminIndexRoute;
+  AdminAnalyticsRoute: typeof AdminAnalyticsRoute
+  AdminAuditLogsRoute: typeof AdminAuditLogsRoute
+  AdminSettingsRoute: typeof AdminSettingsRoute
+  AdminSystemLogsRoute: typeof AdminSystemLogsRoute
+  AdminTemplatesRoute: typeof AdminTemplatesRoute
+  AdminUsersRoute: typeof AdminUsersRoute
+  AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
@@ -511,44 +512,42 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminTemplatesRoute: AdminTemplatesRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminIndexRoute: AdminIndexRoute,
-};
+}
 
-const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren);
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface DashboardResumesNewRouteChildren {
-  DashboardResumesNewManualRoute: typeof DashboardResumesNewManualRoute;
+  DashboardResumesNewManualRoute: typeof DashboardResumesNewManualRoute
 }
 
 const DashboardResumesNewRouteChildren: DashboardResumesNewRouteChildren = {
   DashboardResumesNewManualRoute: DashboardResumesNewManualRoute,
-};
+}
 
-const DashboardResumesNewRouteWithChildren = DashboardResumesNewRoute._addFileChildren(
-  DashboardResumesNewRouteChildren,
-);
+const DashboardResumesNewRouteWithChildren =
+  DashboardResumesNewRoute._addFileChildren(DashboardResumesNewRouteChildren)
 
 interface DashboardResumesRouteChildren {
-  DashboardResumesNewRoute: typeof DashboardResumesNewRouteWithChildren;
+  DashboardResumesNewRoute: typeof DashboardResumesNewRouteWithChildren
 }
 
 const DashboardResumesRouteChildren: DashboardResumesRouteChildren = {
   DashboardResumesNewRoute: DashboardResumesNewRouteWithChildren,
-};
+}
 
-const DashboardResumesRouteWithChildren = DashboardResumesRoute._addFileChildren(
-  DashboardResumesRouteChildren,
-);
+const DashboardResumesRouteWithChildren =
+  DashboardResumesRoute._addFileChildren(DashboardResumesRouteChildren)
 
 interface DashboardRouteChildren {
-  DashboardApiKeysRoute: typeof DashboardApiKeysRoute;
-  DashboardAtsRoute: typeof DashboardAtsRoute;
-  DashboardCoverLettersRoute: typeof DashboardCoverLettersRoute;
-  DashboardExportsRoute: typeof DashboardExportsRoute;
-  DashboardInterviewRoute: typeof DashboardInterviewRoute;
-  DashboardProfileRoute: typeof DashboardProfileRoute;
-  DashboardResumesRoute: typeof DashboardResumesRouteWithChildren;
-  DashboardSettingsRoute: typeof DashboardSettingsRoute;
-  DashboardIndexRoute: typeof DashboardIndexRoute;
+  DashboardApiKeysRoute: typeof DashboardApiKeysRoute
+  DashboardAtsRoute: typeof DashboardAtsRoute
+  DashboardCoverLettersRoute: typeof DashboardCoverLettersRoute
+  DashboardExportsRoute: typeof DashboardExportsRoute
+  DashboardInterviewRoute: typeof DashboardInterviewRoute
+  DashboardProfileRoute: typeof DashboardProfileRoute
+  DashboardResumesRoute: typeof DashboardResumesRouteWithChildren
+  DashboardSettingsRoute: typeof DashboardSettingsRoute
+  DashboardIndexRoute: typeof DashboardIndexRoute
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
@@ -561,9 +560,11 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardResumesRoute: DashboardResumesRouteWithChildren,
   DashboardSettingsRoute: DashboardSettingsRoute,
   DashboardIndexRoute: DashboardIndexRoute,
-};
+}
 
-const DashboardRouteWithChildren = DashboardRoute._addFileChildren(DashboardRouteChildren);
+const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
+  DashboardRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -572,7 +573,7 @@ const rootRouteChildren: RootRouteChildren = {
   ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
-};
+}
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>();
+  ._addFileTypes<FileRouteTypes>()
