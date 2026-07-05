@@ -12,4 +12,4 @@ Route::get('/{any}', function () {
         return file_get_contents($path);
     }
     return response()->json(['error' => 'Frontend not built yet. Run npm run build and copy dist to public.'], 404);
-})->where('any', '.*');
+})->where('any', '^(?!api/).*');

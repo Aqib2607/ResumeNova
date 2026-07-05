@@ -28,10 +28,10 @@ const conversion = [
 ];
 
 const breakdown = [
-  { name: "Modern Pro", v: 38, color: "var(--color-chart-1)" },
-  { name: "ATS Pro", v: 31, color: "var(--color-chart-2)" },
-  { name: "Corporate", v: 18, color: "var(--color-chart-3)" },
-  { name: "Creative", v: 13, color: "var(--color-chart-4)" },
+  { name: "Modern Pro", v: 38, color: "var(--color-chart-1)", bgClass: "bg-chart-1" },
+  { name: "ATS Pro", v: 31, color: "var(--color-chart-2)", bgClass: "bg-chart-2" },
+  { name: "Corporate", v: 18, color: "var(--color-chart-3)", bgClass: "bg-chart-3" },
+  { name: "Creative", v: 13, color: "var(--color-chart-4)", bgClass: "bg-chart-4" },
 ];
 
 function AdminAnalytics() {
@@ -107,7 +107,7 @@ function AdminAnalytics() {
             {breakdown.map((b) => (
               <li key={b.name} className="flex items-center justify-between text-xs">
                 <span className="flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full" style={{ background: b.color }} />
+                  <span className={`h-2 w-2 rounded-full ${b.bgClass}`} />
                   {b.name}
                 </span>
                 <span className="tabular-nums text-muted-foreground">{b.v}%</span>
