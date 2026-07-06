@@ -11,13 +11,13 @@ import type {
 } from "@/types";
 
 export const demoUser: User = {
-  id: "u_01",
-  name: "Aarav Mehta",
-  email: "aarav.mehta@resumenova.app",
-  avatar_url: null,
-  role: "user",
+  id: "u_01H1234567890",
+  name: "Alex Jensen",
+  email: "alex.jensen@example.com",
+  avatar: null,
+  role: "admin",
   language: "en",
-  created_at: "2025-01-12T09:24:00Z",
+  created_at: "2024-01-15T09:00:00Z",
 };
 
 export const demoResumes: Resume[] = [

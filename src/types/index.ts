@@ -10,8 +10,8 @@ export interface User {
   id: ID;
   name: string;
   email: string;
-  avatar_url?: string | null;
-  role: "user" | "admin";
+  avatar?: string | null;
+  role: "user" | "admin" | "ADMIN" | "USER";
   language: string;
   created_at: string;
 }

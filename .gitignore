@@ -30,3 +30,15 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Environment secrets
+.env
+.env.*
+!.env.example
+
+# Frontend build output copied to backend/public
+backend/public/assets/
+backend/public/index.html
+
+# TypeScript incremental build cache
+tsconfig.tsbuildinfo

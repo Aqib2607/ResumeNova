@@ -57,12 +57,23 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 // ── App Routes ────────────────────────────────────────────────────────
-Route::middleware(['auth:sanctum', 'verified', 'user.active'])->group(function () {
+Route::middleware(['auth:sanctum', 'user.active'])->group(function () {
+    // Standard Sanctum /user endpoint
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
 
+    // Legacy /auth/me alias
+    Route::get('/auth/me', function (Request $request) {
+        return $request->user();
+    });
+
     Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index']);
+    Route::get('/dashboard/statistics', [\App\Http\Controllers\DashboardController::class, 'statistics']);
+    Route::get('/dashboard/chart', [\App\Http\Controllers\DashboardController::class, 'chart']);
+    Route::get('/dashboard/recent-resumes', [\App\Http\Controllers\DashboardController::class, 'recentResumes']);
+    Route::get('/dashboard/recent-exports', [\App\Http\Controllers\DashboardController::class, 'recentExports']);
+    Route::get('/dashboard/api-keys', [\App\Http\Controllers\DashboardController::class, 'apiKeys']);
 
     Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'index']);
     Route::patch('/profile', [\App\Http\Controllers\ProfileController::class, 'update']);
@@ -73,6 +84,7 @@ Route::middleware(['auth:sanctum', 'verified', 'user.active'])->group(function (
 
     Route::get('/notifications', [\App\Http\Controllers\NotificationController::class, 'index']);
     Route::patch('/notifications/{id}/read', [\App\Http\Controllers\NotificationController::class, 'markAsRead']);
+    Route::post('/notifications/{id}/read', [\App\Http\Controllers\NotificationController::class, 'markAsRead']);
     Route::post('/notifications/read-all', [\App\Http\Controllers\NotificationController::class, 'markAllAsRead']);
 });
 

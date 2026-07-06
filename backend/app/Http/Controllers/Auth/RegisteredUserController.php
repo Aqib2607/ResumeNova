@@ -9,7 +9,6 @@ use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
 
 class RegisteredUserController extends Controller
 {
@@ -28,10 +27,13 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        Auth::login($user);
+        $token = $user->createToken('spa')->plainTextToken;
 
         $user->recordLogin();
 
-        return response()->json(['user' => $user], 201);
+        return response()->json([
+            'user'  => $user,
+            'token' => $token,
+        ], 201);
     }
 }

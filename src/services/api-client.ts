@@ -4,7 +4,7 @@
 // ============================================================
 
 export const API_BASE_URL =
-  (typeof import.meta !== "undefined" && (import.meta as any).env?.VITE_API_URL) || "/api";
+  (typeof import.meta !== "undefined" && (import.meta as ImportMeta).env?.VITE_API_URL) || "/api";
 
 export class ApiError extends Error {
   status: number;
@@ -28,12 +28,15 @@ export interface RequestOptions extends Omit<RequestInit, "body"> {
 export async function apiRequest<T>(path: string, options: RequestOptions = {}): Promise<T> {
   const { body, token, headers, ...rest } = options;
 
+  // Use explicitly-passed token, then fall back to the stored auth token.
+  const resolvedToken = token ?? localStorage.getItem("auth_token");
+
   const res = await fetch(`${API_BASE_URL}${path}`, {
     ...rest,
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(resolvedToken ? { Authorization: `Bearer ${resolvedToken}` } : {}),
       ...headers,
     },
     body: body !== undefined ? JSON.stringify(body) : undefined,
@@ -44,7 +47,7 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
 
   if (!res.ok) {
     throw new ApiError(
-      (data as any)?.message || res.statusText || "Request failed",
+      (data as { message?: string })?.message || res.statusText || "Request failed",
       res.status,
       data,
     );

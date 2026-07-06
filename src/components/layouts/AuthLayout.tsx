@@ -40,7 +40,7 @@ export function AuthLayout({ title, subtitle, children, footer }: AuthLayoutProp
       </div>
 
       {/* Pitch side */}
-      <div className="relative hidden overflow-hidden bg-foreground lg:block bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/10 via-foreground to-foreground">
+      <div className="relative hidden overflow-hidden bg-foreground lg:block">
         <div className="relative flex h-full flex-col justify-between p-12 text-background">
           <div />
           <div className="max-w-md">

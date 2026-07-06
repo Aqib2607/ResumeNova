@@ -1,7 +1,7 @@
 import { Bell, Menu, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,20 +11,40 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
-import { Link } from "@tanstack/react-router";
-import { demoNotifications, demoUser } from "@/lib/demo-data";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useAuthMe, useNotifications } from "@/hooks/useDashboard";
+import { AuthService } from "@/services/endpoints";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface TopbarProps {
   onMenuClick: () => void;
 }
 
 export function Topbar({ onMenuClick }: TopbarProps) {
-  const unread = demoNotifications.filter((n) => !n.read).length;
-  const initials = demoUser.name
-    .split(" ")
-    .map((p) => p[0])
-    .join("")
-    .slice(0, 2);
+  const { data: user } = useAuthMe();
+  const { data: notifications } = useNotifications();
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  const unread = notifications?.filter((n: any) => !n.read_at).length || 0;
+  const initials = user?.name
+    ? user.name
+        .split(" ")
+        .map((p: string) => p[0])
+        .join("")
+        .slice(0, 2)
+    : "US";
+
+  const handleLogout = async () => {
+    try {
+      await AuthService.logout();
+      queryClient.clear();
+      navigate({ to: "/login" });
+    } catch (error) {
+      console.error("Logout failed", error);
+      navigate({ to: "/login" });
+    }
+  };
 
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-border bg-background/80 px-4 backdrop-blur-md md:px-6">
@@ -70,15 +90,24 @@ export function Topbar({ onMenuClick }: TopbarProps) {
               {unread > 0 && <Badge variant="secondary">{unread} new</Badge>}
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            {demoNotifications.map((n) => (
-              <DropdownMenuItem key={n.id} className="flex flex-col items-start gap-0.5 py-2.5">
-                <div className="flex w-full items-center justify-between">
-                  <span className="text-sm font-medium">{n.title}</span>
-                  {!n.read && <span className="h-1.5 w-1.5 rounded-full bg-primary" />}
-                </div>
-                <span className="text-xs text-muted-foreground">{n.body}</span>
-              </DropdownMenuItem>
-            ))}
+            {notifications && notifications.length > 0 ? (
+              notifications.map((n: any) => {
+                const data = typeof n.data === 'string' ? JSON.parse(n.data) : n.data;
+                return (
+                  <DropdownMenuItem key={n.id} className="flex flex-col items-start gap-0.5 py-2.5">
+                    <div className="flex w-full items-center justify-between">
+                      <span className="text-sm font-medium">{data?.title || 'Notification'}</span>
+                      {!n.read_at && <span className="h-1.5 w-1.5 rounded-full bg-primary" />}
+                    </div>
+                    <span className="text-xs text-muted-foreground">{data?.body}</span>
+                  </DropdownMenuItem>
+                );
+              })
+            ) : (
+              <div className="py-4 text-center text-sm text-muted-foreground">
+                No new notifications.
+              </div>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
 
@@ -89,20 +118,21 @@ export function Topbar({ onMenuClick }: TopbarProps) {
               aria-label="Account menu"
             >
               <Avatar className="h-7 w-7">
+                {user?.avatar && <AvatarImage src={user.avatar} alt={user.name} />}
                 <AvatarFallback className="bg-primary/10 text-xs font-semibold text-primary">
                   {initials}
                 </AvatarFallback>
               </Avatar>
               <span className="hidden text-sm font-medium md:inline">
-                {demoUser.name.split(" ")[0]}
+                {user?.name?.split(" ")[0] || 'User'}
               </span>
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
             <DropdownMenuLabel>
               <div className="flex flex-col">
-                <span className="text-sm font-medium">{demoUser.name}</span>
-                <span className="text-xs font-normal text-muted-foreground">{demoUser.email}</span>
+                <span className="text-sm font-medium">{user?.name || 'User'}</span>
+                <span className="text-xs font-normal text-muted-foreground">{user?.email || ''}</span>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
@@ -113,8 +143,8 @@ export function Topbar({ onMenuClick }: TopbarProps) {
               <Link to="/dashboard/settings">Settings</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link to="/login">Log out</Link>
+            <DropdownMenuItem onClick={handleLogout}>
+              Log out
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

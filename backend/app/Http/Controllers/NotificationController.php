@@ -19,7 +19,10 @@ class NotificationController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $notifications = $this->notificationService->getPaginatedForUser($request->user()->id);
+        $user = $request->user();
+
+        // Return a flat list of the latest 20 notifications (most recent first)
+        $notifications = $user->notifications()->latest()->limit(20)->get();
 
         return response()->json($notifications);
     }

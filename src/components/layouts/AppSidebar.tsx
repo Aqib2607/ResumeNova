@@ -16,6 +16,7 @@ import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/brand/Logo";
 import { Button } from "@/components/ui/button";
+import { useAuthMe } from "@/hooks/useDashboard";
 
 interface NavItem {
   to: string;
@@ -44,6 +45,7 @@ interface AppSidebarProps {
 
 export function AppSidebar({ open, onClose }: AppSidebarProps) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { data: user } = useAuthMe();
 
   const isActive = (to: string) => {
     if (to === "/dashboard") return pathname === "/dashboard";
@@ -123,8 +125,12 @@ export function AppSidebar({ open, onClose }: AppSidebarProps) {
           {renderGroup("main", "Workspace")}
           <div className="my-3 border-t border-sidebar-border" />
           {renderGroup("account", "Account")}
-          <div className="my-3 border-t border-sidebar-border" />
-          {renderGroup("admin", "System")}
+          {user?.role === "ADMIN" && (
+            <>
+              <div className="my-3 border-t border-sidebar-border" />
+              {renderGroup("admin", "System")}
+            </>
+          )}
         </nav>
 
         <div className="border-t border-sidebar-border p-3">

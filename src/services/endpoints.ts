@@ -21,16 +21,20 @@ import type {
 // ---------- Auth ----------
 export const AuthService = {
   login: (payload: { email: string; password: string }) =>
-    api.post<AuthSession>("/auth/login", payload),
-  register: (payload: { name: string; email: string; password: string }) =>
-    api.post<AuthSession>("/auth/register", payload),
+    api.post<AuthSession>("/login", payload),
+  register: (payload: {
+    name: string;
+    email: string;
+    password: string;
+    password_confirmation: string;
+  }) => api.post<AuthSession>("/register", payload),
   forgotPassword: (payload: { email: string }) =>
-    api.post<{ message: string }>("/auth/forgot-password", payload),
+    api.post<{ message: string }>("/forgot-password", payload),
   resetPassword: (payload: { token: string; email: string; password: string }) =>
-    api.post<{ message: string }>("/auth/reset-password", payload),
-  logout: () => api.post<void>("/auth/logout"),
-  me: () => api.get<User>("/auth/me"),
-  googleAuthUrl: () => api.get<{ url: string }>("/auth/google/url"),
+    api.post<{ message: string }>("/reset-password", payload),
+  logout: () => api.post<void>("/logout"),
+  me: () => api.get<User>("/user"),
+  googleAuthUrl: () => api.get<{ url: string }>("/auth/google"),
 };
 
 // ---------- Resumes ----------
@@ -100,4 +104,18 @@ export const AdminService = {
   analytics: () => api.get<unknown>("/admin/analytics"),
   auditLogs: () => api.get<unknown[]>("/admin/audit-logs"),
   systemLogs: () => api.get<unknown[]>("/admin/system-logs"),
+};
+
+// ---------- Dashboard ----------
+export const DashboardService = {
+  statistics: () => api.get<{
+    resumes_count: number;
+    average_ats_score: number;
+    ai_usage_count: number;
+    exports_count: number;
+  }>("/dashboard/statistics"),
+  chart: () => api.get<Array<{ d: string; v: number }>>("/dashboard/chart"),
+  recentResumes: () => api.get<Resume[]>("/dashboard/recent-resumes"),
+  recentExports: () => api.get<ExportRecord[]>("/dashboard/recent-exports"),
+  apiKeys: () => api.get<ApiKey[]>("/dashboard/api-keys"),
 };

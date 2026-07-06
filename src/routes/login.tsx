@@ -1,7 +1,4 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
@@ -11,31 +8,66 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { AuthService } from "@/services/endpoints";
+import { ApiError } from "@/services/api-client";
 
 export const Route = createFileRoute("/login")({
   component: LoginPage,
 });
 
-const schema = z.object({
-  email: z.string().email("Enter a valid email"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
-  remember: z.boolean().optional(),
-});
-type FormValues = z.infer<typeof schema>;
-
 function LoginPage() {
   const [showPwd, setShowPwd] = useState(false);
   const navigate = useNavigate();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<FormValues>({ resolver: zodResolver(schema) });
+  
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [remember, setRemember] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
-  const onSubmit = async (_values: FormValues) => {
-    // TODO: wire to AuthService.login() once Laravel backend is connected.
-    toast.success("Signed in (demo). Connect Laravel API to enable.");
-    navigate({ to: "/dashboard" });
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setEmailError("");
+    setPasswordError("");
+    
+    let hasError = false;
+    if (!email || !email.includes("@")) {
+      setEmailError("Enter a valid email");
+      hasError = true;
+    }
+    if (!password || password.length < 8) {
+      setPasswordError("Password must be at least 8 characters");
+      hasError = true;
+    }
+    if (hasError) return;
+
+    setIsSubmitting(true);
+    try {
+      const session = await AuthService.login({ email, password });
+      if (session?.token) {
+        localStorage.setItem("auth_token", session.token);
+      } else {
+        toast.error("Sign-in succeeded but no token was returned. Contact support.");
+        setIsSubmitting(false);
+        return;
+      }
+      toast.success("Welcome back!");
+      navigate({ to: "/dashboard" });
+    } catch (err) {
+      const message = err instanceof ApiError ? err.message : "Sign-in failed. Please try again.";
+      toast.error(message);
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const { url } = await AuthService.googleAuthUrl();
+      window.location.href = url;
+    } catch {
+      toast.error("Could not initiate Google sign-in. Please try again.");
+    }
   };
 
   return (
@@ -52,20 +84,36 @@ function LoginPage() {
       }
     >
       <SEO title="Login" description="Sign in to your ResumeNova account." />
-      <Button variant="outline" className="w-full" type="button">
+
+      <Button variant="outline" className="w-full gap-2" type="button" onClick={handleGoogleSignIn}>
         <GoogleIcon /> Continue with Google
       </Button>
+
       <div className="my-5 flex items-center gap-3">
         <div className="h-px flex-1 bg-border" />
         <span className="text-xs uppercase tracking-wider text-muted-foreground">or</span>
         <div className="h-px flex-1 bg-border" />
       </div>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+
+      <form onSubmit={onSubmit} className="space-y-4" noValidate>
         <div className="space-y-1.5">
           <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" placeholder="you@company.com" {...register("email")} />
-          {errors.email && <p className="text-xs text-destructive">{errors.email.message}</p>}
+          <Input
+            id="email"
+            type="email"
+            autoComplete="email"
+            placeholder="you@company.com"
+            aria-invalid={!!emailError}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          {emailError && (
+            <p className="text-xs text-destructive" role="alert">
+              {emailError}
+            </p>
+          )}
         </div>
+
         <div className="space-y-1.5">
           <div className="flex items-center justify-between">
             <Label htmlFor="password">Password</Label>
@@ -80,8 +128,11 @@ function LoginPage() {
             <Input
               id="password"
               type={showPwd ? "text" : "password"}
+              autoComplete="current-password"
               placeholder="••••••••"
-              {...register("password")}
+              aria-invalid={!!passwordError}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <button
               type="button"
@@ -92,14 +143,24 @@ function LoginPage() {
               {showPwd ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>
           </div>
-          {errors.password && <p className="text-xs text-destructive">{errors.password.message}</p>}
+          {passwordError && (
+            <p className="text-xs text-destructive" role="alert">
+              {passwordError}
+            </p>
+          )}
         </div>
+
         <div className="flex items-center gap-2">
-          <Checkbox id="remember" {...register("remember")} />
+          <Checkbox
+            id="remember"
+            checked={remember}
+            onCheckedChange={(checked) => setRemember(checked === true)}
+          />
           <Label htmlFor="remember" className="text-sm font-normal text-muted-foreground">
             Remember me for 30 days
           </Label>
         </div>
+
         <Button type="submit" className="w-full" disabled={isSubmitting}>
           {isSubmitting ? "Signing in…" : "Sign in"}
         </Button>

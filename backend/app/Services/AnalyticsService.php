@@ -41,14 +41,31 @@ class AnalyticsService
     }
 
     /**
-     * Get basic dashboard metrics for the user.
+     * Get the weekly AI usage for the dashboard chart.
      */
-    public function getUserMetrics(int $userId): array
+    public function getWeeklyAiUsage(\App\Models\User $user): array
     {
-        // For now, this is a placeholder for future feature usage.
-        return [
-            'resumes_created' => 0, // Placeholder
-            'profile_views'   => rand(5, 50), // Mock data
-        ];
+        // Get the last 7 days of AI requests
+        $startDate = now()->subDays(6)->startOfDay();
+        
+        $requests = $user->aiRequests()
+            ->where('date', '>=', $startDate)
+            ->get()
+            ->groupBy(function($item) {
+                return $item->date->format('D'); // Mon, Tue, etc.
+            });
+            
+        // Map to chart format, ensuring all 7 days are present
+        $chartData = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $day = now()->subDays($i)->format('D');
+            $calls = $requests->has($day) ? $requests->get($day)->sum('calls') : 0;
+            $chartData[] = [
+                'd' => $day,
+                'v' => $calls,
+            ];
+        }
+        
+        return $chartData;
     }
 }
