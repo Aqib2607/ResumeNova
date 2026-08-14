@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate, redirect } from "@tanstack/react-router";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
@@ -11,9 +11,14 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { AuthService } from "@/services/endpoints";
 import { ApiError } from "@/services/api-client";
 
-import { setAuthToken, setStoredUser } from "@/lib/auth";
+import { isAuthenticated, setAuthToken, setStoredUser } from "@/lib/auth";
 
 export const Route = createFileRoute("/login")({
+  beforeLoad: () => {
+    if (isAuthenticated()) {
+      throw redirect({ to: "/dashboard" });
+    }
+  },
   component: LoginPage,
 });
 

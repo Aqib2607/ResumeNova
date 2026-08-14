@@ -27,6 +27,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
+import { useAuthMe } from "@/hooks/useDashboard";
 
 export const Route = createFileRoute("/")({
   component: Landing,
@@ -131,10 +132,12 @@ const faqs = [
 
 function Nav() {
   const [open, setOpen] = useState(false);
+  const { data: user } = useAuthMe();
+
   return (
     <header className="sticky top-0 z-50 border-b border-border/70 bg-background/80 backdrop-blur-md">
       <div className="container-page flex h-16 items-center justify-between">
-        <Logo />
+        <Logo to={user ? "/dashboard" : "/"} />
         <nav className="hidden items-center gap-7 md:flex">
           <a
             href="#features"
@@ -162,12 +165,22 @@ function Nav() {
           </a>
         </nav>
         <div className="hidden items-center gap-2 md:flex">
-          <Button variant="ghost" size="sm" asChild>
-            <Link to="/login">Login</Link>
-          </Button>
-          <Button size="sm" asChild>
-            <Link to="/register">Get started</Link>
-          </Button>
+          {user ? (
+            <Button size="sm" asChild className="gap-1.5 font-medium shadow-sm">
+              <Link to="/dashboard">
+                Dashboard <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </Button>
+          ) : (
+            <>
+              <Button variant="ghost" size="sm" asChild>
+                <Link to="/login">Login</Link>
+              </Button>
+              <Button size="sm" asChild>
+                <Link to="/register">Get started</Link>
+              </Button>
+            </>
+          )}
         </div>
         <button
           className="grid h-9 w-9 place-items-center rounded-md border border-border md:hidden"
@@ -209,12 +222,22 @@ function Nav() {
               FAQ
             </a>
             <div className="flex gap-2 pt-2">
-              <Button variant="outline" className="flex-1" asChild>
-                <Link to="/login">Login</Link>
-              </Button>
-              <Button className="flex-1" asChild>
-                <Link to="/register">Get started</Link>
-              </Button>
+              {user ? (
+                <Button className="flex-1 gap-1.5" asChild>
+                  <Link to="/dashboard">
+                    Dashboard <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </Button>
+              ) : (
+                <>
+                  <Button variant="outline" className="flex-1" asChild>
+                    <Link to="/login">Login</Link>
+                  </Button>
+                  <Button className="flex-1" asChild>
+                    <Link to="/register">Get started</Link>
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -224,6 +247,8 @@ function Nav() {
 }
 
 function Hero() {
+  const { data: user } = useAuthMe();
+
   return (
     <section className="relative overflow-hidden">
       <div className="absolute inset-x-0 top-0 -z-10 h-[600px] bg-gradient-to-b from-primary/[0.06] via-primary/[0.02] to-transparent" />
@@ -253,8 +278,8 @@ function Hero() {
           </p>
           <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Button size="lg" asChild className="h-11 px-6">
-              <Link to="/register">
-                Start free <ArrowRight className="ml-1.5 h-4 w-4" />
+              <Link to={user ? "/dashboard" : "/register"}>
+                {user ? "Go to Dashboard" : "Start free"} <ArrowRight className="ml-1.5 h-4 w-4" />
               </Link>
             </Button>
             <Button size="lg" variant="outline" asChild className="h-11 px-6">
@@ -620,6 +645,8 @@ function FAQ() {
 }
 
 function CTABanner() {
+  const { data: user } = useAuthMe();
+
   return (
     <section className="border-t border-border py-20 md:py-24">
       <div className="container-page">
@@ -633,17 +660,31 @@ function CTABanner() {
               Join 180k+ professionals using ResumeNova to apply smarter.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
-              <Button size="lg" asChild className="h-11 px-6">
-                <Link to="/register">Get started — it's free</Link>
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                asChild
-                className="h-11 border-background/30 bg-transparent px-6 text-background hover:bg-background/10 hover:text-background"
-              >
-                <Link to="/login">I already have an account</Link>
-              </Button>
+              {user ? (
+                <Button
+                  size="lg"
+                  asChild
+                  className="h-11 px-6 bg-primary text-primary-foreground hover:bg-primary/90"
+                >
+                  <Link to="/dashboard">
+                    Go to Dashboard <ArrowRight className="ml-1.5 h-4 w-4" />
+                  </Link>
+                </Button>
+              ) : (
+                <>
+                  <Button size="lg" asChild className="h-11 px-6">
+                    <Link to="/register">Get started — it's free</Link>
+                  </Button>
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    asChild
+                    className="h-11 border-background/30 bg-transparent px-6 text-background hover:bg-background/10 hover:text-background"
+                  >
+                    <Link to="/login">I already have an account</Link>
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         </div>

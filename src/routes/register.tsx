@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate, redirect } from "@tanstack/react-router";
 import { useForm, useWatch, Control } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -13,9 +13,14 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { AuthService } from "@/services/endpoints";
 import { ApiError } from "@/services/api-client";
-import { setAuthToken, setStoredUser } from "@/lib/auth";
+import { isAuthenticated, setAuthToken, setStoredUser } from "@/lib/auth";
 
 export const Route = createFileRoute("/register")({
+  beforeLoad: () => {
+    if (isAuthenticated()) {
+      throw redirect({ to: "/dashboard" });
+    }
+  },
   component: RegisterPage,
 });
 

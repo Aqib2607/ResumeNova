@@ -5,12 +5,13 @@ import { cn } from "@/lib/utils";
 interface LogoProps {
   className?: string;
   showWordmark?: boolean;
+  to?: string;
 }
 
-export function Logo({ className, showWordmark = true }: LogoProps) {
+export function Logo({ className, showWordmark = true, to = "/" }: LogoProps) {
   return (
     <Link
-      to="/"
+      to={to}
       className={cn("flex items-center gap-2 group", className)}
       aria-label="ResumeNova home"
     >

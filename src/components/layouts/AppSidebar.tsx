@@ -111,7 +111,7 @@ export function AppSidebar({ open, onClose }: AppSidebarProps) {
         )}
       >
         <div className="flex h-14 items-center justify-between border-b border-sidebar-border px-4">
-          <Logo />
+          <Logo to="/dashboard" />
           <Button
             variant="ghost"
             size="icon"
