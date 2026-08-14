@@ -17,6 +17,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as OauthCallbackRouteImport } from './routes/oauth.callback'
 import { Route as DashboardSettingsRouteImport } from './routes/dashboard.settings'
 import { Route as DashboardResumesRouteImport } from './routes/dashboard.resumes'
 import { Route as DashboardProfileRouteImport } from './routes/dashboard.profile'
@@ -73,6 +74,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AdminRoute,
+} as any)
+const OauthCallbackRoute = OauthCallbackRouteImport.update({
+  id: '/oauth/callback',
+  path: '/oauth/callback',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
   id: '/settings',
@@ -177,6 +183,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/resumes': typeof DashboardResumesRouteWithChildren
   '/dashboard/settings': typeof DashboardSettingsRoute
+  '/oauth/callback': typeof OauthCallbackRoute
   '/admin/': typeof AdminIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/dashboard/resumes/new': typeof DashboardResumesNewRouteWithChildren
@@ -201,6 +208,7 @@ export interface FileRoutesByTo {
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/resumes': typeof DashboardResumesRouteWithChildren
   '/dashboard/settings': typeof DashboardSettingsRoute
+  '/oauth/callback': typeof OauthCallbackRoute
   '/admin': typeof AdminIndexRoute
   '/dashboard': typeof DashboardIndexRoute
   '/dashboard/resumes/new': typeof DashboardResumesNewRouteWithChildren
@@ -228,6 +236,7 @@ export interface FileRoutesById {
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/resumes': typeof DashboardResumesRouteWithChildren
   '/dashboard/settings': typeof DashboardSettingsRoute
+  '/oauth/callback': typeof OauthCallbackRoute
   '/admin/': typeof AdminIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/dashboard/resumes/new': typeof DashboardResumesNewRouteWithChildren
@@ -256,6 +265,7 @@ export interface FileRouteTypes {
     | '/dashboard/profile'
     | '/dashboard/resumes'
     | '/dashboard/settings'
+    | '/oauth/callback'
     | '/admin/'
     | '/dashboard/'
     | '/dashboard/resumes/new'
@@ -280,6 +290,7 @@ export interface FileRouteTypes {
     | '/dashboard/profile'
     | '/dashboard/resumes'
     | '/dashboard/settings'
+    | '/oauth/callback'
     | '/admin'
     | '/dashboard'
     | '/dashboard/resumes/new'
@@ -306,6 +317,7 @@ export interface FileRouteTypes {
     | '/dashboard/profile'
     | '/dashboard/resumes'
     | '/dashboard/settings'
+    | '/oauth/callback'
     | '/admin/'
     | '/dashboard/'
     | '/dashboard/resumes/new'
@@ -319,6 +331,7 @@ export interface RootRouteChildren {
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
+  OauthCallbackRoute: typeof OauthCallbackRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -378,6 +391,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
+    }
+    '/oauth/callback': {
+      id: '/oauth/callback'
+      path: '/oauth/callback'
+      fullPath: '/oauth/callback'
+      preLoaderRoute: typeof OauthCallbackRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/dashboard/settings': {
       id: '/dashboard/settings'
@@ -573,6 +593,7 @@ const rootRouteChildren: RootRouteChildren = {
   ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
+  OauthCallbackRoute: OauthCallbackRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

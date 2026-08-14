@@ -1,51 +1,87 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Loader2, Terminal } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 import { SEO } from "@/components/SEO";
 import { Badge } from "@/components/ui/badge";
+import { useAdminSystemLogs } from "@/hooks/use-admin";
+
+import type { AdminSystemLog } from "@/types";
 
 export const Route = createFileRoute("/admin/system-logs")({
   component: SystemLogs,
 });
 
-const LINES = [
-  { lvl: "info", t: "2026-06-27T09:14:02Z", msg: "queue:worker started (workers=8)" },
-  {
-    lvl: "warn",
-    t: "2026-06-27T08:51:39Z",
-    msg: "ai_router: groq returned 429, switching to anthropic",
-  },
-  { lvl: "info", t: "2026-06-27T08:50:12Z", msg: "export.pdf job r_01 completed in 2.4s" },
-  {
-    lvl: "error",
-    t: "2026-06-26T22:31:08Z",
-    msg: "stripe.webhook: signature mismatch from 203.0.113.99",
-  },
-  { lvl: "info", t: "2026-06-26T22:30:11Z", msg: "ats.analyze finished score=78 user=u_02" },
-  { lvl: "debug", t: "2026-06-26T22:29:54Z", msg: "cache:miss key=ats:r_01:hash:9af2" },
-];
-
 const TONE: Record<string, string> = {
-  info: "bg-primary/10 text-primary",
-  warn: "bg-warning/10 text-warning",
-  error: "bg-destructive/10 text-destructive",
-  debug: "bg-muted text-muted-foreground",
+  info: "bg-primary/10 text-primary border-primary/20",
+  notice: "bg-primary/10 text-primary border-primary/20",
+  warning: "bg-amber-500/10 text-amber-500 border-amber-500/20",
+  warn: "bg-amber-500/10 text-amber-500 border-amber-500/20",
+  error: "bg-rose-500/10 text-rose-500 border-rose-500/20",
+  critical: "bg-rose-600/20 text-rose-500 border-rose-600/30",
+  debug: "bg-muted text-muted-foreground border-border",
 };
 
 function SystemLogs() {
+  const { data: logsData, isLoading } = useAdminSystemLogs();
+
+  const logs: AdminSystemLog[] = Array.isArray(logsData)
+    ? logsData
+    : logsData?.data && Array.isArray(logsData.data)
+      ? logsData.data
+      : [];
+
   return (
-    <div>
-      <SEO title="Admin · System logs" />
-      <PageHeader title="System logs" description="Tail of the most recent application events." />
-      <div className="overflow-hidden rounded-xl border border-border bg-foreground font-mono text-xs text-background/90">
-        <ul className="divide-y divide-white/5">
-          {LINES.map((l, i) => (
-            <li key={i} className="grid grid-cols-[110px_auto_1fr] items-start gap-3 px-4 py-2.5">
-              <Badge className={`${TONE[l.lvl]} justify-center uppercase`}>{l.lvl}</Badge>
-              <span className="text-background/50">{l.t}</span>
-              <span className="break-all">{l.msg}</span>
-            </li>
-          ))}
-        </ul>
+    <div className="space-y-6">
+      <SEO title="Admin · System Logs" />
+      <PageHeader
+        title="System Logs"
+        description="Sanitized application log trail with masked sensitive tokens and credentials."
+      />
+
+      <div className="overflow-hidden rounded-xl border border-border bg-card">
+        {isLoading ? (
+          <div className="flex flex-col items-center justify-center p-12 text-muted-foreground">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            <p className="mt-3 text-sm">Loading system logs...</p>
+          </div>
+        ) : logs.length === 0 ? (
+          <div className="flex flex-col items-center justify-center p-12 text-center text-muted-foreground">
+            <Terminal className="h-10 w-10 text-muted-foreground/40" />
+            <h3 className="mt-3 text-base font-semibold text-foreground">No System Log Events</h3>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Exceptions and system telemetry will be reported here automatically.
+            </p>
+          </div>
+        ) : (
+          <ul className="divide-y divide-border font-mono text-xs">
+            {logs.map((l) => (
+              <li
+                key={l.id}
+                className="grid grid-cols-1 md:grid-cols-[100px_180px_1fr] items-start gap-3 p-4 hover:bg-muted/30 transition"
+              >
+                <div>
+                  <Badge
+                    variant="outline"
+                    className={`${TONE[l.level.toLowerCase()] ?? "bg-muted text-muted-foreground"} justify-center uppercase font-mono text-[10px]`}
+                  >
+                    {l.level}
+                  </Badge>
+                </div>
+                <span className="text-muted-foreground text-xs">
+                  {new Date(l.created_at).toLocaleString()}
+                </span>
+                <div className="space-y-1 min-w-0">
+                  <p className="break-all font-medium text-foreground">{l.message}</p>
+                  {l.context && Object.keys(l.context).length > 0 && (
+                    <pre className="mt-1 rounded bg-muted p-2 text-[11px] overflow-x-auto text-muted-foreground">
+                      {JSON.stringify(l.context, null, 2)}
+                    </pre>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );

@@ -31,7 +31,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(
+            \App\Contracts\AIProviderInterface::class,
+            \App\Services\AI\GroqProvider::class
+        );
     }
 
     /**
@@ -48,6 +51,10 @@ class AppServiceProvider extends ServiceProvider
 
         // Register Policies
         Gate::policy(User::class, UserPolicy::class);
+        Gate::policy(\App\Models\ApiKey::class, \App\Policies\ApiKeyPolicy::class);
+        Gate::policy(\App\Models\CoverLetter::class, \App\Policies\CoverLetterPolicy::class);
+        Gate::policy(\App\Models\InterviewSession::class, \App\Policies\InterviewSessionPolicy::class);
+        Gate::policy(\App\Models\Export::class, \App\Policies\ExportPolicy::class);
 
         // Register Observers
         User::observe(UserObserver::class);
@@ -72,6 +79,10 @@ class AppServiceProvider extends ServiceProvider
         // Configure Rate Limiting
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+        });
+
+        RateLimiter::for('ai', function (Request $request) {
+            return Limit::perMinute(30)->by($request->user()?->id ?: $request->ip());
         });
 
         RateLimiter::for('web', function (Request $request) {

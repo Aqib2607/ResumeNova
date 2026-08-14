@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { AuthService } from "@/services/endpoints";
 import { ApiError } from "@/services/api-client";
+import { setAuthToken, setStoredUser } from "@/lib/auth";
 
 export const Route = createFileRoute("/register")({
   component: RegisterPage,
@@ -132,7 +133,10 @@ function RegisterPage() {
         toast.error("Registration succeeded but no auth token was returned. Contact support.");
         return;
       }
-      localStorage.setItem("auth_token", session.token);
+      setAuthToken(session.token);
+      if (session.user) {
+        setStoredUser(session.user);
+      }
       toast.success("Account created! Welcome to ResumeNova.");
       navigate({ to: "/dashboard" });
     } catch (err) {

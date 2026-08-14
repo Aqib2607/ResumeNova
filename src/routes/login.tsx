@@ -11,6 +11,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { AuthService } from "@/services/endpoints";
 import { ApiError } from "@/services/api-client";
 
+import { setAuthToken, setStoredUser } from "@/lib/auth";
+
 export const Route = createFileRoute("/login")({
   component: LoginPage,
 });
@@ -18,7 +20,7 @@ export const Route = createFileRoute("/login")({
 function LoginPage() {
   const [showPwd, setShowPwd] = useState(false);
   const navigate = useNavigate();
-  
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
@@ -30,7 +32,7 @@ function LoginPage() {
     e.preventDefault();
     setEmailError("");
     setPasswordError("");
-    
+
     let hasError = false;
     if (!email || !email.includes("@")) {
       setEmailError("Enter a valid email");
@@ -46,7 +48,10 @@ function LoginPage() {
     try {
       const session = await AuthService.login({ email, password });
       if (session?.token) {
-        localStorage.setItem("auth_token", session.token);
+        setAuthToken(session.token);
+        if (session.user) {
+          setStoredUser(session.user);
+        }
       } else {
         toast.error("Sign-in succeeded but no token was returned. Contact support.");
         setIsSubmitting(false);

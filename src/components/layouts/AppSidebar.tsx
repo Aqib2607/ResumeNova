@@ -125,7 +125,7 @@ export function AppSidebar({ open, onClose }: AppSidebarProps) {
           {renderGroup("main", "Workspace")}
           <div className="my-3 border-t border-sidebar-border" />
           {renderGroup("account", "Account")}
-          {user?.role === "ADMIN" && (
+          {(user?.role === "admin" || user?.role === "super_admin") && (
             <>
               <div className="my-3 border-t border-sidebar-border" />
               {renderGroup("admin", "System")}

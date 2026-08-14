@@ -28,19 +28,20 @@ function fakeSocialiteUser(
 // Redirect Tests
 // ──────────────────────────────────────────────────────────────────────────────
 
-it('redirects unauthenticated users to google consent screen', function () {
-    $response = $this->getJson(route('auth.google'));
+it('returns google consent screen authorization url for unauthenticated users', function () {
+    $response = $this->get(route('auth.google'));
 
-    $response->assertRedirect();
-    expect($response->headers->get('Location'))->toContain('accounts.google.com');
+    $response->assertStatus(200)
+        ->assertJsonStructure(['url']);
+    expect($response->json('url'))->toContain('accounts.google.com');
 });
 
-it('google redirect is protected by guest middleware', function () {
-    $user = User::factory()->create();
+it('returns authorization url for json api requests', function () {
+    $response = $this->getJson(route('auth.google'));
 
-    $this->actingAs($user)
-        ->getJson(route('auth.google'))
-        ->assertRedirect();
+    $response->assertStatus(200)
+        ->assertJsonStructure(['url']);
+    expect($response->json('url'))->toContain('accounts.google.com');
 });
 
 // ──────────────────────────────────────────────────────────────────────────────

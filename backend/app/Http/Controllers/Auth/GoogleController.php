@@ -15,11 +15,19 @@ use Throwable;
 class GoogleController extends Controller
 {
     /**
-     * Redirect the user to the Google OAuth consent screen.
+     * Redirect the user to the Google OAuth consent screen or return the authorization URL.
      */
-    public function redirect(): RedirectResponse
+    public function redirect(\Illuminate\Http\Request $request): \Symfony\Component\HttpFoundation\Response
     {
-        return Socialite::driver('google')->stateless()->redirect();
+        /** @var \Laravel\Socialite\Two\AbstractProvider $driver */
+        $driver = Socialite::driver('google');
+        $targetUrl = $driver->stateless()->redirect()->getTargetUrl();
+
+        if ($request->wantsJson() || $request->is('api/*')) {
+            return response()->json(['url' => $targetUrl]);
+        }
+
+        return redirect()->away($targetUrl);
     }
 
     /**
@@ -37,7 +45,9 @@ class GoogleController extends Controller
         $frontendUrl = config('app.frontend_url', 'http://127.0.0.1:5173');
 
         try {
-            $googleUser = Socialite::driver('google')->stateless()->user();
+            /** @var \Laravel\Socialite\Two\AbstractProvider $driver */
+            $driver = Socialite::driver('google');
+            $googleUser = $driver->stateless()->user();
         } catch (Throwable $e) {
             Log::warning('Google OAuth callback failed.', [
                 'error' => $e->getMessage(),

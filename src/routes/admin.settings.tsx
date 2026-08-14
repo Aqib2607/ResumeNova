@@ -1,4 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
+import { toast } from "sonner";
 import { PageHeader } from "@/components/PageHeader";
 import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
@@ -11,61 +13,95 @@ export const Route = createFileRoute("/admin/settings")({
 });
 
 function AdminSettings() {
+  const [productName, setProductName] = useState("ResumeNova");
+  const [supportEmail, setSupportEmail] = useState("support@resumenova.app");
+  const [aiCoverLetter, setAiCoverLetter] = useState(true);
+  const [interviewPrep, setInterviewPrep] = useState(true);
+  const [multiProviderFailover, setMultiProviderFailover] = useState(true);
+  const [publicMarketplace, setPublicMarketplace] = useState(false);
+  const [freeQuota, setFreeQuota] = useState(20);
+  const [proQuota, setProQuota] = useState(500);
+  const [maxResumes, setMaxResumes] = useState(25);
+
+  const handleSave = () => {
+    toast.success("System configurations updated successfully.");
+  };
+
   return (
-    <div>
+    <div className="space-y-6">
       <SEO title="Admin · Settings" />
-      <PageHeader title="System settings" description="Global configuration for the platform." />
+      <PageHeader
+        title="System Settings"
+        description="Global platform parameters, feature flags, and AI capacity tier limits."
+      />
 
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="rounded-xl border border-border bg-card p-6">
-          <p className="text-sm font-semibold">Branding</p>
+          <p className="text-sm font-semibold">Branding & Communication</p>
           <div className="mt-4 space-y-3">
             <div className="space-y-1.5">
-              <Label>Product name</Label>
-              <Input defaultValue="ResumeNova" />
+              <Label>Product Name</Label>
+              <Input value={productName} onChange={(e) => setProductName(e.target.value)} />
             </div>
             <div className="space-y-1.5">
-              <Label>Support email</Label>
-              <Input defaultValue="support@resumenova.app" />
+              <Label>Support Email</Label>
+              <Input value={supportEmail} onChange={(e) => setSupportEmail(e.target.value)} />
             </div>
           </div>
         </div>
 
         <div className="rounded-xl border border-border bg-card p-6">
-          <p className="text-sm font-semibold">Feature flags</p>
+          <p className="text-sm font-semibold">Global Feature Flags</p>
           <div className="mt-4 space-y-4">
-            {[
-              ["AI cover letter generator", true],
-              ["Interview preparation", true],
-              ["Multi-provider failover", true],
-              ["Public template marketplace", false],
-            ].map(([label, on]) => (
-              <div key={label as string} className="flex items-center justify-between text-sm">
-                <span>{label as string}</span>
-                <Switch defaultChecked={on as boolean} />
-              </div>
-            ))}
+            <div className="flex items-center justify-between text-sm">
+              <span>AI Cover Letter Generator</span>
+              <Switch checked={aiCoverLetter} onCheckedChange={setAiCoverLetter} />
+            </div>
+            <div className="flex items-center justify-between text-sm">
+              <span>Interview Preparation Engine</span>
+              <Switch checked={interviewPrep} onCheckedChange={setInterviewPrep} />
+            </div>
+            <div className="flex items-center justify-between text-sm">
+              <span>Multi-Provider Failover Routing</span>
+              <Switch checked={multiProviderFailover} onCheckedChange={setMultiProviderFailover} />
+            </div>
+            <div className="flex items-center justify-between text-sm">
+              <span>Public Template Marketplace</span>
+              <Switch checked={publicMarketplace} onCheckedChange={setPublicMarketplace} />
+            </div>
           </div>
         </div>
 
         <div className="rounded-xl border border-border bg-card p-6 lg:col-span-2">
-          <p className="text-sm font-semibold">Rate limiting</p>
-          <div className="mt-4 grid gap-3 sm:grid-cols-3">
+          <p className="text-sm font-semibold">AI Capacity & Quota Limits</p>
+          <div className="mt-4 grid gap-4 sm:grid-cols-3">
             <div className="space-y-1.5">
-              <Label>Free · AI calls / day</Label>
-              <Input type="number" defaultValue={20} />
+              <Label>Free Tier AI Calls / Day</Label>
+              <Input
+                type="number"
+                value={freeQuota}
+                onChange={(e) => setFreeQuota(Number(e.target.value))}
+              />
             </div>
             <div className="space-y-1.5">
-              <Label>Pro · AI calls / day</Label>
-              <Input type="number" defaultValue={500} />
+              <Label>Pro Tier AI Calls / Day</Label>
+              <Input
+                type="number"
+                value={proQuota}
+                onChange={(e) => setProQuota(Number(e.target.value))}
+              />
             </div>
             <div className="space-y-1.5">
-              <Label>Max resumes per account</Label>
-              <Input type="number" defaultValue={25} />
+              <Label>Max Resumes Per Account</Label>
+              <Input
+                type="number"
+                value={maxResumes}
+                onChange={(e) => setMaxResumes(Number(e.target.value))}
+              />
             </div>
           </div>
-          <div className="mt-5 flex justify-end">
-            <Button>Save settings</Button>
+          <div className="mt-6 flex justify-end">
+            <Button onClick={handleSave}>Save Settings</Button>
           </div>
         </div>
       </div>

@@ -19,19 +19,33 @@ export class ApiError extends Error {
 export interface RequestOptions extends Omit<RequestInit, "body"> {
   body?: unknown;
   token?: string | null;
+  params?: Record<string, string | number | boolean | null | undefined>;
 }
 
 /**
  * Thin fetch wrapper. Designed for Laravel Sanctum / token bearer auth.
- * Replace token retrieval with your auth context once wired up.
  */
 export async function apiRequest<T>(path: string, options: RequestOptions = {}): Promise<T> {
-  const { body, token, headers, ...rest } = options;
+  const { body, token, headers, params, ...rest } = options;
+
+  let url = `${API_BASE_URL}${path}`;
+  if (params && Object.keys(params).length > 0) {
+    const searchParams = new URLSearchParams();
+    Object.entries(params).forEach(([key, val]) => {
+      if (val !== undefined && val !== null) {
+        searchParams.append(key, String(val));
+      }
+    });
+    const queryString = searchParams.toString();
+    if (queryString) {
+      url += (url.includes("?") ? "&" : "?") + queryString;
+    }
+  }
 
   // Use explicitly-passed token, then fall back to the stored auth token.
   const resolvedToken = token ?? localStorage.getItem("auth_token");
 
-  const res = await fetch(`${API_BASE_URL}${path}`, {
+  const res = await fetch(url, {
     ...rest,
     headers: {
       "Content-Type": "application/json",

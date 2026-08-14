@@ -105,17 +105,24 @@ function SettingsPage() {
           </Row>
         </Section>
 
-        <Section title="Language & region">
-          <Row label="App language">
-            <Select defaultValue="en">
+        <Section
+          title="Language & region"
+          description="Platform localization and locale format preferences."
+        >
+          <Row label="App language" hint="Display language for navigation and tool labels.">
+            <Select
+              defaultValue={localStorage.getItem("resumenova_lang") || "en"}
+              onValueChange={(val) => {
+                localStorage.setItem("resumenova_lang", val);
+                window.dispatchEvent(new Event("languagechange"));
+              }}
+            >
               <SelectTrigger className="w-40">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="en">English</SelectItem>
-                <SelectItem value="es">Spanish</SelectItem>
-                <SelectItem value="fr">French</SelectItem>
-                <SelectItem value="de">German</SelectItem>
+                <SelectItem value="en">English (US)</SelectItem>
+                <SelectItem value="bn">বাংলা (Bengali)</SelectItem>
               </SelectContent>
             </Select>
           </Row>

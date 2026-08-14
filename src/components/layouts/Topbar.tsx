@@ -15,6 +15,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { useAuthMe, useNotifications } from "@/hooks/useDashboard";
 import { AuthService } from "@/services/endpoints";
 import { useQueryClient } from "@tanstack/react-query";
+import type { Notification as AppNotification } from "@/types";
 
 interface TopbarProps {
   onMenuClick: () => void;
@@ -26,7 +27,9 @@ export function Topbar({ onMenuClick }: TopbarProps) {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  const unread = notifications?.filter((n: any) => !n.read_at).length || 0;
+  const unread =
+    notifications?.filter((n: AppNotification & { read_at?: string | null }) => !n.read_at)
+      .length || 0;
   const initials = user?.name
     ? user.name
         .split(" ")
@@ -91,23 +94,61 @@ export function Topbar({ onMenuClick }: TopbarProps) {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             {notifications && notifications.length > 0 ? (
-              notifications.map((n: any) => {
-                const data = typeof n.data === 'string' ? JSON.parse(n.data) : n.data;
-                return (
-                  <DropdownMenuItem key={n.id} className="flex flex-col items-start gap-0.5 py-2.5">
-                    <div className="flex w-full items-center justify-between">
-                      <span className="text-sm font-medium">{data?.title || 'Notification'}</span>
-                      {!n.read_at && <span className="h-1.5 w-1.5 rounded-full bg-primary" />}
-                    </div>
-                    <span className="text-xs text-muted-foreground">{data?.body}</span>
-                  </DropdownMenuItem>
-                );
-              })
+              notifications.map(
+                (
+                  n: AppNotification & {
+                    data?: Record<string, unknown> | string;
+                    read_at?: string | null;
+                  },
+                ) => {
+                  const data = (typeof n.data === "string" ? JSON.parse(n.data) : n.data) as
+                    Record<string, string> | undefined;
+                  return (
+                    <DropdownMenuItem
+                      key={n.id}
+                      className="flex flex-col items-start gap-0.5 py-2.5"
+                    >
+                      <div className="flex w-full items-center justify-between">
+                        <span className="text-sm font-medium">{data?.title || "Notification"}</span>
+                        {!n.read_at && <span className="h-1.5 w-1.5 rounded-full bg-primary" />}
+                      </div>
+                      <span className="text-xs text-muted-foreground">{data?.body}</span>
+                    </DropdownMenuItem>
+                  );
+                },
+              )
             ) : (
               <div className="py-4 text-center text-sm text-muted-foreground">
                 No new notifications.
               </div>
             )}
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        {/* Language Selector */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="sm" className="h-8 px-2 text-xs font-medium">
+              🌐 English / বাংলা
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-36">
+            <DropdownMenuItem
+              onClick={() => {
+                localStorage.setItem("resumenova_lang", "en");
+                window.dispatchEvent(new Event("languagechange"));
+              }}
+            >
+              🇺🇸 English (EN)
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                localStorage.setItem("resumenova_lang", "bn");
+                window.dispatchEvent(new Event("languagechange"));
+              }}
+            >
+              🇧🇩 বাংলা (BN)
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
 
@@ -124,15 +165,17 @@ export function Topbar({ onMenuClick }: TopbarProps) {
                 </AvatarFallback>
               </Avatar>
               <span className="hidden text-sm font-medium md:inline">
-                {user?.name?.split(" ")[0] || 'User'}
+                {user?.name?.split(" ")[0] || "User"}
               </span>
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
             <DropdownMenuLabel>
               <div className="flex flex-col">
-                <span className="text-sm font-medium">{user?.name || 'User'}</span>
-                <span className="text-xs font-normal text-muted-foreground">{user?.email || ''}</span>
+                <span className="text-sm font-medium">{user?.name || "User"}</span>
+                <span className="text-xs font-normal text-muted-foreground">
+                  {user?.email || ""}
+                </span>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
@@ -143,9 +186,7 @@ export function Topbar({ onMenuClick }: TopbarProps) {
               <Link to="/dashboard/settings">Settings</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleLogout}>
-              Log out
-            </DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout}>Log out</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

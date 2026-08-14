@@ -8,24 +8,25 @@ A production-ready Laravel 12 backend for the ResumeNova platform.
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Language | PHP 8.3+ |
-| Framework | Laravel 12 |
-| Auth | Laravel Breeze (Blade) |
-| OAuth | Laravel Socialite (Google) |
-| Database | MySQL 8+ |
+| Layer         | Technology                    |
+| ------------- | ----------------------------- |
+| Language      | PHP 8.3+                      |
+| Framework     | Laravel 12                    |
+| Auth          | Laravel Breeze (Blade)        |
+| OAuth         | Laravel Socialite (Google)    |
+| Database      | MySQL 8+                      |
 | Queue / Cache | Database driver (Redis-ready) |
-| PDF | barryvdh/laravel-dompdf |
-| Word | phpoffice/phpword |
-| Frontend | Vite + Tailwind CSS |
-| Testing | PestPHP |
+| PDF           | barryvdh/laravel-dompdf       |
+| Word          | phpoffice/phpword             |
+| Frontend      | Vite + Tailwind CSS           |
+| Testing       | PestPHP                       |
 
 ---
 
 ## Local Setup
 
 ### Prerequisites
+
 - PHP 8.3+
 - Composer 2+
 - Node.js 20+ & npm
@@ -113,18 +114,18 @@ resources/views/
 
 ## Environment Variables Reference
 
-| Variable | Description | Default |
-|---|---|---|
-| `APP_NAME` | Application name | `ResumeNova` |
-| `APP_ENV` | Environment (`local` / `production`) | `local` |
-| `APP_URL` | Application base URL | `http://localhost:8000` |
-| `DB_DATABASE` | MySQL database name | `resumenova` |
-| `QUEUE_CONNECTION` | Queue driver | `database` |
-| `CACHE_STORE` | Cache driver | `database` |
-| `MAIL_MAILER` | Mail driver | `log` (local) |
-| `GOOGLE_CLIENT_ID` | Google OAuth client ID | *(required for OAuth)* |
-| `GOOGLE_CLIENT_SECRET` | Google OAuth client secret | *(required for OAuth)* |
-| `GOOGLE_REDIRECT_URI` | OAuth callback URI | `/auth/google/callback` |
+| Variable               | Description                          | Default                 |
+| ---------------------- | ------------------------------------ | ----------------------- |
+| `APP_NAME`             | Application name                     | `ResumeNova`            |
+| `APP_ENV`              | Environment (`local` / `production`) | `local`                 |
+| `APP_URL`              | Application base URL                 | `http://localhost:8000` |
+| `DB_DATABASE`          | MySQL database name                  | `resumenova`            |
+| `QUEUE_CONNECTION`     | Queue driver                         | `database`              |
+| `CACHE_STORE`          | Cache driver                         | `database`              |
+| `MAIL_MAILER`          | Mail driver                          | `log` (local)           |
+| `GOOGLE_CLIENT_ID`     | Google OAuth client ID               | _(required for OAuth)_  |
+| `GOOGLE_CLIENT_SECRET` | Google OAuth client secret           | _(required for OAuth)_  |
+| `GOOGLE_REDIRECT_URI`  | OAuth callback URI                   | `/auth/google/callback` |
 
 ---
 
@@ -165,10 +166,10 @@ Google OAuth uses Laravel Socialite. No implementation is live until you add rea
 2. Click **Create Credentials → OAuth client ID**
 3. Application type: **Web application**
 4. Add Authorized redirect URIs:
-   ```
-   http://localhost:8000/auth/google/callback
-   https://yourdomain.com/auth/google/callback
-   ```
+    ```
+    http://localhost:8000/auth/google/callback
+    https://yourdomain.com/auth/google/callback
+    ```
 5. Copy the **Client ID** and **Client Secret**
 
 ### 3. Configure `.env`
@@ -210,6 +211,7 @@ php artisan test tests/Feature/Auth/GoogleOAuthTest.php
 ## Part 3 Preview
 
 Part 3 will implement:
+
 - Resume Builder module (CRUD, templates)
 - File upload & storage
 - PDF/Word export foundation
@@ -217,4 +219,4 @@ Part 3 will implement:
 
 ---
 
-*Built with ❤️ on Laravel 12 – ResumeNova Week 04, Part 2*
+_Built with ❤️ on Laravel 12 – ResumeNova Week 04, Part 2_

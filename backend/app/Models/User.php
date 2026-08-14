@@ -34,6 +34,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'suspended_at',
     ];
 
+    protected $appends = [
+        'status',
+    ];
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -91,6 +95,22 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Check if this user has authority to manage another user.
+     */
+    public function canManageUser(User $target): bool
+    {
+        if ($this->isSuperAdmin()) {
+            return true;
+        }
+
+        if ($this->isAdmin()) {
+            return $this->role->isHigherThan($target->role);
+        }
+
+        return false;
+    }
+
+    /**
      * Check if the user has a specific role.
      */
     public function hasRole(UserRole $role): bool
@@ -104,6 +124,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isSuspended(): bool
     {
         return ! is_null($this->suspended_at);
+    }
+
+    public function getStatusAttribute(): string
+    {
+        return $this->isSuspended() ? 'suspended' : 'active';
     }
 
     /**

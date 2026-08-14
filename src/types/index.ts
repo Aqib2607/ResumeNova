@@ -6,13 +6,24 @@
 
 export type ID = string;
 
+export type UserRole = "user" | "admin" | "super_admin";
+
 export interface User {
   id: ID;
   name: string;
   email: string;
   avatar?: string | null;
-  role: "user" | "admin" | "ADMIN" | "USER";
-  language: string;
+  role: UserRole;
+  language?: string;
+  status?: string;
+  suspended_at?: string | null;
+  profile?: {
+    phone?: string | null;
+    location?: string | null;
+    website?: string | null;
+    headline?: string | null;
+    bio?: string | null;
+  } | null;
   created_at: string;
 }
 
@@ -73,14 +84,25 @@ export interface ResumeSkillGroup {
 
 export interface Resume {
   id: ID;
+  user_id?: ID;
   title: string;
   template: ResumeTemplate;
+  version: number | string;
+  status?: string;
+  language?: string;
   basics: ResumeBasics;
   experiences: ResumeExperience[];
   education: ResumeEducation[];
   projects: ResumeProject[];
   skill_groups: ResumeSkillGroup[];
-  version: number;
+  content?: {
+    basics?: ResumeBasics;
+    experiences?: ResumeExperience[];
+    education?: ResumeEducation[];
+    projects?: ResumeProject[];
+    skill_groups?: ResumeSkillGroup[];
+    [key: string]: unknown;
+  };
   updated_at: string;
   created_at: string;
 }
@@ -107,25 +129,58 @@ export interface AtsAnalysis {
 // ---------- Cover Letter ----------
 export interface CoverLetter {
   id: ID;
-  resume_id: ID;
+  resume_id?: ID | null;
+  title?: string;
   language: string;
+  tone?: string;
   job_description: string;
   content: string;
   created_at: string;
+  updated_at?: string;
 }
 
 // ---------- Interview Prep ----------
-export type QuestionCategory = "behavioral" | "technical" | "system-design" | "leadership";
+export type QuestionCategory = "hr" | "behavioral" | "technical" | "system-design" | "leadership";
 export type QuestionDifficulty = "easy" | "medium" | "hard";
+
+export interface InterviewEvaluation {
+  score?: number;
+  feedback?: string;
+  strengths?: string[];
+  improvements?: string[];
+}
 
 export interface InterviewQuestion {
   id: ID;
-  category: QuestionCategory;
-  difficulty: QuestionDifficulty;
+  session_id?: ID;
+  order?: number;
+  category: QuestionCategory | string;
+  difficulty: QuestionDifficulty | string;
   question: string;
   hints?: string[];
+  expected_answer?: string;
   user_answer?: string;
-  completed: boolean;
+  evaluation?: InterviewEvaluation | null;
+  score?: number | null;
+  completed?: boolean;
+  created_at?: string;
+}
+
+export interface InterviewSession {
+  id: ID;
+  user_id: ID;
+  resume_id?: ID | null;
+  resume_title?: string | null;
+  category: string;
+  difficulty: string;
+  language: string;
+  job_description?: string | null;
+  status: "in_progress" | "completed";
+  total_questions: number;
+  completed_questions: number;
+  questions?: InterviewQuestion[];
+  created_at: string;
+  updated_at: string;
 }
 
 // ---------- API Keys ----------
@@ -147,10 +202,18 @@ export interface ApiKey {
 // ---------- Exports ----------
 export interface ExportRecord {
   id: ID;
-  resume_id: ID;
-  resume_title: string;
+  user_id?: ID;
+  resume_id?: ID | null;
+  resume_title?: string | null;
+  cover_letter_id?: ID | null;
+  cover_letter_title?: string | null;
   format: "pdf" | "docx";
-  size_bytes: number;
+  template?: string | null;
+  file_name: string;
+  file_size?: number | null;
+  file_size_human?: string | null;
+  status: string;
+  download_url?: string;
   created_at: string;
 }
 
@@ -163,10 +226,115 @@ export interface Notification {
   created_at: string;
 }
 
+export interface ResumeVersion {
+  id: ID;
+  resume_id: ID;
+  version_number: number;
+  title: string;
+  template: ResumeTemplate;
+  content: {
+    basics?: ResumeBasics;
+    experiences?: ResumeExperience[];
+    education?: ResumeEducation[];
+    projects?: ResumeProject[];
+    skill_groups?: ResumeSkillGroup[];
+  };
+  created_at: string;
+  updated_at: string;
+}
+
+// ---------- Admin Types ----------
+export interface AdminDashboardOverview {
+  users: {
+    total: number;
+    active: number;
+    new_this_week: number;
+    new_this_month: number;
+  };
+  content: {
+    total_resumes: number;
+    total_cover_letters: number;
+    total_ats_analyses: number;
+    total_interview_sessions: number;
+    total_exports: number;
+  };
+  ai: {
+    total_operations: number;
+  };
+}
+
+export interface AdminAnalytics {
+  user_growth: Array<{ date: string; registrations: number }>;
+  ai_activity: Array<{ date: string; ai_requests: number; exports: number }>;
+  template_popularity: Array<{
+    id: number;
+    name: string;
+    slug: string;
+    category: string;
+    usage_count: number;
+  }>;
+}
+
+export interface AdminResumeTemplate {
+  id: ID;
+  slug: string;
+  name: string;
+  category: string;
+  thumbnail?: string | null;
+  description?: string | null;
+  is_active: boolean;
+  is_premium: boolean;
+  usage_count: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AdminAuditLog {
+  id: string;
+  user_id?: ID | null;
+  user?: {
+    id: ID;
+    name: string;
+    email: string;
+    role: string;
+  } | null;
+  action: string;
+  entity_type?: string | null;
+  entity_id?: string | null;
+  old_values?: Record<string, unknown> | null;
+  new_values?: Record<string, unknown> | null;
+  ip_address?: string | null;
+  created_at: string;
+}
+
+export interface AdminSystemLog {
+  id: string;
+  level: string;
+  message: string;
+  context?: Record<string, unknown> | null;
+  created_at: string;
+}
+
 // ---------- Pagination ----------
 export interface Paginated<T> {
   data: T[];
-  page: number;
-  per_page: number;
-  total: number;
+  page?: number;
+  current_page?: number;
+  per_page?: number;
+  total?: number;
+  last_page?: number;
+  meta?: {
+    current_page: number;
+    from?: number;
+    last_page: number;
+    per_page: number;
+    to?: number;
+    total: number;
+  };
+  links?: {
+    first?: string;
+    last?: string;
+    prev?: string | null;
+    next?: string | null;
+  };
 }

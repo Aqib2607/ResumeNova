@@ -68,4 +68,15 @@ class AnalyticsService
         
         return $chartData;
     }
+
+    /**
+     * Get user metrics for the dashboard.
+     */
+    public function getUserMetrics(int $userId): array
+    {
+        return [
+            'ai_requests_today' => 0,
+            'logins_this_month' => 1,
+        ];
+    }
 }

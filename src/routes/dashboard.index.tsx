@@ -35,6 +35,7 @@ import {
   useNotifications,
   useAuthMe,
 } from "@/hooks/useDashboard";
+import type { Resume, ExportRecord, ApiKey, Notification as AppNotification } from "@/types";
 
 export const Route = createFileRoute("/dashboard/")({
   component: DashboardHome,
@@ -60,7 +61,9 @@ function DashboardHome() {
     <div>
       <SEO title="Dashboard" />
       <PageHeader
-        title={isUserPending ? "Welcome back..." : `Welcome back, ${user?.name?.split(" ")[0] || 'User'}`}
+        title={
+          isUserPending ? "Welcome back..." : `Welcome back, ${user?.name?.split(" ")[0] || "User"}`
+        }
         description="Here's a snapshot of your career toolkit."
         actions={
           <Button asChild>
@@ -74,10 +77,30 @@ function DashboardHome() {
       {/* Stat cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {[
-          { label: "Resumes", value: stats?.resumes_count ?? 0, icon: FileText, hint: "+1 this month" },
-          { label: "Avg ATS score", value: stats?.average_ats_score ?? 0, icon: ScanSearch, hint: "+6 vs. last month" },
-          { label: "AI usage", value: stats?.ai_usage_count ?? 0, icon: Sparkles, hint: "calls this week" },
-          { label: "Exports", value: stats?.exports_count ?? 0, icon: Download, hint: "PDF / DOCX" },
+          {
+            label: "Resumes",
+            value: stats?.resumes_count ?? 0,
+            icon: FileText,
+            hint: "+1 this month",
+          },
+          {
+            label: "Avg ATS score",
+            value: stats?.average_ats_score ?? 0,
+            icon: ScanSearch,
+            hint: "+6 vs. last month",
+          },
+          {
+            label: "AI usage",
+            value: stats?.ai_usage_count ?? 0,
+            icon: Sparkles,
+            hint: "calls this week",
+          },
+          {
+            label: "Exports",
+            value: stats?.exports_count ?? 0,
+            icon: Download,
+            hint: "PDF / DOCX",
+          },
         ].map((s, i) => (
           <motion.div
             key={s.label}
@@ -113,7 +136,13 @@ function DashboardHome() {
               <p className="text-xs text-muted-foreground">Calls per day across all keys</p>
             </div>
             <Badge variant="secondary">
-              {isChartPending ? "..." : chartData?.reduce((acc: number, curr: any) => acc + curr.v, 0)} total
+              {isChartPending
+                ? "..."
+                : chartData?.reduce(
+                    (acc: number, curr: { d: string; v: number }) => acc + curr.v,
+                    0,
+                  )}{" "}
+              total
             </Badge>
           </div>
           <div className="h-56">
@@ -215,7 +244,7 @@ function DashboardHome() {
             </div>
           ) : recentResumes && recentResumes.length > 0 ? (
             <ul className="divide-y divide-border">
-              {recentResumes.map((r: any) => (
+              {recentResumes.map((r: Resume) => (
                 <li key={r.id} className="flex items-center justify-between gap-3 py-3">
                   <div className="flex min-w-0 items-center gap-3">
                     <span className="grid h-10 w-10 shrink-0 place-items-center rounded-md bg-primary/10 text-primary">
@@ -229,7 +258,9 @@ function DashboardHome() {
                     </div>
                   </div>
                   <Button variant="ghost" size="sm" asChild>
-                    <Link to="/dashboard/resumes">Edit</Link>
+                    <Link to="/dashboard/resumes/new/manual" search={{ id: String(r.id) }}>
+                      Edit
+                    </Link>
                   </Button>
                 </li>
               ))}
@@ -247,10 +278,12 @@ function DashboardHome() {
           <p className="text-xs text-muted-foreground">Overall average across all resumes</p>
           <div className="mt-5 flex items-baseline gap-2">
             {isStatsPending ? (
-               <Skeleton className="h-12 w-16" />
+              <Skeleton className="h-12 w-16" />
             ) : (
               <>
-                <span className="text-5xl font-semibold tracking-tight">{stats?.average_ats_score ?? 0}</span>
+                <span className="text-5xl font-semibold tracking-tight">
+                  {stats?.average_ats_score ?? 0}
+                </span>
                 <span className="text-sm text-muted-foreground">/ 100</span>
               </>
             )}
@@ -281,7 +314,7 @@ function DashboardHome() {
             </div>
           ) : recentExports && recentExports.length > 0 ? (
             <ul className="space-y-2">
-              {recentExports.map((x: any) => (
+              {recentExports.map((x: ExportRecord) => (
                 <li
                   key={x.id}
                   className="flex items-center justify-between rounded-lg border border-border px-3 py-2.5"
@@ -299,9 +332,7 @@ function DashboardHome() {
               ))}
             </ul>
           ) : (
-             <div className="py-4 text-center text-sm text-muted-foreground">
-               No recent exports.
-             </div>
+            <div className="py-4 text-center text-sm text-muted-foreground">No recent exports.</div>
           )}
         </div>
 
@@ -309,23 +340,32 @@ function DashboardHome() {
         <div className="rounded-xl border border-border bg-card p-5">
           <p className="text-sm font-semibold">Notifications</p>
           {isNotificationsPending ? (
-            <div className="space-y-3 mt-3">
+            <div className="mt-3 space-y-3">
               <Skeleton className="h-12 w-full" />
               <Skeleton className="h-12 w-full" />
             </div>
           ) : notifications && notifications.length > 0 ? (
             <ul className="mt-3 space-y-2">
-              {notifications.map((n: any) => {
-                const data = typeof n.data === 'string' ? JSON.parse(n.data) : n.data;
-                return (
-                <li key={n.id} className="rounded-lg border border-border px-3 py-2.5">
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm font-medium">{data?.title || 'Notification'}</p>
-                    {!n.read_at && <span className="h-1.5 w-1.5 rounded-full bg-primary" />}
-                  </div>
-                  <p className="mt-0.5 text-xs text-muted-foreground">{data?.body}</p>
-                </li>
-              )})}
+              {notifications.map(
+                (
+                  n: AppNotification & {
+                    data?: Record<string, unknown> | string;
+                    read_at?: string | null;
+                  },
+                ) => {
+                  const data = (typeof n.data === "string" ? JSON.parse(n.data) : n.data) as
+                    Record<string, string> | undefined;
+                  return (
+                    <li key={n.id} className="rounded-lg border border-border px-3 py-2.5">
+                      <div className="flex items-center justify-between">
+                        <p className="text-sm font-medium">{data?.title || "Notification"}</p>
+                        {!n.read_at && <span className="h-1.5 w-1.5 rounded-full bg-primary" />}
+                      </div>
+                      <p className="mt-0.5 text-xs text-muted-foreground">{data?.body}</p>
+                    </li>
+                  );
+                },
+              )}
             </ul>
           ) : (
             <div className="py-4 text-center text-sm text-muted-foreground">
@@ -347,13 +387,13 @@ function DashboardHome() {
           </Button>
         </div>
         {isApiKeysPending ? (
-           <div className="grid gap-2 sm:grid-cols-3">
-             <Skeleton className="h-12 w-full" />
-             <Skeleton className="h-12 w-full" />
-           </div>
+          <div className="grid gap-2 sm:grid-cols-3">
+            <Skeleton className="h-12 w-full" />
+            <Skeleton className="h-12 w-full" />
+          </div>
         ) : apiKeys && apiKeys.length > 0 ? (
           <ul className="grid gap-2 sm:grid-cols-3">
-            {apiKeys.map((k: any) => (
+            {apiKeys.map((k: ApiKey) => (
               <li
                 key={k.id}
                 className="flex items-center justify-between rounded-lg border border-border px-3 py-2.5"
@@ -378,7 +418,7 @@ function DashboardHome() {
           </ul>
         ) : (
           <div className="py-4 text-center text-sm text-muted-foreground">
-             No API keys configured.
+            No API keys configured.
           </div>
         )}
       </div>

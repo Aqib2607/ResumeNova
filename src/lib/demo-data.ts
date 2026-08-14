@@ -200,7 +200,9 @@ export const demoExports: ExportRecord[] = [
     resume_id: "r_01",
     resume_title: "Senior Product Designer — 2026",
     format: "pdf",
-    size_bytes: 184_320,
+    file_name: "senior-product-designer-2026.pdf",
+    file_size: 184_320,
+    status: "completed",
     created_at: "2026-06-25T16:42:00Z",
   },
   {
@@ -208,7 +210,9 @@ export const demoExports: ExportRecord[] = [
     resume_id: "r_01",
     resume_title: "Senior Product Designer — 2026",
     format: "docx",
-    size_bytes: 95_120,
+    file_name: "senior-product-designer-2026.docx",
+    file_size: 95_120,
+    status: "completed",
     created_at: "2026-06-22T11:08:00Z",
   },
   {
@@ -216,7 +220,9 @@ export const demoExports: ExportRecord[] = [
     resume_id: "r_02",
     resume_title: "Staff Engineer — Backend",
     format: "pdf",
-    size_bytes: 162_840,
+    file_name: "staff-engineer-backend.pdf",
+    file_size: 162_840,
+    status: "completed",
     created_at: "2026-06-12T09:31:00Z",
   },
 ];

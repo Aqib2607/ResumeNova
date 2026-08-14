@@ -6,15 +6,16 @@ use App\Enums\UserRole;
 use App\Models\User;
 
 test('new users can register via API', function () {
-    $this->postJson('/api/register', [
+    $response = $this->postJson('/api/register', [
         'name'                  => 'Test User',
         'email'                 => 'test@example.com',
         'password'              => 'Password1!',
         'password_confirmation' => 'Password1!',
     ])->assertStatus(201)
-      ->assertJsonStructure(['user' => ['id', 'name', 'email']]);
+      ->assertJsonStructure(['user' => ['id', 'name', 'email'], 'token']);
 
-    $this->assertAuthenticated();
+    expect($response->json('token'))->not->toBeEmpty();
+    $this->assertDatabaseHas('users', ['email' => 'test@example.com']);
 });
 
 test('new user is assigned the user role by default', function () {

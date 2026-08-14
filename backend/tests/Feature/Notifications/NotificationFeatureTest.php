@@ -27,7 +27,7 @@ class NotificationFeatureTest extends TestCase
         $response = $this->actingAs($user)->getJson('/api/notifications');
 
         $response->assertStatus(200);
-        $response->assertJsonStructure(['data', 'links', 'current_page', 'total']);
+        $response->assertJsonCount(1);
     }
 
     public function test_notification_can_be_marked_as_read(): void

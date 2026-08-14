@@ -1,9 +1,21 @@
-import { Outlet, createFileRoute } from "@tanstack/react-router";
+import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
 import { useState } from "react";
 import { AppSidebar } from "@/components/layouts/AppSidebar";
 import { Topbar } from "@/components/layouts/Topbar";
+import { getAuthToken } from "@/lib/auth";
 
 export const Route = createFileRoute("/dashboard")({
+  beforeLoad: ({ location }) => {
+    const token = getAuthToken();
+    if (!token) {
+      throw redirect({
+        to: "/login",
+        search: {
+          redirect: location.href,
+        },
+      });
+    }
+  },
   component: DashboardLayout,
 });
 

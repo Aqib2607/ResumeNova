@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\Admin\AdminUserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -14,16 +15,21 @@ use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
+    public function __construct(
+        protected AdminUserService $userService,
+    ) {}
+
     /**
-     * Display a listing of the users.
+     * Display a listing of the users with search and filter.
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
         Gate::authorize('viewAny', User::class);
 
-        $users = User::query()
-            ->latest()
-            ->paginate(15);
+        $filters = $request->only(['q', 'role', 'status', 'sort_by', 'sort_dir']);
+        $perPage = (int) $request->query('per_page', 15);
+
+        $users = $this->userService->listUsers($filters, $perPage);
 
         return response()->json($users);
     }
@@ -35,15 +41,36 @@ class UserController extends Controller
     {
         Gate::authorize('view', $user);
 
-        $user->load(['roleAuditLogs.changedBy' => function ($query) {
-            $query->select('id', 'name');
-        }])->loadCount('roleAuditLogs');
-        
-        $assignableRoles = UserRole::cases();
+        $user->load([
+            'profile',
+            'roleAuditLogs.changedBy' => function ($query) {
+                $query->select('id', 'name');
+            },
+        ])->loadCount(['roleAuditLogs', 'resumes', 'coverLetters']);
 
         return response()->json([
             'user' => $user,
-            'assignableRoles' => $assignableRoles,
+            'assignableRoles' => UserRole::cases(),
+        ]);
+    }
+
+    /**
+     * Update user details.
+     */
+    public function update(Request $request, User $user): JsonResponse
+    {
+        Gate::authorize('update', $user);
+
+        $validated = $request->validate([
+            'name' => ['sometimes', 'string', 'min:2', 'max:255'],
+            'email' => ['sometimes', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+        ]);
+
+        $updated = $this->userService->updateUser($request->user(), $user, $validated);
+
+        return response()->json([
+            'message' => 'User updated successfully.',
+            'user' => $updated,
         ]);
     }
 
@@ -54,8 +81,6 @@ class UserController extends Controller
     {
         Gate::authorize('assignRole', $user);
 
-        // Determine which roles this admin is allowed to assign.
-        // Super admins can assign anything, regular admins can only assign admin/user.
         $allowedRoles = $request->user()->isSuperAdmin()
             ? UserRole::values()
             : UserRole::adminAssignableValues();
@@ -64,36 +89,46 @@ class UserController extends Controller
             'role' => ['required', 'string', Rule::in($allowedRoles)],
         ]);
 
-        $user->update(['role' => $validated['role']]);
+        $newRole = UserRole::from($validated['role']);
+        $updated = $this->userService->assignRole($request->user(), $user, $newRole);
 
-        return response()->json(['message' => 'Role successfully updated', 'user' => $user->fresh()]);
+        return response()->json([
+            'message' => 'Role successfully updated.',
+            'user' => $updated,
+        ]);
     }
 
     /**
      * Suspend the user.
      */
-    public function suspend(User $user): JsonResponse
+    public function suspend(Request $request, User $user): JsonResponse
     {
         Gate::authorize('suspend', $user);
 
-        if (! $user->isSuspended()) {
-            $user->update(['suspended_at' => now()]);
-        }
+        $validated = $request->validate([
+            'reason' => ['nullable', 'string', 'max:500'],
+        ]);
 
-        return response()->json(['message' => 'User suspended']);
+        $updated = $this->userService->suspendUser($request->user(), $user, $validated['reason'] ?? null);
+
+        return response()->json([
+            'message' => 'User suspended successfully.',
+            'user' => $updated,
+        ]);
     }
 
     /**
      * Reactivate the user.
      */
-    public function reactivate(User $user): JsonResponse
+    public function reactivate(Request $request, User $user): JsonResponse
     {
         Gate::authorize('reactivate', $user);
 
-        if ($user->isSuspended()) {
-            $user->update(['suspended_at' => null]);
-        }
+        $updated = $this->userService->reactivateUser($request->user(), $user);
 
-        return response()->json(['message' => 'User reactivated']);
+        return response()->json([
+            'message' => 'User reactivated successfully.',
+            'user' => $updated,
+        ]);
     }
 }

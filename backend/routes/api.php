@@ -86,13 +86,86 @@ Route::middleware(['auth:sanctum', 'user.active'])->group(function () {
     Route::patch('/notifications/{id}/read', [\App\Http\Controllers\NotificationController::class, 'markAsRead']);
     Route::post('/notifications/{id}/read', [\App\Http\Controllers\NotificationController::class, 'markAsRead']);
     Route::post('/notifications/read-all', [\App\Http\Controllers\NotificationController::class, 'markAllAsRead']);
+
+    // ── Resumes ───────────────────────────────────────────────────────────
+    Route::get('/resumes', [\App\Http\Controllers\ResumeController::class, 'index']);
+    Route::post('/resumes', [\App\Http\Controllers\ResumeController::class, 'store']);
+    Route::get('/resumes/{resume}', [\App\Http\Controllers\ResumeController::class, 'show']);
+    Route::put('/resumes/{resume}', [\App\Http\Controllers\ResumeController::class, 'update']);
+    Route::patch('/resumes/{resume}', [\App\Http\Controllers\ResumeController::class, 'update']);
+    Route::delete('/resumes/{resume}', [\App\Http\Controllers\ResumeController::class, 'destroy']);
+    Route::post('/resumes/{resume}/duplicate', [\App\Http\Controllers\ResumeController::class, 'duplicate']);
+    Route::get('/resumes/{resume}/versions', [\App\Http\Controllers\ResumeController::class, 'versions']);
+    Route::post('/resumes/{resume}/versions/{version}/restore', [\App\Http\Controllers\ResumeController::class, 'restoreVersion']);
+
+    // ── AI Resume Generation ───────────────────────────────────────────────
+    Route::post('/resumes/{resume}/ai/summary', [\App\Http\Controllers\AIResumeController::class, 'summary'])->middleware('throttle:ai');
+    Route::post('/resumes/{resume}/ai/experience', [\App\Http\Controllers\AIResumeController::class, 'experience'])->middleware('throttle:ai');
+    Route::post('/resumes/{resume}/ai/project', [\App\Http\Controllers\AIResumeController::class, 'project'])->middleware('throttle:ai');
+    Route::post('/resumes/{resume}/ai/skills', [\App\Http\Controllers\AIResumeController::class, 'skills'])->middleware('throttle:ai');
+
+    // ── API Keys ──────────────────────────────────────────────────────────
+    Route::get('/api-keys', [\App\Http\Controllers\ApiKeyController::class, 'index']);
+    Route::post('/api-keys', [\App\Http\Controllers\ApiKeyController::class, 'store']);
+    Route::post('/api-keys/reorder', [\App\Http\Controllers\ApiKeyController::class, 'reorder']);
+    Route::get('/api-keys/{apiKey}', [\App\Http\Controllers\ApiKeyController::class, 'show']);
+    Route::put('/api-keys/{apiKey}', [\App\Http\Controllers\ApiKeyController::class, 'update']);
+    Route::patch('/api-keys/{apiKey}', [\App\Http\Controllers\ApiKeyController::class, 'update']);
+    Route::delete('/api-keys/{apiKey}', [\App\Http\Controllers\ApiKeyController::class, 'destroy']);
+    Route::post('/api-keys/{apiKey}/test', [\App\Http\Controllers\ApiKeyController::class, 'test']);
+
+    // ── ATS Analyzer ──────────────────────────────────────────────────────
+    Route::post('/ats/analyze', [\App\Http\Controllers\AtsController::class, 'analyze'])->middleware('throttle:ai');
+    Route::get('/ats/history', [\App\Http\Controllers\AtsController::class, 'history']);
+    Route::get('/ats/{analysis}', [\App\Http\Controllers\AtsController::class, 'show']);
+    Route::delete('/ats/{analysis}', [\App\Http\Controllers\AtsController::class, 'destroy']);
+
+    // ── Cover Letters ─────────────────────────────────────────────────────
+    Route::get('/cover-letters', [\App\Http\Controllers\CoverLetterController::class, 'index']);
+    Route::post('/cover-letters/generate', [\App\Http\Controllers\CoverLetterController::class, 'generate'])->middleware('throttle:ai');
+    Route::get('/cover-letters/{coverLetter}', [\App\Http\Controllers\CoverLetterController::class, 'show']);
+    Route::put('/cover-letters/{coverLetter}', [\App\Http\Controllers\CoverLetterController::class, 'update']);
+    Route::patch('/cover-letters/{coverLetter}', [\App\Http\Controllers\CoverLetterController::class, 'update']);
+    Route::delete('/cover-letters/{coverLetter}', [\App\Http\Controllers\CoverLetterController::class, 'destroy']);
+
+    // ── Interview Preparation ─────────────────────────────────────────────
+    Route::get('/interviews', [\App\Http\Controllers\InterviewController::class, 'index']);
+    Route::post('/interviews', [\App\Http\Controllers\InterviewController::class, 'store'])->middleware('throttle:ai');
+    Route::get('/interviews/{interview}', [\App\Http\Controllers\InterviewController::class, 'show']);
+    Route::delete('/interviews/{interview}', [\App\Http\Controllers\InterviewController::class, 'destroy']);
+    Route::post('/interviews/{interview}/questions/generate', [\App\Http\Controllers\InterviewController::class, 'generateQuestions'])->middleware('throttle:ai');
+    Route::post('/interviews/{interview}/questions/{question}/answer', [\App\Http\Controllers\InterviewController::class, 'answer'])->middleware('throttle:ai');
+
+    // ── Document Exports ──────────────────────────────────────────────────
+    Route::get('/exports', [\App\Http\Controllers\ExportController::class, 'index']);
+    Route::post('/exports/resumes/{resume}', [\App\Http\Controllers\ExportController::class, 'exportResume']);
+    Route::post('/exports/cover-letters/{coverLetter}', [\App\Http\Controllers\ExportController::class, 'exportCoverLetter']);
+    Route::get('/exports/{export}', [\App\Http\Controllers\ExportController::class, 'show']);
+    Route::get('/exports/{export}/download', [\App\Http\Controllers\ExportController::class, 'download']);
+    Route::delete('/exports/{export}', [\App\Http\Controllers\ExportController::class, 'destroy']);
 });
 
 // ── Admin Panel ───────────────────────────────────────────────────────
 Route::middleware(['auth:sanctum', 'role.admin', 'user.active'])->prefix('admin')->group(function () {
+    Route::get('/dashboard', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'overview']);
+    Route::get('/analytics', [\App\Http\Controllers\Admin\AdminAnalyticsController::class, 'index']);
+
+    // User Management
     Route::get('/users', [\App\Http\Controllers\Admin\UserController::class, 'index']);
     Route::get('/users/{user}', [\App\Http\Controllers\Admin\UserController::class, 'show']);
+    Route::patch('/users/{user}', [\App\Http\Controllers\Admin\UserController::class, 'update']);
     Route::patch('/users/{user}/role', [\App\Http\Controllers\Admin\UserController::class, 'assignRole']);
     Route::post('/users/{user}/suspend', [\App\Http\Controllers\Admin\UserController::class, 'suspend']);
     Route::post('/users/{user}/reactivate', [\App\Http\Controllers\Admin\UserController::class, 'reactivate']);
+
+    // Template Management
+    Route::get('/templates', [\App\Http\Controllers\Admin\AdminTemplateController::class, 'index']);
+    Route::post('/templates', [\App\Http\Controllers\Admin\AdminTemplateController::class, 'store']);
+    Route::get('/templates/{template}', [\App\Http\Controllers\Admin\AdminTemplateController::class, 'show']);
+    Route::patch('/templates/{template}', [\App\Http\Controllers\Admin\AdminTemplateController::class, 'update']);
+    Route::delete('/templates/{template}', [\App\Http\Controllers\Admin\AdminTemplateController::class, 'destroy']);
+
+    // Logs
+    Route::get('/audit-logs', [\App\Http\Controllers\Admin\AdminLogController::class, 'auditLogs']);
+    Route::get('/system-logs', [\App\Http\Controllers\Admin\AdminLogController::class, 'systemLogs']);
 });

@@ -1,4 +1,4 @@
-import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, redirect, useRouterState } from "@tanstack/react-router";
 import { useState } from "react";
 import {
   BarChart3,
@@ -15,8 +15,26 @@ import { Logo } from "@/components/brand/Logo";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
+import { getAuthToken, isAdmin } from "@/lib/auth";
 
 export const Route = createFileRoute("/admin")({
+  beforeLoad: ({ location }) => {
+    const token = getAuthToken();
+    if (!token) {
+      throw redirect({
+        to: "/login",
+        search: {
+          redirect: location.href,
+        },
+      });
+    }
+
+    if (!isAdmin()) {
+      throw redirect({
+        to: "/dashboard",
+      });
+    }
+  },
   component: AdminLayout,
 });
 
