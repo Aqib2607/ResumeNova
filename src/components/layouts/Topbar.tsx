@@ -1,4 +1,4 @@
-import { Bell, Menu, Search } from "lucide-react";
+import { Bell, Menu, Search, Sun, Moon, Laptop } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -14,6 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useAuthMe, useNotifications } from "@/hooks/useDashboard";
 import { AuthService } from "@/services/endpoints";
+import { useTheme } from "@/components/theme-provider";
 import { useQueryClient } from "@tanstack/react-query";
 import type { Notification as AppNotification } from "@/types";
 
@@ -22,6 +23,7 @@ interface TopbarProps {
 }
 
 export function Topbar({ onMenuClick }: TopbarProps) {
+  const { theme, resolvedTheme, setTheme } = useTheme();
   const { data: user } = useAuthMe();
   const { data: notifications } = useNotifications();
   const queryClient = useQueryClient();
@@ -122,6 +124,41 @@ export function Topbar({ onMenuClick }: TopbarProps) {
                 No new notifications.
               </div>
             )}
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        {/* Theme Selector */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-9 w-9"
+              aria-label="Toggle theme"
+            >
+              {resolvedTheme === "dark" ? (
+                <Moon className="h-4 w-4 text-foreground" />
+              ) : (
+                <Sun className="h-4 w-4 text-foreground" />
+              )}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-36">
+            <DropdownMenuItem onClick={() => setTheme("light")} className="flex items-center gap-2">
+              <Sun className="h-4 w-4" />
+              <span>Light</span>
+              {theme === "light" && <span className="ml-auto text-xs text-primary font-bold">✓</span>}
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme("dark")} className="flex items-center gap-2">
+              <Moon className="h-4 w-4" />
+              <span>Dark</span>
+              {theme === "dark" && <span className="ml-auto text-xs text-primary font-bold">✓</span>}
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme("system")} className="flex items-center gap-2">
+              <Laptop className="h-4 w-4" />
+              <span>System</span>
+              {theme === "system" && <span className="ml-auto text-xs text-primary font-bold">✓</span>}
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
 

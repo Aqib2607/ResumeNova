@@ -4,6 +4,7 @@ import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { useTheme } from "@/components/theme-provider";
 import {
   Select,
   SelectContent,
@@ -66,6 +67,8 @@ function Row({
 }
 
 function SettingsPage() {
+  const { theme, setTheme } = useTheme();
+
   return (
     <div>
       <SEO title="Settings" />
@@ -77,7 +80,10 @@ function SettingsPage() {
       <div className="grid gap-6 lg:grid-cols-2">
         <Section title="Appearance" description="Theme preferences (system-wide).">
           <Row label="Theme" hint="Choose light, dark, or follow system.">
-            <Select defaultValue="system">
+            <Select
+              value={theme}
+              onValueChange={(val) => setTheme(val as "light" | "dark" | "system")}
+            >
               <SelectTrigger className="w-40">
                 <SelectValue />
               </SelectTrigger>

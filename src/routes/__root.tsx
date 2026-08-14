@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 import { Toaster } from "sonner";
+import { ThemeProvider } from "@/components/theme-provider";
 
 import appCss from "../styles.css?url";
 
@@ -111,10 +112,12 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <HeadContent />
-      <Outlet />
-      <Toaster position="top-right" richColors closeButton />
-      <Scripts />
+      <ThemeProvider defaultTheme="system" storageKey="resumenova_theme">
+        <HeadContent />
+        <Outlet />
+        <Toaster position="top-right" richColors closeButton />
+        <Scripts />
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }
