@@ -51,6 +51,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::put('password', [PasswordController::class, 'update'])
         ->name('password.update');
+    Route::patch('password', [PasswordController::class, 'update']);
+    Route::patch('user/password', [PasswordController::class, 'update']);
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
@@ -115,6 +117,7 @@ Route::middleware(['auth:sanctum', 'user.active'])->group(function () {
     Route::post('/api-keys/{apiKey}/test', [\App\Http\Controllers\ApiKeyController::class, 'test']);
 
     // ── ATS Analyzer ──────────────────────────────────────────────────────
+    Route::get('/ats', [\App\Http\Controllers\AtsController::class, 'history']);
     Route::post('/ats/analyze', [\App\Http\Controllers\AtsController::class, 'analyze'])->middleware('throttle:ai');
     Route::get('/ats/history', [\App\Http\Controllers\AtsController::class, 'history']);
     Route::get('/ats/{analysis}', [\App\Http\Controllers\AtsController::class, 'show']);
