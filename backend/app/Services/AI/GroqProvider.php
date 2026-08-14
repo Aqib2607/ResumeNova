@@ -22,6 +22,7 @@ class GroqProvider implements AIProviderInterface
     protected string $defaultModel;
     protected int $timeout;
     protected int $maxRetries;
+    protected bool $verifySsl;
 
     public function __construct()
     {
@@ -29,6 +30,7 @@ class GroqProvider implements AIProviderInterface
         $this->defaultModel = (string) config('groq.default_model', 'llama-3.3-70b-versatile');
         $this->timeout = (int) config('groq.timeout', 30);
         $this->maxRetries = (int) config('groq.max_retries', 3);
+        $this->verifySsl = (bool) config('groq.verify_ssl', false);
     }
 
     public function getProviderName(): string
@@ -56,11 +58,16 @@ class GroqProvider implements AIProviderInterface
         }
 
         try {
-            $response = Http::withToken($apiKey)
+            $httpClient = Http::withToken($apiKey)
                 ->timeout($this->timeout)
                 ->asJson()
-                ->acceptJson()
-                ->post($url, $payload);
+                ->acceptJson();
+
+            if (!$this->verifySsl) {
+                $httpClient = $httpClient->withoutVerifying();
+            }
+
+            $response = $httpClient->post($url, $payload);
         } catch (Throwable $e) {
             Log::warning('Groq HTTP connection failure: ' . $e->getMessage());
             throw new TransientProviderException(
