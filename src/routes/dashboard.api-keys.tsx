@@ -311,7 +311,7 @@ function AddApiKeyDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} autoComplete="off">
           <DialogHeader>
             <DialogTitle>Add API key</DialogTitle>
             <DialogDescription>
@@ -336,6 +336,7 @@ function AddApiKeyDialog({
               <Label htmlFor="key-name">Key Name</Label>
               <Input
                 id="key-name"
+                autoComplete="off"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g. Groq Primary Key"
@@ -360,6 +361,7 @@ function AddApiKeyDialog({
                 id="key-priority"
                 type="number"
                 min={1}
+                autoComplete="off"
                 value={priority}
                 onChange={(e) => setPriority(Number(e.target.value))}
               />
@@ -439,7 +441,7 @@ function EditApiKeyDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
-        <form onSubmit={handleUpdate}>
+        <form onSubmit={handleUpdate} autoComplete="off">
           <DialogHeader>
             <DialogTitle>Edit API key</DialogTitle>
             <DialogDescription>
@@ -451,6 +453,7 @@ function EditApiKeyDialog({
               <Label htmlFor="edit-key-name">Key Name</Label>
               <Input
                 id="edit-key-name"
+                autoComplete="off"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
@@ -476,6 +479,7 @@ function EditApiKeyDialog({
                 id="edit-key-priority"
                 type="number"
                 min={1}
+                autoComplete="off"
                 value={priority}
                 onChange={(e) => setPriority(Number(e.target.value))}
               />
