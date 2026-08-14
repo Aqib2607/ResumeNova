@@ -32,7 +32,9 @@ import { Route as AdminSystemLogsRouteImport } from './routes/admin.system-logs'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminAuditLogsRouteImport } from './routes/admin.audit-logs'
 import { Route as AdminAnalyticsRouteImport } from './routes/admin.analytics'
+import { Route as DashboardResumesIndexRouteImport } from './routes/dashboard.resumes.index'
 import { Route as DashboardResumesNewRouteImport } from './routes/dashboard.resumes.new'
+import { Route as DashboardResumesNewIndexRouteImport } from './routes/dashboard.resumes.new.index'
 import { Route as DashboardResumesNewManualRouteImport } from './routes/dashboard.resumes.new.manual'
 
 const RegisterRoute = RegisterRouteImport.update({
@@ -150,11 +152,22 @@ const AdminAnalyticsRoute = AdminAnalyticsRouteImport.update({
   path: '/analytics',
   getParentRoute: () => AdminRoute,
 } as any)
+const DashboardResumesIndexRoute = DashboardResumesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardResumesRoute,
+} as any)
 const DashboardResumesNewRoute = DashboardResumesNewRouteImport.update({
   id: '/new',
   path: '/new',
   getParentRoute: () => DashboardResumesRoute,
 } as any)
+const DashboardResumesNewIndexRoute =
+  DashboardResumesNewIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => DashboardResumesNewRoute,
+  } as any)
 const DashboardResumesNewManualRoute =
   DashboardResumesNewManualRouteImport.update({
     id: '/manual',
@@ -187,7 +200,9 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/dashboard/resumes/new': typeof DashboardResumesNewRouteWithChildren
+  '/dashboard/resumes/': typeof DashboardResumesIndexRoute
   '/dashboard/resumes/new/manual': typeof DashboardResumesNewManualRoute
+  '/dashboard/resumes/new/': typeof DashboardResumesNewIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -206,13 +221,13 @@ export interface FileRoutesByTo {
   '/dashboard/exports': typeof DashboardExportsRoute
   '/dashboard/interview': typeof DashboardInterviewRoute
   '/dashboard/profile': typeof DashboardProfileRoute
-  '/dashboard/resumes': typeof DashboardResumesRouteWithChildren
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/oauth/callback': typeof OauthCallbackRoute
   '/admin': typeof AdminIndexRoute
   '/dashboard': typeof DashboardIndexRoute
-  '/dashboard/resumes/new': typeof DashboardResumesNewRouteWithChildren
+  '/dashboard/resumes': typeof DashboardResumesIndexRoute
   '/dashboard/resumes/new/manual': typeof DashboardResumesNewManualRoute
+  '/dashboard/resumes/new': typeof DashboardResumesNewIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -240,7 +255,9 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/dashboard/resumes/new': typeof DashboardResumesNewRouteWithChildren
+  '/dashboard/resumes/': typeof DashboardResumesIndexRoute
   '/dashboard/resumes/new/manual': typeof DashboardResumesNewManualRoute
+  '/dashboard/resumes/new/': typeof DashboardResumesNewIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -269,7 +286,9 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/dashboard/'
     | '/dashboard/resumes/new'
+    | '/dashboard/resumes/'
     | '/dashboard/resumes/new/manual'
+    | '/dashboard/resumes/new/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -288,13 +307,13 @@ export interface FileRouteTypes {
     | '/dashboard/exports'
     | '/dashboard/interview'
     | '/dashboard/profile'
-    | '/dashboard/resumes'
     | '/dashboard/settings'
     | '/oauth/callback'
     | '/admin'
     | '/dashboard'
-    | '/dashboard/resumes/new'
+    | '/dashboard/resumes'
     | '/dashboard/resumes/new/manual'
+    | '/dashboard/resumes/new'
   id:
     | '__root__'
     | '/'
@@ -321,7 +340,9 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/dashboard/'
     | '/dashboard/resumes/new'
+    | '/dashboard/resumes/'
     | '/dashboard/resumes/new/manual'
+    | '/dashboard/resumes/new/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -497,12 +518,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAnalyticsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/dashboard/resumes/': {
+      id: '/dashboard/resumes/'
+      path: '/'
+      fullPath: '/dashboard/resumes/'
+      preLoaderRoute: typeof DashboardResumesIndexRouteImport
+      parentRoute: typeof DashboardResumesRoute
+    }
     '/dashboard/resumes/new': {
       id: '/dashboard/resumes/new'
       path: '/new'
       fullPath: '/dashboard/resumes/new'
       preLoaderRoute: typeof DashboardResumesNewRouteImport
       parentRoute: typeof DashboardResumesRoute
+    }
+    '/dashboard/resumes/new/': {
+      id: '/dashboard/resumes/new/'
+      path: '/'
+      fullPath: '/dashboard/resumes/new/'
+      preLoaderRoute: typeof DashboardResumesNewIndexRouteImport
+      parentRoute: typeof DashboardResumesNewRoute
     }
     '/dashboard/resumes/new/manual': {
       id: '/dashboard/resumes/new/manual'
@@ -538,10 +573,12 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface DashboardResumesNewRouteChildren {
   DashboardResumesNewManualRoute: typeof DashboardResumesNewManualRoute
+  DashboardResumesNewIndexRoute: typeof DashboardResumesNewIndexRoute
 }
 
 const DashboardResumesNewRouteChildren: DashboardResumesNewRouteChildren = {
   DashboardResumesNewManualRoute: DashboardResumesNewManualRoute,
+  DashboardResumesNewIndexRoute: DashboardResumesNewIndexRoute,
 }
 
 const DashboardResumesNewRouteWithChildren =
@@ -549,10 +586,12 @@ const DashboardResumesNewRouteWithChildren =
 
 interface DashboardResumesRouteChildren {
   DashboardResumesNewRoute: typeof DashboardResumesNewRouteWithChildren
+  DashboardResumesIndexRoute: typeof DashboardResumesIndexRoute
 }
 
 const DashboardResumesRouteChildren: DashboardResumesRouteChildren = {
   DashboardResumesNewRoute: DashboardResumesNewRouteWithChildren,
+  DashboardResumesIndexRoute: DashboardResumesIndexRoute,
 }
 
 const DashboardResumesRouteWithChildren =
