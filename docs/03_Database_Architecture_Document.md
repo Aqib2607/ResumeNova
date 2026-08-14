@@ -10,8 +10,8 @@ Framework: Laravel 12
 
 Related Documents:
 
-* 01_Requirements_Architecture_Document.md
-* 02_Functional_Specification_Document.md
+- 01_Requirements_Architecture_Document.md
+- 02_Functional_Specification_Document.md
 
 ---
 
@@ -19,23 +19,23 @@ Related Documents:
 
 ResumeNova follows a modular relational database architecture designed for:
 
-* Multi-user support
-* Role-based access control
-* Resume versioning
-* AI request tracking
-* API failover management
-* ATS analysis storage
-* Cover letter generation
-* Audit logging
-* Future SaaS scalability
+- Multi-user support
+- Role-based access control
+- Resume versioning
+- AI request tracking
+- API failover management
+- ATS analysis storage
+- Cover letter generation
+- Audit logging
+- Future SaaS scalability
 
 Database Design Principles:
 
-* Normalized schema
-* Soft delete support
-* Audit-ready architecture
-* Minimal data duplication
-* Future multi-tenant compatibility
+- Normalized schema
+- Soft delete support
+- Audit-ready architecture
+- Minimal data duplication
+- Future multi-tenant compatibility
 
 ---
 
@@ -638,9 +638,9 @@ profiles
 
 Benefits:
 
-* Recovery capability
-* Audit compliance
-* Historical analytics
+- Recovery capability
+- Audit compliance
+- Historical analytics
 
 ---
 

@@ -29,9 +29,10 @@ User Actions:
 2. Click Register
 3. Enter:
 
-   * Name
-   * Email
-   * Password
+   - Name
+   - Email
+   - Password
+
 4. Submit
 
 System Actions:
@@ -85,24 +86,24 @@ ACTIVE_USER
 
 Name:
 
-* Required
-* 3-100 characters
+- Required
+- 3-100 characters
 
 Email:
 
-* Required
-* Unique
+- Required
+- Unique
 
 Phone:
 
-* Optional
-* Valid format
+- Optional
+- Valid format
 
 Profile Image:
 
-* JPG
-* PNG
-* Max 2MB
+- JPG
+- PNG
+- Max 2MB
 
 ---
 

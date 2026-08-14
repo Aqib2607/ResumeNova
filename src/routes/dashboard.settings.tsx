@@ -4,7 +4,7 @@ import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { useTheme } from "@/components/theme-provider";
+import { useTheme } from "@/hooks/use-theme";
 import {
   Select,
   SelectContent,

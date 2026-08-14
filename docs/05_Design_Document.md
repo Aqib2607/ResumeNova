@@ -11,17 +11,17 @@ Professional • Modern • Minimal • AI-Powered • ATS-Focused
 
 Target Users:
 
-* University Students
-* Fresh Graduates
-* Professionals
-* Career Switchers
+- University Students
+- Fresh Graduates
+- Professionals
+- Career Switchers
 
 Related Documents:
 
-* 01_Requirements_Architecture_Document.md
-* 02_Functional_Specification_Document.md
-* 03_Database_Architecture_Document.md
-* 04_PRD_Product_Requirements_Document.md
+- 01_Requirements_Architecture_Document.md
+- 02_Functional_Specification_Document.md
+- 03_Database_Architecture_Document.md
+- 04_PRD_Product_Requirements_Document.md
 
 ---
 
@@ -97,12 +97,12 @@ ATS-focused utility
 
 ## Inspiration Sources
 
-* Notion
-* Linear
-* Stripe
-* Resume.io
-* Teal
-* Vercel Dashboard
+- Notion
+- Linear
+- Stripe
+- Resume.io
+- Teal
+- Vercel Dashboard
 
 ---
 

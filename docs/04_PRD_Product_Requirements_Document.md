@@ -34,12 +34,12 @@ To become a comprehensive AI-powered career development platform that helps stud
 
 Many job seekers face difficulties creating professional resumes because:
 
-* They lack resume writing knowledge.
-* They are unfamiliar with ATS requirements.
-* Resume formatting consumes time.
-* Cover letters require repetitive effort.
-* Career documentation is often inconsistent.
-* Existing solutions are expensive or overly complex.
+- They lack resume writing knowledge.
+- They are unfamiliar with ATS requirements.
+- Resume formatting consumes time.
+- Cover letters require repetitive effort.
+- Career documentation is often inconsistent.
+- Existing solutions are expensive or overly complex.
 
 ResumeNova addresses these problems through AI-assisted automation and structured workflows.
 
@@ -49,20 +49,20 @@ ResumeNova addresses these problems through AI-assisted automation and structure
 
 ## Primary Objectives
 
-* Enable professional resume creation.
-* Improve ATS compatibility.
-* Simplify cover letter generation.
-* Provide interview preparation assistance.
-* Support bilingual resume creation.
+- Enable professional resume creation.
+- Improve ATS compatibility.
+- Simplify cover letter generation.
+- Provide interview preparation assistance.
+- Support bilingual resume creation.
 
 ---
 
 ## Secondary Objectives
 
-* Build a scalable SaaS-ready platform.
-* Enable future monetization.
-* Support multiple AI providers.
-* Expand into a full career management ecosystem.
+- Build a scalable SaaS-ready platform.
+- Enable future monetization.
+- Support multiple AI providers.
+- Expand into a full career management ecosystem.
 
 ---
 
@@ -106,9 +106,9 @@ University Students
 
 Characteristics:
 
-* Final-year students
-* Internship seekers
-* Fresh graduates
+- Final-year students
+- Internship seekers
+- Fresh graduates
 
 ---
 
@@ -118,9 +118,9 @@ Entry-Level Professionals
 
 Characteristics:
 
-* 0–5 years experience
-* Career switchers
-* Job seekers
+- 0–5 years experience
+- Career switchers
+- Job seekers
 
 ---
 
@@ -130,9 +130,9 @@ Experienced Professionals
 
 Characteristics:
 
-* Mid-level professionals
-* Senior professionals
-* Management applicants
+- Mid-level professionals
+- Senior professionals
+- Management applicants
 
 ---
 
@@ -158,8 +158,8 @@ Create internship-ready resume.
 
 ### Pain Points
 
-* No resume writing experience
-* No ATS knowledge
+- No resume writing experience
+- No ATS knowledge
 
 ---
 
@@ -183,8 +183,8 @@ Switch companies.
 
 ### Pain Points
 
-* Resume outdated
-* Needs ATS optimization
+- Resume outdated
+- Needs ATS optimization
 
 ---
 
@@ -208,8 +208,8 @@ Apply for leadership roles.
 
 ### Pain Points
 
-* Needs executive-level resume
-* Requires tailored cover letters
+- Needs executive-level resume
+- Requires tailored cover letters
 
 ---
 
@@ -399,8 +399,8 @@ User Registration
 
 Users must register using:
 
-* Email
-* Password
+- Email
+- Password
 
 ---
 
@@ -426,10 +426,10 @@ Resume Generation
 
 AI must generate:
 
-* Summary
-* Experience
-* Skills
-* Projects
+- Summary
+- Experience
+- Skills
+- Projects
 
 ---
 
@@ -463,8 +463,8 @@ Export
 
 System must export:
 
-* PDF
-* DOCX
+- PDF
+- DOCX
 
 ---
 
@@ -504,8 +504,8 @@ Resume Generation < 15 seconds
 
 Support:
 
-* Initial 1,000 users
-* Future 10,000+ users
+- Initial 1,000 users
+- Future 10,000+ users
 
 ---
 
@@ -529,11 +529,11 @@ Role-Based Access Control
 
 Advantages:
 
-* Large template library
+- Large template library
 
 Weaknesses:
 
-* Limited AI functionality
+- Limited AI functionality
 
 ---
 
@@ -541,11 +541,11 @@ Weaknesses:
 
 Advantages:
 
-* Strong AI generation
+- Strong AI generation
 
 Weaknesses:
 
-* Limited ATS insights
+- Limited ATS insights
 
 ---
 
@@ -553,11 +553,11 @@ Weaknesses:
 
 Advantages:
 
-* Attractive designs
+- Attractive designs
 
 Weaknesses:
 
-* Complex user flow
+- Complex user flow
 
 ---
 
@@ -753,12 +753,12 @@ Subscription Billing
 
 ResumeNova will be considered successful when users can:
 
-* Create professional resumes quickly.
-* Generate ATS-optimized content.
-* Produce tailored cover letters.
-* Export professional documents.
-* Use uninterrupted AI generation through API failover.
-* Successfully prepare for job applications using AI-powered assistance.
+- Create professional resumes quickly.
+- Generate ATS-optimized content.
+- Produce tailored cover letters.
+- Export professional documents.
+- Use uninterrupted AI generation through API failover.
+- Successfully prepare for job applications using AI-powered assistance.
 
 ---
 

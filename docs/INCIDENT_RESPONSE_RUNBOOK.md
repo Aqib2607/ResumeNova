@@ -6,12 +6,12 @@
 
 ## 1. Severity Classification
 
-| Severity Level | Definition | Response SLA | Examples |
-| --- | --- | --- | --- |
-| **SEV-1 (Critical)** | Core service completely unavailable or severe data breach | 15 Minutes | Total site outage, user data leak, database corruption |
-| **SEV-2 (High)** | Major subsystem degraded with no immediate workaround | 1 Hour | AI generations completely failing, export engine broken |
-| **SEV-3 (Medium)** | Non-critical functionality degraded or cosmetic defects | 4 Hours | Notification delivery delays, Bangla font alignment issue |
-| **SEV-4 (Low)** | Minor bug or documentation error | 24 Hours | Non-blocking UI glitch |
+| Severity Level       | Definition                                                | Response SLA | Examples                                                  |
+| -------------------- | --------------------------------------------------------- | ------------ | --------------------------------------------------------- |
+| **SEV-1 (Critical)** | Core service completely unavailable or severe data breach | 15 Minutes   | Total site outage, user data leak, database corruption    |
+| **SEV-2 (High)**     | Major subsystem degraded with no immediate workaround     | 1 Hour       | AI generations completely failing, export engine broken   |
+| **SEV-3 (Medium)**   | Non-critical functionality degraded or cosmetic defects   | 4 Hours      | Notification delivery delays, Bangla font alignment issue |
+| **SEV-4 (Low)**      | Minor bug or documentation error                          | 24 Hours     | Non-blocking UI glitch                                    |
 
 ---
 

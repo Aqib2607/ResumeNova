@@ -14,16 +14,16 @@ Deployment Model: Web Application
 
 Target Scale:
 
-* Initial: < 1,000 Users
-* Future: 10,000+ Users
+- Initial: < 1,000 Users
+- Future: 10,000+ Users
 
 Related Documents:
 
-* 01_Requirements_Architecture_Document.md
-* 02_Functional_Specification_Document.md
-* 03_Database_Architecture_Document.md
-* 04_PRD_Product_Requirements_Document.md
-* 05_Design_Document.md
+- 01_Requirements_Architecture_Document.md
+- 02_Functional_Specification_Document.md
+- 03_Database_Architecture_Document.md
+- 04_PRD_Product_Requirements_Document.md
+- 05_Design_Document.md
 
 ---
 
