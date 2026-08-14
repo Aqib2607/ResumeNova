@@ -70,6 +70,14 @@ class ApiKey extends Model
      */
     public function isEligible(): bool
     {
+        if (in_array($this->status, ['invalid', 'disabled', 'revoked'], true)) {
+            return false;
+        }
+
+        if ($this->status === 'rate_limited') {
+            return $this->cooldown_until === null || $this->cooldown_until->isPast();
+        }
+
         if ($this->status !== 'active') {
             return false;
         }

@@ -40,7 +40,16 @@ class ApiKeyManager
     {
         $query = ApiKey::where('user_id', $user->id)
             ->where('provider', $providerName ?: 'groq')
-            ->where('status', 'active')
+            ->where(function ($q) {
+                $q->where('status', 'active')
+                  ->orWhere(function ($sub) {
+                      $sub->where('status', 'rate_limited')
+                          ->where(function ($inner) {
+                              $inner->whereNull('cooldown_until')
+                                    ->orWhere('cooldown_until', '<=', now());
+                          });
+                  });
+            })
             ->where(function ($q) {
                 $q->whereNull('cooldown_until')
                   ->orWhere('cooldown_until', '<=', now());
@@ -50,7 +59,17 @@ class ApiKeyManager
             $query->where('id', '!=', $excludeKeyId);
         }
 
-        return $query->orderBy('priority', 'asc')->orderBy('last_used_at', 'asc')->first();
+        $key = $query->orderBy('priority', 'asc')->orderBy('last_used_at', 'asc')->first();
+
+        if ($key && $key->status === 'rate_limited' && ($key->cooldown_until === null || $key->cooldown_until->isPast())) {
+            $key->update([
+                'status' => 'active',
+                'cooldown_until' => null,
+                'failure_reason' => null,
+            ]);
+        }
+
+        return $key;
     }
 
     /**
