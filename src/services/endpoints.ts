@@ -199,6 +199,7 @@ export const InterviewsService = {
 export const NotificationsService = {
   list: () => api.get<Notification[]>("/notifications"),
   markRead: (id: string | number) => api.post<void>(`/notifications/${id}/read`),
+  markAllRead: () => api.post<void>("/notifications/read-all"),
 };
 
 // ---------- Admin ----------

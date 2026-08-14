@@ -35,20 +35,22 @@ import {
   useNotifications,
   useAuthMe,
 } from "@/hooks/useDashboard";
+import { useLanguage, type TranslationKey } from "@/hooks/use-language";
 import type { Resume, ExportRecord, ApiKey, Notification as AppNotification } from "@/types";
 
 export const Route = createFileRoute("/dashboard/")({
   component: DashboardHome,
 });
 
-const quickActions = [
-  { label: "New resume", icon: Plus, to: "/dashboard/resumes" },
-  { label: "Run ATS analysis", icon: ScanSearch, to: "/dashboard/ats" },
-  { label: "Generate cover letter", icon: Sparkles, to: "/dashboard/cover-letters" },
-  { label: "Add API key", icon: KeyRound, to: "/dashboard/api-keys" },
+const quickActions: Array<{ labelKey: TranslationKey; icon: typeof Plus; to: string }> = [
+  { labelKey: "qa_new_resume", icon: Plus, to: "/dashboard/resumes" },
+  { labelKey: "qa_ats_scan", icon: ScanSearch, to: "/dashboard/ats" },
+  { labelKey: "qa_cover_letter", icon: Sparkles, to: "/dashboard/cover-letters" },
+  { labelKey: "qa_api_key", icon: KeyRound, to: "/dashboard/api-keys" },
 ];
 
 function DashboardHome() {
+  const { t } = useLanguage();
   const { data: user, isPending: isUserPending } = useAuthMe();
   const { data: stats, isPending: isStatsPending } = useDashboardStats();
   const { data: chartData, isPending: isChartPending } = useDashboardChart();
@@ -62,13 +64,15 @@ function DashboardHome() {
       <SEO title="Dashboard" />
       <PageHeader
         title={
-          isUserPending ? "Welcome back..." : `Welcome back, ${user?.name?.split(" ")[0] || "User"}`
+          isUserPending
+            ? `${t("dash_welcome")}...`
+            : `${t("dash_welcome")}, ${user?.name?.split(" ")[0] || "User"}`
         }
-        description="Here's a snapshot of your career toolkit."
+        description={t("dash_subtitle")}
         actions={
           <Button asChild>
             <Link to="/dashboard/resumes">
-              <Plus className="h-4 w-4" /> New resume
+              <Plus className="h-4 w-4" /> {t("btn_new_resume")}
             </Link>
           </Button>
         }
@@ -78,25 +82,25 @@ function DashboardHome() {
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {[
           {
-            label: "Resumes",
+            label: t("stat_resumes"),
             value: stats?.resumes_count ?? 0,
             icon: FileText,
-            hint: "+1 this month",
+            hint: `+1 ${t("stat_month")}`,
           },
           {
-            label: "Avg ATS score",
+            label: t("stat_avg_ats"),
             value: stats?.average_ats_score ?? 0,
             icon: ScanSearch,
             hint: "+6 vs. last month",
           },
           {
-            label: "AI usage",
+            label: t("stat_ai_usage"),
             value: stats?.ai_usage_count ?? 0,
             icon: Sparkles,
-            hint: "calls this week",
+            hint: t("stat_calls_week"),
           },
           {
-            label: "Exports",
+            label: t("stat_exports"),
             value: stats?.exports_count ?? 0,
             icon: Download,
             hint: "PDF / DOCX",
@@ -132,8 +136,8 @@ function DashboardHome() {
         <div className="rounded-xl border border-border bg-card p-5 lg:col-span-2">
           <div className="mb-4 flex items-center justify-between">
             <div>
-              <p className="text-sm font-semibold">AI usage this week</p>
-              <p className="text-xs text-muted-foreground">Calls per day across all keys</p>
+              <p className="text-sm font-semibold">{t("chart_title")}</p>
+              <p className="text-xs text-muted-foreground">{t("chart_subtitle")}</p>
             </div>
             <Badge variant="secondary">
               {isChartPending
@@ -202,12 +206,12 @@ function DashboardHome() {
 
         {/* Quick actions */}
         <div className="rounded-xl border border-border bg-card p-5">
-          <p className="text-sm font-semibold">Quick actions</p>
-          <p className="text-xs text-muted-foreground">Jump back into your workflow</p>
+          <p className="text-sm font-semibold">{t("quick_actions")}</p>
+          <p className="text-xs text-muted-foreground">{t("dash_subtitle")}</p>
           <div className="mt-4 space-y-2">
             {quickActions.map((a) => (
               <Link
-                key={a.label}
+                key={a.labelKey}
                 to={a.to}
                 className="group flex items-center justify-between rounded-lg border border-border bg-background px-3 py-2.5 text-sm transition hover:border-primary/40 hover:bg-primary/5"
               >
@@ -215,7 +219,7 @@ function DashboardHome() {
                   <span className="grid h-7 w-7 place-items-center rounded-md bg-primary/10 text-primary">
                     <a.icon className="h-3.5 w-3.5" />
                   </span>
-                  {a.label}
+                  {t(a.labelKey)}
                 </span>
                 <ArrowUpRight className="h-4 w-4 text-muted-foreground transition group-hover:text-primary" />
               </Link>
@@ -228,7 +232,7 @@ function DashboardHome() {
         {/* Recent resumes */}
         <div className="rounded-xl border border-border bg-card p-5 lg:col-span-2">
           <div className="mb-4 flex items-center justify-between">
-            <p className="text-sm font-semibold">Recent resumes</p>
+            <p className="text-sm font-semibold">{t("recent_resumes")}</p>
             <Link
               to="/dashboard/resumes"
               className="text-xs font-medium text-primary hover:underline"

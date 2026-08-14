@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { useTheme } from "@/hooks/use-theme";
+import { useLanguage } from "@/hooks/use-language";
 import {
   Select,
   SelectContent,
@@ -68,18 +69,16 @@ function Row({
 
 function SettingsPage() {
   const { theme, setTheme } = useTheme();
+  const { language, setLanguage, t } = useLanguage();
 
   return (
     <div>
-      <SEO title="Settings" />
-      <PageHeader
-        title="Settings"
-        description="Manage preferences, notifications, and account state."
-      />
+      <SEO title={t("settings_title")} />
+      <PageHeader title={t("settings_title")} description={t("settings_subtitle")} />
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <Section title="Appearance" description="Theme preferences (system-wide).">
-          <Row label="Theme" hint="Choose light, dark, or follow system.">
+        <Section title={t("appearance_title")} description={t("appearance_desc")}>
+          <Row label={t("theme_label")} hint={t("theme_hint")}>
             <Select
               value={theme}
               onValueChange={(val) => setTheme(val as "light" | "dark" | "system")}
@@ -88,41 +87,32 @@ function SettingsPage() {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="light">Light</SelectItem>
-                <SelectItem value="dark">Dark</SelectItem>
-                <SelectItem value="system">System</SelectItem>
+                <SelectItem value="light">{t("theme_light")}</SelectItem>
+                <SelectItem value="dark">{t("theme_dark")}</SelectItem>
+                <SelectItem value="system">{t("theme_system")}</SelectItem>
               </SelectContent>
             </Select>
           </Row>
-          <Row label="Compact density" hint="Tighten spacing across dashboard tables.">
+          <Row label={t("compact_label")} hint={t("compact_hint")}>
             <Switch />
           </Row>
         </Section>
 
-        <Section title="Notifications" description="What we email you about.">
-          <Row label="Product updates" hint="Major releases and improvements.">
+        <Section title={t("notifications_section")} description={t("notifications_desc")}>
+          <Row label={t("product_updates")} hint={t("product_updates_hint")}>
             <Switch defaultChecked />
           </Row>
-          <Row label="Weekly ATS digest" hint="Score trends across your resumes.">
+          <Row label={t("weekly_digest")} hint={t("weekly_digest_hint")}>
             <Switch defaultChecked />
           </Row>
-          <Row label="Interview reminders" hint="Daily nudge to practice 1 question.">
+          <Row label={t("interview_reminders")} hint={t("interview_reminders_hint")}>
             <Switch />
           </Row>
         </Section>
 
-        <Section
-          title="Language & region"
-          description="Platform localization and locale format preferences."
-        >
-          <Row label="App language" hint="Display language for navigation and tool labels.">
-            <Select
-              defaultValue={localStorage.getItem("resumenova_lang") || "en"}
-              onValueChange={(val) => {
-                localStorage.setItem("resumenova_lang", val);
-                window.dispatchEvent(new Event("languagechange"));
-              }}
-            >
+        <Section title={t("lang_region")} description={t("lang_region_desc")}>
+          <Row label={t("app_lang")} hint={t("app_lang_hint")}>
+            <Select value={language} onValueChange={(val) => setLanguage(val as "en" | "bn")}>
               <SelectTrigger className="w-40">
                 <SelectValue />
               </SelectTrigger>
@@ -132,7 +122,7 @@ function SettingsPage() {
               </SelectContent>
             </Select>
           </Row>
-          <Row label="Date format">
+          <Row label={t("date_format")}>
             <Select defaultValue="iso">
               <SelectTrigger className="w-40">
                 <SelectValue />
@@ -146,18 +136,18 @@ function SettingsPage() {
           </Row>
         </Section>
 
-        <Section title="Danger zone" description="Account-level actions that can't be undone.">
-          <Row label="Export all data" hint="Receive a ZIP of resumes, analyses and letters.">
-            <Button variant="outline">Request export</Button>
+        <Section title={t("danger_zone")} description={t("danger_zone_desc")}>
+          <Row label={t("export_all")} hint={t("export_all_hint")}>
+            <Button variant="outline">{t("btn_request_export")}</Button>
           </Row>
-          <Row label="Delete account" hint="Permanently remove your account and data.">
+          <Row label={t("delete_account")} hint={t("delete_account_hint")}>
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button
                   variant="outline"
                   className="border-destructive/40 text-destructive hover:bg-destructive/10 hover:text-destructive"
                 >
-                  Delete account
+                  {t("delete_account")}
                 </Button>
               </AlertDialogTrigger>
               <AlertDialogContent>
@@ -169,7 +159,7 @@ function SettingsPage() {
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogCancel>{t("btn_cancel")}</AlertDialogCancel>
                   <AlertDialogAction className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
                     Delete permanently
                   </AlertDialogAction>

@@ -24,6 +24,30 @@ class NotificationController extends Controller
         // Return a flat list of the latest 20 notifications (most recent first)
         $notifications = $user->notifications()->latest()->limit(20)->get();
 
+        if ($notifications->isEmpty()) {
+            $user->notifications()->create([
+                'id' => (string) \Illuminate\Support\Str::uuid(),
+                'type' => 'App\Notifications\WelcomeNotification',
+                'data' => [
+                    'title' => 'Welcome to ResumeNova!',
+                    'body' => 'Get started by creating your first AI-optimized resume, scanning with ATS, or generating a cover letter.',
+                ],
+                'read_at' => null,
+            ]);
+
+            $user->notifications()->create([
+                'id' => (string) \Illuminate\Support\Str::uuid(),
+                'type' => 'App\Notifications\AiEngineNotification',
+                'data' => [
+                    'title' => 'AI Engine Ready',
+                    'body' => 'Your AI models are ready. Generate summaries, bullet points, skills, and mock interview questions with one click.',
+                ],
+                'read_at' => null,
+            ]);
+
+            $notifications = $user->notifications()->latest()->limit(20)->get();
+        }
+
         return response()->json($notifications);
     }
 

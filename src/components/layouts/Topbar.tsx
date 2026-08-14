@@ -13,8 +13,9 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useAuthMe, useNotifications } from "@/hooks/useDashboard";
-import { AuthService } from "@/services/endpoints";
+import { AuthService, NotificationsService } from "@/services/endpoints";
 import { useTheme } from "@/hooks/use-theme";
+import { useLanguage } from "@/hooks/use-language";
 import { useQueryClient } from "@tanstack/react-query";
 import type { Notification as AppNotification } from "@/types";
 
@@ -24,6 +25,7 @@ interface TopbarProps {
 
 export function Topbar({ onMenuClick }: TopbarProps) {
   const { theme, resolvedTheme, setTheme } = useTheme();
+  const { language, setLanguage, t } = useLanguage();
   const { data: user } = useAuthMe();
   const { data: notifications } = useNotifications();
   const queryClient = useQueryClient();
@@ -51,6 +53,24 @@ export function Topbar({ onMenuClick }: TopbarProps) {
     }
   };
 
+  const handleMarkAllRead = async () => {
+    try {
+      await NotificationsService.markAllRead();
+      queryClient.invalidateQueries({ queryKey: ["notifications"] });
+    } catch (error) {
+      console.error("Failed to mark all notifications as read", error);
+    }
+  };
+
+  const handleMarkRead = async (id: string | number) => {
+    try {
+      await NotificationsService.markRead(id);
+      queryClient.invalidateQueries({ queryKey: ["notifications"] });
+    } catch (error) {
+      console.error("Failed to mark notification as read", error);
+    }
+  };
+
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center justify-between gap-3 border-b border-border bg-background/80 px-4 backdrop-blur-md md:px-6">
       <div className="flex items-center gap-3">
@@ -67,7 +87,7 @@ export function Topbar({ onMenuClick }: TopbarProps) {
         <div className="relative hidden w-64 md:block lg:w-80 xl:w-96">
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder="Search resumes, jobs, questions…"
+            placeholder={t("search_placeholder")}
             className="h-9 pl-9 text-sm"
             aria-label="Search"
           />
@@ -75,6 +95,7 @@ export function Topbar({ onMenuClick }: TopbarProps) {
       </div>
 
       <div className="ml-auto flex items-center gap-1 sm:gap-2">
+        {/* Notifications */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
@@ -90,9 +111,23 @@ export function Topbar({ onMenuClick }: TopbarProps) {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-80">
-            <DropdownMenuLabel className="flex items-center justify-between">
-              Notifications
-              {unread > 0 && <Badge variant="secondary">{unread} new</Badge>}
+            <DropdownMenuLabel className="flex items-center justify-between py-2">
+              <span className="text-sm font-semibold">{t("notifications_title")}</span>
+              <div className="flex items-center gap-2">
+                {unread > 0 && (
+                  <Badge variant="secondary">
+                    {unread} {t("notifications_new")}
+                  </Badge>
+                )}
+                {unread > 0 && (
+                  <button
+                    onClick={handleMarkAllRead}
+                    className="text-[11px] font-medium text-primary hover:underline"
+                  >
+                    {t("notifications_mark_all_read")}
+                  </button>
+                )}
+              </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             {notifications && notifications.length > 0 ? (
@@ -108,7 +143,8 @@ export function Topbar({ onMenuClick }: TopbarProps) {
                   return (
                     <DropdownMenuItem
                       key={n.id}
-                      className="flex flex-col items-start gap-0.5 py-2.5"
+                      onClick={() => handleMarkRead(n.id)}
+                      className="flex cursor-pointer flex-col items-start gap-0.5 py-2.5"
                     >
                       <div className="flex w-full items-center justify-between">
                         <span className="text-sm font-medium">{data?.title || "Notification"}</span>
@@ -121,7 +157,7 @@ export function Topbar({ onMenuClick }: TopbarProps) {
               )
             ) : (
               <div className="py-4 text-center text-sm text-muted-foreground">
-                No new notifications.
+                {t("notifications_empty")}
               </div>
             )}
           </DropdownMenuContent>
@@ -141,16 +177,16 @@ export function Topbar({ onMenuClick }: TopbarProps) {
           <DropdownMenuContent align="end" className="w-36">
             <DropdownMenuItem onClick={() => setTheme("light")} className="flex items-center gap-2">
               <Sun className="h-4 w-4" />
-              <span>Light</span>
+              <span>{t("theme_light")}</span>
               {theme === "light" && (
-                <span className="ml-auto text-xs text-primary font-bold">✓</span>
+                <span className="ml-auto text-xs font-bold text-primary">✓</span>
               )}
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => setTheme("dark")} className="flex items-center gap-2">
               <Moon className="h-4 w-4" />
-              <span>Dark</span>
+              <span>{t("theme_dark")}</span>
               {theme === "dark" && (
-                <span className="ml-auto text-xs text-primary font-bold">✓</span>
+                <span className="ml-auto text-xs font-bold text-primary">✓</span>
               )}
             </DropdownMenuItem>
             <DropdownMenuItem
@@ -158,9 +194,9 @@ export function Topbar({ onMenuClick }: TopbarProps) {
               className="flex items-center gap-2"
             >
               <Laptop className="h-4 w-4" />
-              <span>System</span>
+              <span>{t("theme_system")}</span>
               {theme === "system" && (
-                <span className="ml-auto text-xs text-primary font-bold">✓</span>
+                <span className="ml-auto text-xs font-bold text-primary">✓</span>
               )}
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -169,31 +205,38 @@ export function Topbar({ onMenuClick }: TopbarProps) {
         {/* Language Selector */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="sm" className="h-8 px-2 text-xs font-medium">
-              🌐 <span className="hidden sm:inline">English / বাংলা</span>
-              <span className="sm:hidden">EN/BN</span>
+            <Button variant="ghost" size="sm" className="h-9 gap-1.5 px-2.5 text-xs font-medium">
+              <span className="rounded bg-muted px-1 py-0.5 text-[10px] font-bold text-primary">
+                {language === "bn" ? "বাং" : "EN"}
+              </span>
+              <span className="hidden md:inline">{language === "bn" ? "বাংলা" : "English"}</span>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-36">
+          <DropdownMenuContent align="end" className="w-40">
             <DropdownMenuItem
-              onClick={() => {
-                localStorage.setItem("resumenova_lang", "en");
-                window.dispatchEvent(new Event("languagechange"));
-              }}
+              onClick={() => setLanguage("en")}
+              className="flex items-center justify-between"
             >
-              🇺🇸 English (EN)
+              <div className="flex items-center gap-2">
+                <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] font-bold">EN</span>
+                <span>English</span>
+              </div>
+              {language === "en" && <span className="text-xs font-bold text-primary">✓</span>}
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() => {
-                localStorage.setItem("resumenova_lang", "bn");
-                window.dispatchEvent(new Event("languagechange"));
-              }}
+              onClick={() => setLanguage("bn")}
+              className="flex items-center justify-between"
             >
-              🇧🇩 বাংলা (BN)
+              <div className="flex items-center gap-2">
+                <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] font-bold">বাং</span>
+                <span>বাংলা</span>
+              </div>
+              {language === "bn" && <span className="text-xs font-bold text-primary">✓</span>}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
 
+        {/* User Account Menu */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button
@@ -222,13 +265,13 @@ export function Topbar({ onMenuClick }: TopbarProps) {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link to="/dashboard/profile">Profile</Link>
+              <Link to="/dashboard/profile">{t("nav_profile")}</Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link to="/dashboard/settings">Settings</Link>
+              <Link to="/dashboard/settings">{t("nav_settings")}</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleLogout}>Log out</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout}>{t("log_out")}</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

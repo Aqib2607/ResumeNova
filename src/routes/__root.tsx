@@ -10,6 +10,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "@/components/theme-provider";
+import { I18nProvider } from "@/components/i18n-provider";
 
 import appCss from "../styles.css?url";
 
@@ -113,10 +114,12 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="system" storageKey="resumenova_theme">
-        <HeadContent />
-        <Outlet />
-        <Toaster position="top-right" richColors closeButton />
-        <Scripts />
+        <I18nProvider defaultLanguage="en" storageKey="resumenova_lang">
+          <HeadContent />
+          <Outlet />
+          <Toaster position="top-right" richColors closeButton />
+          <Scripts />
+        </I18nProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );
