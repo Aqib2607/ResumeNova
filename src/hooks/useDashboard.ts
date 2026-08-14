@@ -1,5 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { DashboardService, NotificationsService, AuthService } from "@/services/endpoints";
+import type { Notification as AppNotification } from "@/types";
 
 export function useDashboardStats() {
   return useQuery({
@@ -40,6 +41,66 @@ export function useNotifications() {
   return useQuery({
     queryKey: ["dashboard", "notifications"],
     queryFn: () => NotificationsService.list(),
+  });
+}
+
+export function useMarkNotificationRead() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string | number) => NotificationsService.markRead(id),
+    onMutate: async (id) => {
+      await queryClient.cancelQueries({ queryKey: ["dashboard", "notifications"] });
+      const previousNotifications = queryClient.getQueryData<AppNotification[]>([
+        "dashboard",
+        "notifications",
+      ]);
+      if (previousNotifications) {
+        queryClient.setQueryData<AppNotification[]>(
+          ["dashboard", "notifications"],
+          previousNotifications.map((n) =>
+            String(n.id) === String(id) ? { ...n, read_at: new Date().toISOString() } : n,
+          ),
+        );
+      }
+      return { previousNotifications };
+    },
+    onError: (_err, _id, context) => {
+      if (context?.previousNotifications) {
+        queryClient.setQueryData(["dashboard", "notifications"], context.previousNotifications);
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["dashboard", "notifications"] });
+    },
+  });
+}
+
+export function useMarkAllNotificationsRead() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: () => NotificationsService.markAllRead(),
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: ["dashboard", "notifications"] });
+      const previousNotifications = queryClient.getQueryData<AppNotification[]>([
+        "dashboard",
+        "notifications",
+      ]);
+      if (previousNotifications) {
+        queryClient.setQueryData<AppNotification[]>(
+          ["dashboard", "notifications"],
+          previousNotifications.map((n) => ({ ...n, read_at: new Date().toISOString() })),
+        );
+      }
+      return { previousNotifications };
+    },
+    onError: (_err, _variables, context) => {
+      if (context?.previousNotifications) {
+        queryClient.setQueryData(["dashboard", "notifications"], context.previousNotifications);
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["dashboard", "notifications"] });
+    },
   });
 }
 

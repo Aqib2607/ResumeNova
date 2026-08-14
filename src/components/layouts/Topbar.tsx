@@ -12,11 +12,17 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useAuthMe, useNotifications } from "@/hooks/useDashboard";
-import { AuthService, NotificationsService } from "@/services/endpoints";
+import {
+  useAuthMe,
+  useNotifications,
+  useMarkNotificationRead,
+  useMarkAllNotificationsRead,
+} from "@/hooks/useDashboard";
+import { AuthService } from "@/services/endpoints";
 import { useTheme } from "@/hooks/use-theme";
 import { useLanguage } from "@/hooks/use-language";
 import { useQueryClient } from "@tanstack/react-query";
+import { cn } from "@/lib/utils";
 import type { Notification as AppNotification } from "@/types";
 
 interface TopbarProps {
@@ -28,6 +34,8 @@ export function Topbar({ onMenuClick }: TopbarProps) {
   const { language, setLanguage, t } = useLanguage();
   const { data: user } = useAuthMe();
   const { data: notifications } = useNotifications();
+  const markNotificationRead = useMarkNotificationRead();
+  const markAllNotificationsRead = useMarkAllNotificationsRead();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
@@ -50,24 +58,6 @@ export function Topbar({ onMenuClick }: TopbarProps) {
     } catch (error) {
       console.error("Logout failed", error);
       navigate({ to: "/login" });
-    }
-  };
-
-  const handleMarkAllRead = async () => {
-    try {
-      await NotificationsService.markAllRead();
-      queryClient.invalidateQueries({ queryKey: ["notifications"] });
-    } catch (error) {
-      console.error("Failed to mark all notifications as read", error);
-    }
-  };
-
-  const handleMarkRead = async (id: string | number) => {
-    try {
-      await NotificationsService.markRead(id);
-      queryClient.invalidateQueries({ queryKey: ["notifications"] });
-    } catch (error) {
-      console.error("Failed to mark notification as read", error);
     }
   };
 
@@ -121,8 +111,17 @@ export function Topbar({ onMenuClick }: TopbarProps) {
                 )}
                 {unread > 0 && (
                   <button
-                    onClick={handleMarkAllRead}
-                    className="text-[11px] font-medium text-primary hover:underline"
+                    type="button"
+                    onPointerDown={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      markAllNotificationsRead.mutate();
+                    }}
+                    className="text-[11px] font-medium text-primary hover:underline cursor-pointer"
                   >
                     {t("notifications_mark_all_read")}
                   </button>
@@ -140,17 +139,37 @@ export function Topbar({ onMenuClick }: TopbarProps) {
                 ) => {
                   const data = (typeof n.data === "string" ? JSON.parse(n.data) : n.data) as
                     Record<string, string> | undefined;
+                  const isUnread = !n.read_at;
                   return (
                     <DropdownMenuItem
                       key={n.id}
-                      onClick={() => handleMarkRead(n.id)}
-                      className="flex cursor-pointer flex-col items-start gap-0.5 py-2.5"
+                      onSelect={(e) => {
+                        e.preventDefault();
+                        if (isUnread) {
+                          markNotificationRead.mutate(n.id);
+                        }
+                      }}
+                      className={cn(
+                        "flex cursor-pointer flex-col items-start gap-0.5 py-2.5 transition",
+                        isUnread ? "bg-primary/5" : "opacity-75 hover:opacity-100",
+                      )}
                     >
                       <div className="flex w-full items-center justify-between">
-                        <span className="text-sm font-medium">{data?.title || "Notification"}</span>
-                        {!n.read_at && <span className="h-1.5 w-1.5 rounded-full bg-primary" />}
+                        <span
+                          className={cn(
+                            "text-sm font-medium",
+                            isUnread ? "text-foreground font-semibold" : "text-muted-foreground",
+                          )}
+                        >
+                          {data?.title || "Notification"}
+                        </span>
+                        {isUnread && (
+                          <span className="h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
+                        )}
                       </div>
-                      <span className="text-xs text-muted-foreground">{data?.body}</span>
+                      <span className="text-xs text-muted-foreground line-clamp-2">
+                        {data?.body}
+                      </span>
                     </DropdownMenuItem>
                   );
                 },
