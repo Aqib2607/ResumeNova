@@ -12,15 +12,15 @@ An enterprise-grade, self-hosted web platform that combines multi-model AI conte
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4.0-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![Pest Testing](https://img.shields.io/badge/Tests-111%20Passed-10B981?logo=pest&logoColor=white)](https://pestphp.com/)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](backend/composer.json)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](#license)
 
-[Key Features](#-key-features) • [Architecture](#-system-architecture) • [Tech Stack](#-technology-stack) • [Quick Start](#-quick-start) • [Environment](#-environment-configuration) • [Documentation](#-documentation-ecosystem)
+[Why ResumeNova](#why-resumenova) • [Key Features](#key-features) • [Architecture](#system-architecture) • [Tech Stack](#technology-stack) • [Quick Start](#quick-start) • [Environment](#environment-configuration) • [Testing](#testing--verification) • [Docs](#documentation-ecosystem)
 
 ---
 
 </div>
 
-## 📌 Why ResumeNova?
+## <a id="why-resumenova"></a>📌 Why ResumeNova?
 
 Modern job seekers face two primary obstacles: **opaque Applicant Tracking Systems (ATS)** that filter out qualified candidates and **rate-limited AI tools** that produce generic, hallucinated buzzwords.
 
@@ -33,7 +33,7 @@ Modern job seekers face two primary obstacles: **opaque Applicant Tracking Syste
 
 ---
 
-## ✨ Key Features
+## <a id="key-features"></a>✨ Key Features
 
 ### 1. 🤖 AI-Powered Resume Builder
 
@@ -82,7 +82,7 @@ Modern job seekers face two primary obstacles: **opaque Applicant Tracking Syste
 
 ---
 
-## 🏗️ System Architecture
+## <a id="system-architecture"></a>🏗️ System Architecture
 
 ```mermaid
 flowchart TB
@@ -126,7 +126,7 @@ flowchart TB
 
 ---
 
-## 💻 Technology Stack
+## <a id="technology-stack"></a>💻 Technology Stack
 
 | Layer                   | Technologies                                       | Description                                              |
 | :---------------------- | :------------------------------------------------- | :------------------------------------------------------- |
@@ -142,7 +142,7 @@ flowchart TB
 
 ---
 
-## 🚀 Quick Start
+## <a id="quick-start"></a>🚀 Quick Start
 
 ### Prerequisites
 
@@ -240,7 +240,7 @@ Visit **`http://localhost:5173`** (or **`http://127.0.0.1:8000`**) in your brows
 
 ---
 
-## ⚙️ Environment Configuration
+## <a id="environment-configuration"></a>⚙️ Environment Configuration
 
 ### Key Environment Variables (`backend/.env`)
 
@@ -280,7 +280,7 @@ SANCTUM_STATEFUL_DOMAINS=localhost:5173,127.0.0.1:5173,localhost:8000,127.0.0.1:
 
 ---
 
-## 🧪 Testing & Verification
+## <a id="testing--verification"></a>🧪 Testing & Verification
 
 The codebase includes an automated test suite and code quality checks.
 
@@ -301,7 +301,7 @@ npm run build
 
 ---
 
-## 📂 Project Structure
+## <a id="project-structure"></a>📂 Project Structure
 
 ```text
 ResumeNova/
@@ -339,7 +339,7 @@ ResumeNova/
 
 ---
 
-## 📚 Documentation Ecosystem
+## <a id="documentation-ecosystem"></a>📚 Documentation Ecosystem
 
 For detailed technical specifications, runbooks, and architectural diagrams, refer to the documentation in [`docs/`](docs/):
 
@@ -358,11 +358,13 @@ For detailed technical specifications, runbooks, and architectural diagrams, ref
 | **Runbooks**     | [`Monitoring Runbook`](docs/PRODUCTION_MONITORING_RUNBOOK.md)                | System health, error logs, and queue metrics          |
 | **Runbooks**     | [`Incident Response Runbook`](docs/INCIDENT_RESPONSE_RUNBOOK.md)             | Triage and severity classification guide              |
 | **Audit**        | [`Complete Audit Report`](docs/ResumeNova_Complete_Audit_Report.md)          | Quality, security, and stability audit report         |
+| **Audit**        | [`Smoke Test Report`](docs/PRODUCTION_SMOKE_TEST_REPORT.md)                  | Pre-launch smoke test results and verification        |
 | **Audit**        | [`Production Readiness Audit`](docs/FINAL_PRODUCTION_READINESS_AUDIT.md)     | Final pre-launch validation and verification          |
+| **Audit**        | [`Deployment Verification`](docs/FINAL_DEPLOYMENT_STATE_VERIFICATION.md)     | Comprehensive server and pipeline state verification  |
 
 ---
 
-## 🔒 Security & Privacy
+## <a id="security--privacy"></a>🔒 Security & Privacy
 
 - **Encrypted API Keys**: User-provided Groq API keys are encrypted at rest using `AES-256-CBC` before being stored in the database.
 - **Backend-Only Inference**: Client browsers never communicate directly with external AI endpoints; all requests are authenticated and brokered through the Laravel backend.
@@ -371,7 +373,7 @@ For detailed technical specifications, runbooks, and architectural diagrams, ref
 
 ---
 
-## 🤝 Contributing
+## <a id="contributing"></a>🤝 Contributing
 
 Contributions to ResumeNova are welcome! To contribute:
 
@@ -384,18 +386,18 @@ Contributions to ResumeNova are welcome! To contribute:
 
 ---
 
-## 📄 License
+## <a id="license"></a>📄 License
 
 This project is open-sourced under the [MIT License](backend/composer.json).
 
 ---
 
-## 💬 Support & Issues
+## <a id="support--issues"></a>💬 Support & Issues
 
 If you encounter any issues, have feature suggestions, or need help:
 
 - Open an issue on the [GitHub Issues](https://github.com/Aqib2607/ResumeNova/issues) tracker.
-- Review existing runbooks in the [`docs/`](docs/) directory.
+- Review existing documentation and runbooks in the [Documentation Ecosystem](#documentation-ecosystem).
 
 ---
 
