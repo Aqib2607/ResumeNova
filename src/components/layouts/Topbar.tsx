@@ -52,29 +52,29 @@ export function Topbar({ onMenuClick }: TopbarProps) {
   };
 
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-border bg-background/80 px-4 backdrop-blur-md md:px-6">
-      <Button
-        variant="ghost"
-        size="icon"
-        className="h-9 w-9 lg:hidden"
-        onClick={onMenuClick}
-        aria-label="Open menu"
-      >
-        <Menu className="h-5 w-5" />
-      </Button>
+    <header className="sticky top-0 z-30 flex h-14 items-center justify-between gap-3 border-b border-border bg-background/80 px-4 backdrop-blur-md md:px-6">
+      <div className="flex items-center gap-3">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-9 w-9 lg:hidden"
+          onClick={onMenuClick}
+          aria-label="Open menu"
+        >
+          <Menu className="h-5 w-5" />
+        </Button>
 
-      <div className="relative hidden max-w-md flex-1 md:block">
-        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-        <Input
-          placeholder="Search resumes, jobs, questions…"
-          className="h-9 pl-9"
-          aria-label="Search"
-        />
+        <div className="relative hidden w-64 md:block lg:w-80 xl:w-96">
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            placeholder="Search resumes, jobs, questions…"
+            className="h-9 pl-9 text-sm"
+            aria-label="Search"
+          />
+        </div>
       </div>
 
-      <div className="flex-1 md:hidden" />
-
-      <div className="flex items-center gap-1.5">
+      <div className="ml-auto flex items-center gap-1 sm:gap-2">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
@@ -170,7 +170,8 @@ export function Topbar({ onMenuClick }: TopbarProps) {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="sm" className="h-8 px-2 text-xs font-medium">
-              🌐 English / বাংলা
+              🌐 <span className="hidden sm:inline">English / বাংলা</span>
+              <span className="sm:hidden">EN/BN</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-36">
