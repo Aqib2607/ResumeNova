@@ -347,6 +347,7 @@ function AddApiKeyDialog({
               <Input
                 id="api-key-val"
                 type="password"
+                autoComplete="new-password"
                 value={key}
                 onChange={(e) => setKey(e.target.value)}
                 placeholder="gsk_…"
@@ -486,6 +487,7 @@ function EditApiKeyDialog({
               <Input
                 id="replace-key-val"
                 type="password"
+                autoComplete="new-password"
                 value={newKey}
                 onChange={(e) => setNewKey(e.target.value)}
                 placeholder="Enter new key to replace…"

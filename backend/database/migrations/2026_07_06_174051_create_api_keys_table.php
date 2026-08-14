@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->string('masked_key');
-            $table->string('key')->nullable();
+            $table->text('key')->nullable();
             $table->string('status')->default('active'); // active, rate_limited, revoked
             $table->timestamps();
         });
