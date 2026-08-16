@@ -1,222 +1,125 @@
-# ResumeNova – Backend
+# ResumeNova – Backend API & AI Engine
 
-> **Week 04 · Part 2 – Authentication System**
-
-A production-ready Laravel 12 backend for the ResumeNova platform.
+An enterprise-grade, high-performance Laravel 12 REST API powering the ResumeNova career platform. Engineered with a clean Service/Repository architecture, multi-key Groq LLM failover, dual-layer ATS scoring, and asynchronous document compilation.
 
 ---
 
-## Tech Stack
+## 🛠️ Tech Stack & Architecture
 
-| Layer         | Technology                    |
-| ------------- | ----------------------------- |
-| Language      | PHP 8.3+                      |
-| Framework     | Laravel 12                    |
-| Auth          | Laravel Breeze (Blade)        |
-| OAuth         | Laravel Socialite (Google)    |
-| Database      | MySQL 8+                      |
-| Queue / Cache | Database driver (Redis-ready) |
-| PDF           | barryvdh/laravel-dompdf       |
-| Word          | phpoffice/phpword             |
-| Frontend      | Vite + Tailwind CSS           |
-| Testing       | PestPHP                       |
+| Layer | Technology | Details |
+| :--- | :--- | :--- |
+| **Framework** | Laravel 12.x / PHP 8.3+ | PSR-12 strict-typed REST API architecture |
+| **Authentication** | Laravel Sanctum & Socialite | Stateful token authentication and Google OAuth |
+| **Database** | MySQL 8.0+ | 25 structured migrations with Eloquent ORM |
+| **AI Inference** | Groq Cloud SDK | Multi-model support (DeepSeek, Llama, Qwen, Mixtral) with BYOK failover |
+| **Document Generation** | DomPDF & PHPWord | Programmatic compilation for PDF and `.docx` |
+| **Testing** | PestPHP 4.7 & PHPUnit | 111 feature tests covering auth, AI, exports, and RBAC |
+| **Code Quality** | Laravel Pint & Larastan | Static analysis and automated formatting |
 
 ---
 
-## Local Setup
+## 🚀 Quick Setup
 
 ### Prerequisites
+- PHP >= 8.3 with extensions: `pdo_mysql`, `mbstring`, `openssl`, `gd`, `zip`
+- Composer >= 2.6
+- MySQL >= 8.0
 
-- PHP 8.3+
-- Composer 2+
-- Node.js 20+ & npm
-- MySQL 8+
-
-### Steps
+### Step-by-Step Installation
 
 ```bash
-# 1. Clone the repo and navigate to the backend
-git clone <repo-url>
-cd ResumeNova/backend
+# 1. Install PHP dependencies
+composer install
 
 # 2. Copy environment file
 cp .env.example .env
 
-# 3. Install PHP dependencies
-composer install
-
-# 4. Generate application key
+# 3. Generate application encryption key
 php artisan key:generate
 
-# 5. Configure your database in .env
-# DB_DATABASE=resumenova
-# DB_USERNAME=root
-# DB_PASSWORD=your_password
+# 4. Create and configure MySQL database
+# In MySQL: CREATE DATABASE resumenova CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+# Update DB_* credentials in .env
 
-# 6. Create the database
-mysql -u root -p -e "CREATE DATABASE resumenova CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+# 5. Run migrations & seed database
+php artisan migrate --seed
 
-# 7. Run migrations
-php artisan migrate
-
-# 8. Install Node dependencies
-npm install
-
-# 9. Start the development server (opens server + queue + Vite)
-composer run dev
+# 6. Start the local API server
+php artisan serve --port=8000
 ```
 
 ---
 
-## Folder Architecture
+## 📂 Backend Architecture
 
-```
-app/
-├── Actions/           # Single-purpose action classes
-├── Contracts/         # Interfaces (Repository, Service, etc.)
-│   └── Repository/
-│       └── RepositoryInterface.php
-├── DTOs/              # Data Transfer Objects
-├── Enums/             # PHP 8.1+ backed enums
-├── Events/            # Domain events
-├── Helpers/           # Global helper functions (helpers.php)
-├── Http/
-│   ├── Controllers/   # Feature controllers
-│   ├── Middleware/    # Custom middleware
-│   └── Requests/      # Form Request validation
-├── Jobs/              # Queued jobs
-├── Listeners/         # Event listeners
-├── Models/            # Eloquent models
-├── Notifications/     # Laravel notifications
-├── Observers/         # Eloquent model observers
-├── Policies/          # Authorisation policies
-├── Repositories/      # Data access layer
-│   └── BaseRepository.php
-├── Rules/             # Custom validation rules
-├── Services/          # Business logic layer
-│   └── BaseService.php
-└── Traits/            # Shared traits
-    └── ApiResponder.php
-
-resources/views/
-├── layouts/
-│   ├── app.blade.php      # Authenticated shell
-│   ├── guest.blade.php    # Auth pages shell
-│   └── admin.blade.php    # Admin panel shell
-├── components/            # Shared Blade components
-├── auth/                  # Breeze auth views
-├── dashboard/             # User dashboard
-├── admin/                 # Admin panel pages
-└── profile/               # User profile pages
+```text
+backend/
+├── app/
+│   ├── Actions/              # Isolated, single-purpose action classes
+│   ├── Contracts/            # Interface contracts & repository abstractions
+│   ├── DTOs/                 # Data Transfer Objects
+│   ├── Enums/                # PHP 8.1+ backed enums (UserRole, ExportStatus, etc.)
+│   ├── Events/               # Domain event dispatches
+│   ├── Helpers/              # Global helpers (helpers.php)
+│   ├── Http/
+│   │   ├── Controllers/      # Feature API & Admin Controllers
+│   │   ├── Middleware/       # ActiveUser, AdminRole, Sanctum middleware
+│   │   └── Requests/         # Form validation requests
+│   ├── Jobs/                 # Background queue worker jobs
+│   ├── Models/               # Eloquent Models (User, Resume, ApiKey, etc.)
+│   ├── Notifications/        # In-app notification triggers
+│   ├── Policies/             # Authorization policies & RBAC gates
+│   ├── Repositories/         # Data access repository layer
+│   └── Services/             # Domain business logic & Groq AI Failover engine
+│
+├── config/                   # AI, Queue, Sanctum, and App configs
+├── database/
+│   ├── migrations/           # 25 Schema migrations
+│   └── seeders/              # Initial seeders for testing & demo accounts
+├── routes/
+│   ├── api.php               # Protected REST API endpoints
+│   └── web.php               # Web routes & asset delivery
+└── tests/                    # PestPHP automated test suite
 ```
 
 ---
 
-## Environment Variables Reference
+## ⚡ Core Subsystems
 
-| Variable               | Description                          | Default                 |
-| ---------------------- | ------------------------------------ | ----------------------- |
-| `APP_NAME`             | Application name                     | `ResumeNova`            |
-| `APP_ENV`              | Environment (`local` / `production`) | `local`                 |
-| `APP_URL`              | Application base URL                 | `http://localhost:8000` |
-| `DB_DATABASE`          | MySQL database name                  | `resumenova`            |
-| `QUEUE_CONNECTION`     | Queue driver                         | `database`              |
-| `CACHE_STORE`          | Cache driver                         | `database`              |
-| `MAIL_MAILER`          | Mail driver                          | `log` (local)           |
-| `GOOGLE_CLIENT_ID`     | Google OAuth client ID               | _(required for OAuth)_  |
-| `GOOGLE_CLIENT_SECRET` | Google OAuth client secret           | _(required for OAuth)_  |
-| `GOOGLE_REDIRECT_URI`  | OAuth callback URI                   | `/auth/google/callback` |
+### 1. Groq AI Multi-Key Failover Pipeline
+- **Priority Routing**: Distributes AI workloads based on user-configured key rankings.
+- **Rate-Limit Failover (`429`)**: Seamlessly shifts to next available key during quota or throughput limits.
+- **Cooldown Window Tracking**: Tracks when rate-limited keys can safely re-enter the pool.
+- **State Checkpoints**: Mid-stream generation checkpoints stored in `ai_checkpoints`.
 
----
+### 2. Dual-Layer ATS Analyzer
+- **Deterministic Evaluation**: Validates structural compliance, contact information, section completeness, and keyword frequencies.
+- **Semantic LLM Analysis**: Compares candidate profile against target job description to produce gap analysis, role matching percentage, and actionable recommendations.
 
-## Coding Standards
-
-- **PSR-12** for code style – enforced by Laravel Pint (`./vendor/bin/pint`)
-- **Strict types** (`declare(strict_types=1)`) in all PHP files
-- **Service / Repository pattern** – controllers delegate to services, services delegate to repositories
-- **DTOs** for passing structured data between layers
-- **Enums** for fixed value sets (roles, statuses, etc.)
-- **Action classes** for single-use business operations
+### 3. Document Compilation Engine
+- **PDF Generation**: HTML-to-PDF compilation via `barryvdh/laravel-dompdf`.
+- **Word (`.docx`) Generation**: Native document styling via `phpoffice/phpword`.
 
 ---
 
-## Running Tests
+## 🧪 Testing
 
 ```bash
-php artisan test
-# or
-./vendor/bin/pest
-```
-
----
-
-## Google OAuth Setup
-
-Google OAuth uses Laravel Socialite. No implementation is live until you add real credentials.
-
-### 1. Create a Google Cloud Project
-
-1. Go to [console.cloud.google.com](https://console.cloud.google.com)
-2. Create a new project (e.g. **ResumeNova**)
-3. Enable the **Google+ API** or **People API** (OAuth works without it, but profiles need it)
-
-### 2. Create OAuth 2.0 Credentials
-
-1. Navigate to **APIs & Services → Credentials**
-2. Click **Create Credentials → OAuth client ID**
-3. Application type: **Web application**
-4. Add Authorized redirect URIs:
-    ```
-    http://localhost:8000/auth/google/callback
-    https://yourdomain.com/auth/google/callback
-    ```
-5. Copy the **Client ID** and **Client Secret**
-
-### 3. Configure `.env`
-
-```env
-GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
-GOOGLE_CLIENT_SECRET=your-client-secret
-GOOGLE_REDIRECT_URI=http://localhost:8000/auth/google/callback
-```
-
-### 4. Test the Flow
-
-1. Start the dev server: `composer run dev`
-2. Visit `http://localhost:8000/login`
-3. Click **Continue with Google**
-4. Complete the Google consent screen
-5. You are redirected to `/dashboard`
-
----
-
-## Running Tests
-
-```bash
-# Run all tests
+# Run complete PestPHP test suite (111 tests / 384 assertions)
 php artisan test
 
-# Run only auth tests
+# Run tests with filter
+php artisan test --filter=AI
 php artisan test --filter=Auth
-
-# Run a specific test file
-php artisan test tests/Feature/Auth/GoogleOAuthTest.php
+php artisan test --filter=Export
 ```
 
-> **Note**: Tests use a dedicated `resumenova_test` MySQL database (configured in `phpunit.xml`).  
-> Create it with: `php artisan tinker --execute="DB::statement('CREATE DATABASE IF NOT EXISTS resumenova_test');" `
-
 ---
 
-## Part 3 Preview
+## 📖 Operational Documentation
 
-Part 3 will implement:
-
-- Resume Builder module (CRUD, templates)
-- File upload & storage
-- PDF/Word export foundation
-- Admin panel with user management
-
----
-
-_Built with ❤️ on Laravel 12 – ResumeNova Week 04, Part 2_
+For server configurations, Nginx setups, and deployment procedures, see the root documentation directory:
+- [Production Deployment Guide](../docs/PRODUCTION_DEPLOYMENT_GUIDE.md)
+- [Production Environment Reference](../docs/PRODUCTION_ENVIRONMENT_REFERENCE.md)
+- [Backup & Restore Runbook](../docs/BACKUP_AND_RESTORE_RUNBOOK.md)
+- [Incident Response Runbook](../docs/INCIDENT_RESPONSE_RUNBOOK.md)
