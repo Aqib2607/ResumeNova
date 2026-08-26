@@ -24,6 +24,7 @@ import { Route as DashboardProfileRouteImport } from './routes/dashboard.profile
 import { Route as DashboardInterviewRouteImport } from './routes/dashboard.interview'
 import { Route as DashboardExportsRouteImport } from './routes/dashboard.exports'
 import { Route as DashboardCoverLettersRouteImport } from './routes/dashboard.cover-letters'
+import { Route as DashboardJobsRouteImport } from './routes/dashboard.jobs'
 import { Route as DashboardAtsRouteImport } from './routes/dashboard.ats'
 import { Route as DashboardApiKeysRouteImport } from './routes/dashboard.api-keys'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
@@ -112,6 +113,11 @@ const DashboardCoverLettersRoute = DashboardCoverLettersRouteImport.update({
   path: '/cover-letters',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardJobsRoute = DashboardJobsRouteImport.update({
+  id: '/jobs',
+  path: '/jobs',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const DashboardAtsRoute = DashboardAtsRouteImport.update({
   id: '/ats',
   path: '/ats',
@@ -193,6 +199,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/cover-letters': typeof DashboardCoverLettersRoute
   '/dashboard/exports': typeof DashboardExportsRoute
   '/dashboard/interview': typeof DashboardInterviewRoute
+  '/dashboard/jobs': typeof DashboardJobsRoute
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/resumes': typeof DashboardResumesRouteWithChildren
   '/dashboard/settings': typeof DashboardSettingsRoute
@@ -220,6 +227,7 @@ export interface FileRoutesByTo {
   '/dashboard/cover-letters': typeof DashboardCoverLettersRoute
   '/dashboard/exports': typeof DashboardExportsRoute
   '/dashboard/interview': typeof DashboardInterviewRoute
+  '/dashboard/jobs': typeof DashboardJobsRoute
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/oauth/callback': typeof OauthCallbackRoute
@@ -248,6 +256,7 @@ export interface FileRoutesById {
   '/dashboard/cover-letters': typeof DashboardCoverLettersRoute
   '/dashboard/exports': typeof DashboardExportsRoute
   '/dashboard/interview': typeof DashboardInterviewRoute
+  '/dashboard/jobs': typeof DashboardJobsRoute
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/resumes': typeof DashboardResumesRouteWithChildren
   '/dashboard/settings': typeof DashboardSettingsRoute
@@ -279,6 +288,7 @@ export interface FileRouteTypes {
     | '/dashboard/cover-letters'
     | '/dashboard/exports'
     | '/dashboard/interview'
+    | '/dashboard/jobs'
     | '/dashboard/profile'
     | '/dashboard/resumes'
     | '/dashboard/settings'
@@ -306,6 +316,7 @@ export interface FileRouteTypes {
     | '/dashboard/cover-letters'
     | '/dashboard/exports'
     | '/dashboard/interview'
+    | '/dashboard/jobs'
     | '/dashboard/profile'
     | '/dashboard/settings'
     | '/oauth/callback'
@@ -333,6 +344,7 @@ export interface FileRouteTypes {
     | '/dashboard/cover-letters'
     | '/dashboard/exports'
     | '/dashboard/interview'
+    | '/dashboard/jobs'
     | '/dashboard/profile'
     | '/dashboard/resumes'
     | '/dashboard/settings'
@@ -460,6 +472,13 @@ declare module '@tanstack/react-router' {
       path: '/cover-letters'
       fullPath: '/dashboard/cover-letters'
       preLoaderRoute: typeof DashboardCoverLettersRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/jobs': {
+      id: '/dashboard/jobs'
+      path: '/jobs'
+      fullPath: '/dashboard/jobs'
+      preLoaderRoute: typeof DashboardJobsRouteImport
       parentRoute: typeof DashboardRoute
     }
     '/dashboard/ats': {
@@ -603,6 +622,7 @@ interface DashboardRouteChildren {
   DashboardCoverLettersRoute: typeof DashboardCoverLettersRoute
   DashboardExportsRoute: typeof DashboardExportsRoute
   DashboardInterviewRoute: typeof DashboardInterviewRoute
+  DashboardJobsRoute: typeof DashboardJobsRoute
   DashboardProfileRoute: typeof DashboardProfileRoute
   DashboardResumesRoute: typeof DashboardResumesRouteWithChildren
   DashboardSettingsRoute: typeof DashboardSettingsRoute
@@ -615,6 +635,7 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardCoverLettersRoute: DashboardCoverLettersRoute,
   DashboardExportsRoute: DashboardExportsRoute,
   DashboardInterviewRoute: DashboardInterviewRoute,
+  DashboardJobsRoute: DashboardJobsRoute,
   DashboardProfileRoute: DashboardProfileRoute,
   DashboardResumesRoute: DashboardResumesRouteWithChildren,
   DashboardSettingsRoute: DashboardSettingsRoute,

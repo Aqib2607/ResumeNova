@@ -12,6 +12,7 @@ export const translations = {
     // Navigation Items
     nav_dashboard: "Dashboard",
     nav_resumes: "My Resumes",
+    nav_jobs: "Job Discovery",
     nav_ats: "ATS Analyzer",
     nav_cover_letters: "Cover Letters",
     nav_interview: "Interview Prep",
@@ -103,6 +104,7 @@ export const translations = {
     // Navigation Items
     nav_dashboard: "ড্যাশবোর্ড",
     nav_resumes: "আমার জীবনবৃত্তান্ত",
+    nav_jobs: "চাকরি সন্ধান",
     nav_ats: "এটিএস অ্যানালাইজার",
     nav_cover_letters: "কভার লেটার",
     nav_interview: "ইন্টারভিউ প্রস্তুতি",

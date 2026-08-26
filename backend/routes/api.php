@@ -146,6 +146,20 @@ Route::middleware(['auth:sanctum', 'user.active'])->group(function () {
     Route::get('/exports/{export}', [\App\Http\Controllers\ExportController::class, 'show']);
     Route::get('/exports/{export}/download', [\App\Http\Controllers\ExportController::class, 'download']);
     Route::delete('/exports/{export}', [\App\Http\Controllers\ExportController::class, 'destroy']);
+
+    // ── Job Discovery & Tracking ──────────────────────────────────────────
+    Route::get('/jobs', [\App\Http\Controllers\JobPostingController::class, 'index']);
+    Route::post('/jobs/discover', [\App\Http\Controllers\JobPostingController::class, 'discover'])->middleware('throttle:ai');
+    Route::post('/jobs/match', [\App\Http\Controllers\JobMatchController::class, 'match'])->middleware('throttle:ai');
+    Route::post('/job-matches/{id}/dismiss', [\App\Http\Controllers\JobMatchController::class, 'dismiss']);
+
+    Route::apiResource('job-sources', \App\Http\Controllers\JobSourceController::class);
+    Route::apiResource('job-postings', \App\Http\Controllers\JobPostingController::class);
+    Route::apiResource('job-preferences', \App\Http\Controllers\JobPreferenceController::class);
+    Route::apiResource('job-matches', \App\Http\Controllers\JobMatchController::class);
+    Route::apiResource('saved-jobs', \App\Http\Controllers\SavedJobController::class);
+    Route::apiResource('job-applications', \App\Http\Controllers\JobApplicationController::class);
+    Route::apiResource('candidate-skills', \App\Http\Controllers\CandidateSkillController::class);
 });
 
 // ── Admin Panel ───────────────────────────────────────────────────────

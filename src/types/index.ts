@@ -315,6 +315,80 @@ export interface AdminSystemLog {
   created_at: string;
 }
 
+// ---------- Jobs ----------
+export interface JobLink {
+  id: ID;
+  job_posting_id: ID;
+  url: string;
+  provider_type?: string;
+  clicks?: number;
+}
+
+export interface Job {
+  id: ID;
+  title: string;
+  company: string;
+  company_name?: string;
+  location?: string;
+  work_mode?: "remote" | "hybrid" | "onsite" | string;
+  employment_type?: "full-time" | "part-time" | "contract" | "internship" | string;
+  type?: string;
+  salary?: string;
+  salary_formatted?: string;
+  min_salary?: number;
+  max_salary?: number;
+  currency?: string;
+  description: string;
+  skills_required?: string[];
+  url?: string;
+  links?: JobLink[];
+  posted_at?: string;
+  expires_at?: string;
+  is_active?: boolean;
+  matches?: JobMatch[];
+  saves?: SavedJob[];
+  applications?: JobApplication[];
+}
+
+export interface JobMatch {
+  id?: ID;
+  job_posting_id?: ID;
+  job?: Job;
+  posting?: Job;
+  score?: number;
+  match_score?: number;
+  match_reasoning?: string;
+  matched_skills?: string[];
+  missing_skills?: string[];
+  recommendation?: string;
+  is_dismissed?: boolean;
+  created_at?: string;
+}
+
+export interface SavedJob {
+  id: ID;
+  user_id?: ID;
+  job_posting_id: ID;
+  job?: Job;
+  posting?: Job;
+  notes?: string;
+  created_at?: string;
+}
+
+export interface JobApplication {
+  id: ID;
+  user_id?: ID;
+  job_posting_id: ID;
+  resume_id?: ID | null;
+  job?: Job;
+  posting?: Job;
+  resume?: Resume | null;
+  status: "applied" | "screening" | "interviewing" | "offered" | "rejected" | "withdrawn" | string;
+  applied_at?: string | null;
+  notes?: string | null;
+  created_at?: string;
+}
+
 // ---------- Pagination ----------
 export interface Paginated<T> {
   data: T[];

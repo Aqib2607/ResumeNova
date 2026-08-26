@@ -58,4 +58,9 @@ class Resume extends Model
             'content' => $this->content,
         ]);
     }
+
+    public function jobApplications(): HasMany
+    {
+        return $this->hasMany(JobApplication::class);
+    }
 }

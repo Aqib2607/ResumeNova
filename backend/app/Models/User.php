@@ -210,4 +210,29 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(ApiKey::class);
     }
+
+    public function jobPreferences(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(JobPreference::class);
+    }
+
+    public function candidateSkills(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(CandidateSkill::class);
+    }
+
+    public function jobMatches(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(JobMatch::class);
+    }
+
+    public function savedJobs(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(SavedJob::class);
+    }
+
+    public function jobApplications(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(JobApplication::class);
+    }
 }

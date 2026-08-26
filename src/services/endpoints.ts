@@ -23,6 +23,10 @@ import type {
   Resume,
   ResumeVersion,
   User,
+  Job,
+  JobMatch,
+  SavedJob,
+  JobApplication,
 } from "@/types";
 
 // ---------- Auth ----------
@@ -254,4 +258,51 @@ export const DashboardService = {
   recentResumes: () => api.get<Resume[]>("/dashboard/recent-resumes"),
   recentExports: () => api.get<ExportRecord[]>("/dashboard/recent-exports"),
   apiKeys: () => api.get<ApiKey[]>("/dashboard/api-keys"),
+};
+
+// ---------- Jobs ----------
+export const JobsService = {
+  search: (params?: {
+    q?: string;
+    location?: string;
+    work_mode?: string;
+    employment_type?: string;
+    page?: number;
+    per_page?: number;
+  }) => api.get<Paginated<Job>>("/jobs", { params }),
+
+  discover: (params?: { keywords?: string[] | string; q?: string; location?: string }) =>
+    api.post<{ message: string; new_jobs_count: number }>("/jobs/discover", params),
+
+  smartMatch: (payload: { resume_id?: string | number; job_posting_id?: string | number }) =>
+    api.post<{ message: string; matches: JobMatch[] }>("/jobs/match", payload),
+
+  getMatches: () => api.get<JobMatch[]>("/job-matches"),
+
+  dismissMatch: (id: string | number) =>
+    api.post<{ message: string }>(`/job-matches/${id}/dismiss`),
+
+  getSavedJobs: () => api.get<SavedJob[]>("/saved-jobs"),
+
+  saveJob: (payload: { job_posting_id: string | number; notes?: string }) =>
+    api.post<SavedJob>("/saved-jobs", payload),
+
+  removeSavedJob: (id: string | number) =>
+    api.delete<{ message: string }>(`/saved-jobs/${id}`),
+
+  getApplications: () => api.get<JobApplication[]>("/job-applications"),
+
+  createApplication: (payload: {
+    job_posting_id: string | number;
+    resume_id?: string | number | null;
+    status?: string;
+    applied_at?: string | null;
+    notes?: string | null;
+  }) => api.post<JobApplication>("/job-applications", payload),
+
+  updateApplication: (id: string | number, payload: Partial<JobApplication>) =>
+    api.patch<JobApplication>(`/job-applications/${id}`, payload),
+
+  deleteApplication: (id: string | number) =>
+    api.delete<{ message: string }>(`/job-applications/${id}`),
 };

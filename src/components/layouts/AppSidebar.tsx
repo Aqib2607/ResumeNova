@@ -2,6 +2,7 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import {
   LayoutDashboard,
   FileText,
+  Briefcase,
   ScanSearch,
   Mail,
   Mic,
@@ -29,6 +30,7 @@ interface NavItem {
 const items: NavItem[] = [
   { to: "/dashboard", labelKey: "nav_dashboard", icon: LayoutDashboard, group: "main" },
   { to: "/dashboard/resumes", labelKey: "nav_resumes", icon: FileText, group: "main" },
+  { to: "/dashboard/jobs", labelKey: "nav_jobs", icon: Briefcase, group: "main" },
   { to: "/dashboard/ats", labelKey: "nav_ats", icon: ScanSearch, group: "main" },
   { to: "/dashboard/cover-letters", labelKey: "nav_cover_letters", icon: Mail, group: "main" },
   { to: "/dashboard/interview", labelKey: "nav_interview", icon: Mic, group: "main" },
