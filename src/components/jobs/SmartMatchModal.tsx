@@ -17,9 +17,17 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Sparkles, Loader2, CheckCircle2, AlertCircle, ExternalLink, Lightbulb } from "lucide-react";
+import {
+  Sparkles,
+  Loader2,
+  CheckCircle2,
+  AlertCircle,
+  ExternalLink,
+  Lightbulb,
+} from "lucide-react";
 import { useResumes } from "@/hooks/use-resumes";
 import { useSmartMatchMutation } from "@/hooks/use-jobs";
+import { getJobApplyUrl } from "@/lib/utils";
 import type { JobMatch } from "@/types";
 import { toast } from "sonner";
 
@@ -86,7 +94,10 @@ export function SmartMatchModal({ initialJobPostingId, trigger }: SmartMatchModa
         <div className="space-y-6 py-2">
           {/* Resume Selector */}
           <div className="rounded-xl border bg-muted/30 p-4 space-y-3">
-            <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            <label
+              htmlFor="smart-match-resume-select"
+              className="text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+            >
               Select Profile / Resume to Evaluate
             </label>
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
@@ -95,7 +106,11 @@ export function SmartMatchModal({ initialJobPostingId, trigger }: SmartMatchModa
                 onValueChange={setSelectedResumeId}
                 disabled={isLoadingResumes || smartMatchMutation.isPending}
               >
-                <SelectTrigger className="flex-1 bg-background">
+                <SelectTrigger
+                  id="smart-match-resume-select"
+                  aria-label="Select resume for smart match"
+                  className="flex-1 bg-background"
+                >
                   <SelectValue placeholder="Choose a resume to analyze..." />
                 </SelectTrigger>
                 <SelectContent>
@@ -134,9 +149,7 @@ export function SmartMatchModal({ initialJobPostingId, trigger }: SmartMatchModa
                 <h4 className="font-semibold text-base">
                   Top Recommended Matches ({matches.length})
                 </h4>
-                <span className="text-xs text-muted-foreground">
-                  Sorted by compatibility score
-                </span>
+                <span className="text-xs text-muted-foreground">Sorted by compatibility score</span>
               </div>
 
               {matches.length === 0 ? (
@@ -189,15 +202,12 @@ export function SmartMatchModal({ initialJobPostingId, trigger }: SmartMatchModa
                                   {score}%
                                 </span>
                               </div>
-                              <Progress
-                                value={score}
-                                className="h-2"
-                              />
+                              <Progress value={score} className="h-2" />
                             </div>
 
-                            {job?.url && (
+                            {job && (
                               <Button asChild variant="outline" size="sm" className="h-8 text-xs">
-                                <a href={job.url} target="_blank" rel="noopener noreferrer">
+                                <a href={getJobApplyUrl(job)} target="_blank" rel="noopener noreferrer">
                                   View
                                   <ExternalLink className="ml-1.5 h-3 w-3" />
                                 </a>

@@ -11,3 +11,4 @@ use Illuminate\Support\Facades\Schedule;
 use App\Jobs\DiscoverJobsJob;
 
 Schedule::job(new DiscoverJobsJob)->hourly()->withoutOverlapping(60);
+Schedule::command('resume-imports:cleanup')->hourly();

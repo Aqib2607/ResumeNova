@@ -137,18 +137,18 @@ flowchart TB
 
 ## <a id="technology-stack"></a>💻 Technology Stack
 
-| Layer                   | Technologies                                              | Description                                              |
-| :---------------------- | :-------------------------------------------------------- | :------------------------------------------------------- |
-| **Frontend Framework**  | React 19.x, TypeScript 5.8, Vite 6.0                      | High-performance, modern single-page application         |
-| **Routing & State**     | TanStack Router 1.170, TanStack Query v5                  | Type-safe client-side routing and optimistic caching     |
+| Layer                   | Technologies                                                | Description                                              |
+| :---------------------- | :---------------------------------------------------------- | :------------------------------------------------------- |
+| **Frontend Framework**  | React 19.x, TypeScript 5.8, Vite 6.0                        | High-performance, modern single-page application         |
+| **Routing & State**     | TanStack Router 1.170, TanStack Query v5                    | Type-safe client-side routing and optimistic caching     |
 | **Styling & UI**        | Tailwind CSS v4, Radix UI Primitives, Framer Motion, Lucide | Modern design system with Dark/Light mode and animations |
-| **Form & Validation**   | React Hook Form 7.71, Zod 3.24                            | Robust form handling with schema-driven validation       |
-| **Backend Framework**   | Laravel 12.x, PHP 8.3+                                    | Clean RESTful service architecture                       |
-| **Authentication**      | Laravel Sanctum 4.0, Laravel Socialite 5.28               | Token-based API auth and Google OAuth integration        |
-| **AI Inference**        | Groq Cloud API (DeepSeek, Llama 3.3, Qwen 2.5, Mixtral)   | High-speed LLM inference with automated failover         |
-| **Database**            | MySQL 8.0+                                                | Relational schema with 25 structured migrations          |
-| **Document Generation** | `barryvdh/laravel-dompdf` 3.1, `phpoffice/phpword` 1.1    | Programmatic PDF and Microsoft Word document compilation |
-| **Testing & Quality**   | PestPHP 4.7, PHPUnit, ESLint 9, Prettier                  | Comprehensive automated test suite and strict linting    |
+| **Form & Validation**   | React Hook Form 7.71, Zod 3.24                              | Robust form handling with schema-driven validation       |
+| **Backend Framework**   | Laravel 12.x, PHP 8.3+                                      | Clean RESTful service architecture                       |
+| **Authentication**      | Laravel Sanctum 4.0, Laravel Socialite 5.28                 | Token-based API auth and Google OAuth integration        |
+| **AI Inference**        | Groq Cloud API (DeepSeek, Llama 3.3, Qwen 2.5, Mixtral)     | High-speed LLM inference with automated failover         |
+| **Database**            | MySQL 8.0+                                                  | Relational schema with 25 structured migrations          |
+| **Document Generation** | `barryvdh/laravel-dompdf` 3.1, `phpoffice/phpword` 1.1      | Programmatic PDF and Microsoft Word document compilation |
+| **Testing & Quality**   | PestPHP 4.7, PHPUnit, ESLint 9, Prettier                    | Comprehensive automated test suite and strict linting    |
 
 ---
 
@@ -295,96 +295,96 @@ SANCTUM_STATEFUL_DOMAINS=localhost:5173,127.0.0.1:5173,localhost:8000,127.0.0.1:
 
 ### Authentication & User
 
-| Method | Endpoint | Description | Auth Required |
-| :--- | :--- | :--- | :--- |
-| `POST` | `/api/register` | Register new account | No |
-| `POST` | `/api/login` | Login and obtain Sanctum token | No |
-| `POST` | `/api/logout` | Revoke current session/token | Yes |
-| `GET` | `/api/auth/google` | Redirect to Google OAuth provider | No |
-| `GET` | `/api/auth/google/callback` | Handle Google OAuth callback | No |
-| `GET` | `/api/user` | Fetch authenticated user profile & roles | Yes |
-| `PATCH` | `/api/profile` | Update user profile details | Yes |
-| `PATCH` | `/api/settings/account` | Update account password/preferences | Yes |
+| Method  | Endpoint                    | Description                              | Auth Required |
+| :------ | :-------------------------- | :--------------------------------------- | :------------ |
+| `POST`  | `/api/register`             | Register new account                     | No            |
+| `POST`  | `/api/login`                | Login and obtain Sanctum token           | No            |
+| `POST`  | `/api/logout`               | Revoke current session/token             | Yes           |
+| `GET`   | `/api/auth/google`          | Redirect to Google OAuth provider        | No            |
+| `GET`   | `/api/auth/google/callback` | Handle Google OAuth callback             | No            |
+| `GET`   | `/api/user`                 | Fetch authenticated user profile & roles | Yes           |
+| `PATCH` | `/api/profile`              | Update user profile details              | Yes           |
+| `PATCH` | `/api/settings/account`     | Update account password/preferences      | Yes           |
 
 ### Dashboard & Analytics
 
-| Method | Endpoint | Description | Auth Required |
-| :--- | :--- | :--- | :--- |
-| `GET` | `/api/dashboard` | Aggregated dashboard overview | Yes |
-| `GET` | `/api/dashboard/statistics` | User resume and ATS score metrics | Yes |
-| `GET` | `/api/dashboard/chart` | Timeline chart analytics data | Yes |
-| `GET` | `/api/dashboard/recent-resumes` | List recently modified resumes | Yes |
-| `GET` | `/api/dashboard/recent-exports` | List recent document exports | Yes |
+| Method | Endpoint                        | Description                       | Auth Required |
+| :----- | :------------------------------ | :-------------------------------- | :------------ |
+| `GET`  | `/api/dashboard`                | Aggregated dashboard overview     | Yes           |
+| `GET`  | `/api/dashboard/statistics`     | User resume and ATS score metrics | Yes           |
+| `GET`  | `/api/dashboard/chart`          | Timeline chart analytics data     | Yes           |
+| `GET`  | `/api/dashboard/recent-resumes` | List recently modified resumes    | Yes           |
+| `GET`  | `/api/dashboard/recent-exports` | List recent document exports      | Yes           |
 
 ### Resumes & AI Generation
 
-| Method | Endpoint | Description | Auth Required |
-| :--- | :--- | :--- | :--- |
-| `GET` | `/api/resumes` | List user resumes | Yes |
-| `POST` | `/api/resumes` | Create new resume | Yes |
-| `GET` | `/api/resumes/{id}` | Get full resume payload | Yes |
-| `PUT` | `/api/resumes/{id}` | Update resume details | Yes |
-| `DELETE` | `/api/resumes/{id}` | Delete resume | Yes |
-| `POST` | `/api/resumes/{id}/duplicate` | Duplicate resume variant | Yes |
-| `GET` | `/api/resumes/{id}/versions` | List snapshot version history | Yes |
-| `POST` | `/api/resumes/{id}/versions/{v}/restore` | Restore resume to snapshot version | Yes |
-| `POST` | `/api/resumes/{id}/ai/summary` | AI generate professional summary | Yes (Throttled) |
-| `POST` | `/api/resumes/{id}/ai/experience` | AI generate experience bullet points | Yes (Throttled) |
-| `POST` | `/api/resumes/{id}/ai/project` | AI generate project descriptions | Yes (Throttled) |
-| `POST` | `/api/resumes/{id}/ai/skills` | AI extract & categorize skills | Yes (Throttled) |
+| Method   | Endpoint                                 | Description                          | Auth Required   |
+| :------- | :--------------------------------------- | :----------------------------------- | :-------------- |
+| `GET`    | `/api/resumes`                           | List user resumes                    | Yes             |
+| `POST`   | `/api/resumes`                           | Create new resume                    | Yes             |
+| `GET`    | `/api/resumes/{id}`                      | Get full resume payload              | Yes             |
+| `PUT`    | `/api/resumes/{id}`                      | Update resume details                | Yes             |
+| `DELETE` | `/api/resumes/{id}`                      | Delete resume                        | Yes             |
+| `POST`   | `/api/resumes/{id}/duplicate`            | Duplicate resume variant             | Yes             |
+| `GET`    | `/api/resumes/{id}/versions`             | List snapshot version history        | Yes             |
+| `POST`   | `/api/resumes/{id}/versions/{v}/restore` | Restore resume to snapshot version   | Yes             |
+| `POST`   | `/api/resumes/{id}/ai/summary`           | AI generate professional summary     | Yes (Throttled) |
+| `POST`   | `/api/resumes/{id}/ai/experience`        | AI generate experience bullet points | Yes (Throttled) |
+| `POST`   | `/api/resumes/{id}/ai/project`           | AI generate project descriptions     | Yes (Throttled) |
+| `POST`   | `/api/resumes/{id}/ai/skills`            | AI extract & categorize skills       | Yes (Throttled) |
 
 ### ATS Analyzer & Cover Letters
 
-| Method | Endpoint | Description | Auth Required |
-| :--- | :--- | :--- | :--- |
-| `POST` | `/api/ats/analyze` | Run dual-layer ATS analysis against job description | Yes (Throttled) |
-| `GET` | `/api/ats/history` | List historical ATS scans | Yes |
-| `GET` | `/api/ats/{id}` | Retrieve specific ATS score report | Yes |
-| `DELETE` | `/api/ats/{id}` | Delete ATS analysis report | Yes |
-| `GET` | `/api/cover-letters` | List generated cover letters | Yes |
-| `POST` | `/api/cover-letters/generate` | AI generate tailored cover letter | Yes (Throttled) |
-| `GET` | `/api/cover-letters/{id}` | Get cover letter details | Yes |
-| `PUT` | `/api/cover-letters/{id}` | Update cover letter content | Yes |
-| `DELETE` | `/api/cover-letters/{id}` | Delete cover letter | Yes |
+| Method   | Endpoint                      | Description                                         | Auth Required   |
+| :------- | :---------------------------- | :-------------------------------------------------- | :-------------- |
+| `POST`   | `/api/ats/analyze`            | Run dual-layer ATS analysis against job description | Yes (Throttled) |
+| `GET`    | `/api/ats/history`            | List historical ATS scans                           | Yes             |
+| `GET`    | `/api/ats/{id}`               | Retrieve specific ATS score report                  | Yes             |
+| `DELETE` | `/api/ats/{id}`               | Delete ATS analysis report                          | Yes             |
+| `GET`    | `/api/cover-letters`          | List generated cover letters                        | Yes             |
+| `POST`   | `/api/cover-letters/generate` | AI generate tailored cover letter                   | Yes (Throttled) |
+| `GET`    | `/api/cover-letters/{id}`     | Get cover letter details                            | Yes             |
+| `PUT`    | `/api/cover-letters/{id}`     | Update cover letter content                         | Yes             |
+| `DELETE` | `/api/cover-letters/{id}`     | Delete cover letter                                 | Yes             |
 
 ### Mock Interview Simulator
 
-| Method | Endpoint | Description | Auth Required |
-| :--- | :--- | :--- | :--- |
-| `GET` | `/api/interviews` | List past interview prep sessions | Yes |
-| `POST` | `/api/interviews` | Create new interview practice session | Yes (Throttled) |
-| `GET` | `/api/interviews/{id}` | Get interview session & questions | Yes |
-| `POST` | `/api/interviews/{id}/questions/generate` | Generate interview questions | Yes (Throttled) |
-| `POST` | `/api/interviews/{id}/questions/{q}/answer` | Submit answer for AI scoring & critique | Yes (Throttled) |
-| `DELETE` | `/api/interviews/{id}` | Delete interview session | Yes |
+| Method   | Endpoint                                    | Description                             | Auth Required   |
+| :------- | :------------------------------------------ | :-------------------------------------- | :-------------- |
+| `GET`    | `/api/interviews`                           | List past interview prep sessions       | Yes             |
+| `POST`   | `/api/interviews`                           | Create new interview practice session   | Yes (Throttled) |
+| `GET`    | `/api/interviews/{id}`                      | Get interview session & questions       | Yes             |
+| `POST`   | `/api/interviews/{id}/questions/generate`   | Generate interview questions            | Yes (Throttled) |
+| `POST`   | `/api/interviews/{id}/questions/{q}/answer` | Submit answer for AI scoring & critique | Yes (Throttled) |
+| `DELETE` | `/api/interviews/{id}`                      | Delete interview session                | Yes             |
 
 ### BYOK API Keys & Document Exports
 
-| Method | Endpoint | Description | Auth Required |
-| :--- | :--- | :--- | :--- |
-| `GET` | `/api/api-keys` | List user Groq API keys with priority/cooldown status | Yes |
-| `POST` | `/api/api-keys` | Add new encrypted API key | Yes |
-| `POST` | `/api/api-keys/reorder` | Update failover priority order | Yes |
-| `POST` | `/api/api-keys/{id}/test` | Test key validity with live Groq ping | Yes |
-| `DELETE` | `/api/api-keys/{id}` | Remove API key | Yes |
-| `GET` | `/api/exports` | List document exports | Yes |
-| `POST` | `/api/exports/resumes/{id}` | Trigger PDF / DOCX resume compilation | Yes |
-| `POST` | `/api/exports/cover-letters/{id}` | Trigger PDF / DOCX cover letter compilation | Yes |
-| `GET` | `/api/exports/{id}/download` | Download compiled binary file | Yes |
+| Method   | Endpoint                          | Description                                           | Auth Required |
+| :------- | :-------------------------------- | :---------------------------------------------------- | :------------ |
+| `GET`    | `/api/api-keys`                   | List user Groq API keys with priority/cooldown status | Yes           |
+| `POST`   | `/api/api-keys`                   | Add new encrypted API key                             | Yes           |
+| `POST`   | `/api/api-keys/reorder`           | Update failover priority order                        | Yes           |
+| `POST`   | `/api/api-keys/{id}/test`         | Test key validity with live Groq ping                 | Yes           |
+| `DELETE` | `/api/api-keys/{id}`              | Remove API key                                        | Yes           |
+| `GET`    | `/api/exports`                    | List document exports                                 | Yes           |
+| `POST`   | `/api/exports/resumes/{id}`       | Trigger PDF / DOCX resume compilation                 | Yes           |
+| `POST`   | `/api/exports/cover-letters/{id}` | Trigger PDF / DOCX cover letter compilation           | Yes           |
+| `GET`    | `/api/exports/{id}/download`      | Download compiled binary file                         | Yes           |
 
 ### Admin Portal (`/api/admin/*`)
 
-| Method | Endpoint | Description | Auth Required |
-| :--- | :--- | :--- | :--- |
-| `GET` | `/api/admin/dashboard` | Global platform KPIs & metrics | Admin / Super Admin |
-| `GET` | `/api/admin/analytics` | Detailed registration & export telemetry | Admin / Super Admin |
-| `GET` | `/api/admin/users` | Manage user accounts & permissions | Admin / Super Admin |
-| `PATCH` | `/api/admin/users/{id}/role` | Assign user role (`user`, `admin`, `super_admin`) | Admin / Super Admin |
-| `POST` | `/api/admin/users/{id}/suspend` | Suspend user access | Admin / Super Admin |
-| `POST` | `/api/admin/users/{id}/reactivate` | Reactivate user access | Admin / Super Admin |
-| `GET` | `/api/admin/templates` | Manage resume template catalogue | Admin / Super Admin |
-| `GET` | `/api/admin/audit-logs` | Query security & action audit logs | Admin / Super Admin |
-| `GET` | `/api/admin/system-logs` | View application error & exception logs | Admin / Super Admin |
+| Method  | Endpoint                           | Description                                       | Auth Required       |
+| :------ | :--------------------------------- | :------------------------------------------------ | :------------------ |
+| `GET`   | `/api/admin/dashboard`             | Global platform KPIs & metrics                    | Admin / Super Admin |
+| `GET`   | `/api/admin/analytics`             | Detailed registration & export telemetry          | Admin / Super Admin |
+| `GET`   | `/api/admin/users`                 | Manage user accounts & permissions                | Admin / Super Admin |
+| `PATCH` | `/api/admin/users/{id}/role`       | Assign user role (`user`, `admin`, `super_admin`) | Admin / Super Admin |
+| `POST`  | `/api/admin/users/{id}/suspend`    | Suspend user access                               | Admin / Super Admin |
+| `POST`  | `/api/admin/users/{id}/reactivate` | Reactivate user access                            | Admin / Super Admin |
+| `GET`   | `/api/admin/templates`             | Manage resume template catalogue                  | Admin / Super Admin |
+| `GET`   | `/api/admin/audit-logs`            | Query security & action audit logs                | Admin / Super Admin |
+| `GET`   | `/api/admin/system-logs`           | View application error & exception logs           | Admin / Super Admin |
 
 ---
 
@@ -476,25 +476,25 @@ ResumeNova/
 
 For comprehensive technical specifications, deployment procedures, and operational runbooks, refer to the documentation repository in [`docs/`](docs/):
 
-| Category | Document | Description |
-| :--- | :--- | :--- |
-| **Architecture** | [`Requirements Architecture`](docs/01_Requirements_Architecture_Document.md) | High-level system requirements and design |
-| **Architecture** | [`Functional Specification`](docs/02_Functional_Specification_Document.md) | Detailed functional behavior specifications |
-| **Database** | [`Database Architecture`](docs/03_Database_Architecture_Document.md) | Entity relationships, indexes, and schema definitions |
-| **Product** | [`PRD (Product Requirements)`](docs/04_PRD_Product_Requirements_Document.md) | Product vision, scope, and feature matrix |
-| **Design** | [`Design Document`](docs/05_Design_Document.md) | UI/UX guidelines and component systems |
-| **Tech Stack** | [`Tech Stack Document`](docs/06_Tech_Stack_Document.md) | Complete technology choices and rationales |
-| **Operations** | [`Production Deployment Guide`](docs/PRODUCTION_DEPLOYMENT_GUIDE.md) | Server setup, Nginx, Supervisor, and SSL runbook |
-| **Operations** | [`Environment Reference`](docs/PRODUCTION_ENVIRONMENT_REFERENCE.md) | Production variable specifications and requirements |
-| **Runbooks** | [`Backup & Restore Runbook`](docs/BACKUP_AND_RESTORE_RUNBOOK.md) | Database dump, snapshot, and recovery procedures |
-| **Runbooks** | [`Rollback Runbook`](docs/ROLLBACK_RUNBOOK.md) | Safe rollback procedures for releases |
-| **Runbooks** | [`Monitoring Runbook`](docs/PRODUCTION_MONITORING_RUNBOOK.md) | System health, error logs, and queue metrics |
-| **Runbooks** | [`Incident Response Runbook`](docs/INCIDENT_RESPONSE_RUNBOOK.md) | Triage and severity classification guide |
-| **Audit** | [`Complete Audit Report`](docs/ResumeNova_Complete_Audit_Report.md) | Quality, security, and stability audit report |
-| **Audit** | [`Smoke Test Report`](docs/PRODUCTION_SMOKE_TEST_REPORT.md) | Pre-launch smoke test results and verification |
-| **Audit** | [`Production Readiness Audit`](docs/FINAL_PRODUCTION_READINESS_AUDIT.md) | Pre-launch validation and verification audit |
-| **Audit** | [`Deployment Verification`](docs/FINAL_DEPLOYMENT_STATE_VERIFICATION.md) | Deployment state verification and classification |
-| **Audit** | [`Deployment Report`](docs/FINAL_PRODUCTION_DEPLOYMENT_REPORT.md) | Summary deployment closure and readiness sign-off |
+| Category         | Document                                                                     | Description                                           |
+| :--------------- | :--------------------------------------------------------------------------- | :---------------------------------------------------- |
+| **Architecture** | [`Requirements Architecture`](docs/01_Requirements_Architecture_Document.md) | High-level system requirements and design             |
+| **Architecture** | [`Functional Specification`](docs/02_Functional_Specification_Document.md)   | Detailed functional behavior specifications           |
+| **Database**     | [`Database Architecture`](docs/03_Database_Architecture_Document.md)         | Entity relationships, indexes, and schema definitions |
+| **Product**      | [`PRD (Product Requirements)`](docs/04_PRD_Product_Requirements_Document.md) | Product vision, scope, and feature matrix             |
+| **Design**       | [`Design Document`](docs/05_Design_Document.md)                              | UI/UX guidelines and component systems                |
+| **Tech Stack**   | [`Tech Stack Document`](docs/06_Tech_Stack_Document.md)                      | Complete technology choices and rationales            |
+| **Operations**   | [`Production Deployment Guide`](docs/PRODUCTION_DEPLOYMENT_GUIDE.md)         | Server setup, Nginx, Supervisor, and SSL runbook      |
+| **Operations**   | [`Environment Reference`](docs/PRODUCTION_ENVIRONMENT_REFERENCE.md)          | Production variable specifications and requirements   |
+| **Runbooks**     | [`Backup & Restore Runbook`](docs/BACKUP_AND_RESTORE_RUNBOOK.md)             | Database dump, snapshot, and recovery procedures      |
+| **Runbooks**     | [`Rollback Runbook`](docs/ROLLBACK_RUNBOOK.md)                               | Safe rollback procedures for releases                 |
+| **Runbooks**     | [`Monitoring Runbook`](docs/PRODUCTION_MONITORING_RUNBOOK.md)                | System health, error logs, and queue metrics          |
+| **Runbooks**     | [`Incident Response Runbook`](docs/INCIDENT_RESPONSE_RUNBOOK.md)             | Triage and severity classification guide              |
+| **Audit**        | [`Complete Audit Report`](docs/ResumeNova_Complete_Audit_Report.md)          | Quality, security, and stability audit report         |
+| **Audit**        | [`Smoke Test Report`](docs/PRODUCTION_SMOKE_TEST_REPORT.md)                  | Pre-launch smoke test results and verification        |
+| **Audit**        | [`Production Readiness Audit`](docs/FINAL_PRODUCTION_READINESS_AUDIT.md)     | Pre-launch validation and verification audit          |
+| **Audit**        | [`Deployment Verification`](docs/FINAL_DEPLOYMENT_STATE_VERIFICATION.md)     | Deployment state verification and classification      |
+| **Audit**        | [`Deployment Report`](docs/FINAL_PRODUCTION_DEPLOYMENT_REPORT.md)            | Summary deployment closure and readiness sign-off     |
 
 ---
 

@@ -48,7 +48,8 @@ class JobPosting extends Model
 
     public function getUrlAttribute(): ?string
     {
-        return $this->links()->first()?->url;
+        $link = $this->relationLoaded('links') ? $this->links->first() : $this->links()->first();
+        return $link?->url;
     }
 
     public function getSalaryFormattedAttribute(): ?string

@@ -14,12 +14,27 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useSaveJobMutation, useRemoveSavedJobMutation } from "@/hooks/use-jobs";
 import { ApplicationTrackerModal } from "./ApplicationTrackerModal";
+import { getJobApplyUrl } from "@/lib/utils";
 import { toast } from "sonner";
 
 interface JobCardProps {
   job: Job;
   match?: JobMatch | null;
   onViewMatchDetails?: (match: JobMatch) => void;
+}
+
+function stripHtml(text?: string | null): string {
+  if (!text) return "";
+  return text
+    .replace(/<[^>]*>?/gm, " ")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">")
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;/gi, "'")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 function timeAgo(dateString?: string | null) {
@@ -75,7 +90,7 @@ export function JobCard({ job, match, onViewMatchDetails }: JobCardProps) {
     }
   };
 
-  const applyUrl = job.url || job.links?.[0]?.url || "#";
+  const applyUrl = getJobApplyUrl(job);
 
   return (
     <>
@@ -153,7 +168,7 @@ export function JobCard({ job, match, onViewMatchDetails }: JobCardProps) {
 
           {/* Description snippet */}
           <p className="mt-3 line-clamp-2 text-xs text-muted-foreground leading-relaxed">
-            {job.description}
+            {stripHtml(job.description)}
           </p>
 
           {/* Skills Required Chips */}
@@ -212,11 +227,7 @@ export function JobCard({ job, match, onViewMatchDetails }: JobCardProps) {
         </div>
       </div>
 
-      <ApplicationTrackerModal
-        job={job}
-        open={trackModalOpen}
-        onOpenChange={setTrackModalOpen}
-      />
+      <ApplicationTrackerModal job={job} open={trackModalOpen} onOpenChange={setTrackModalOpen} />
     </>
   );
 }

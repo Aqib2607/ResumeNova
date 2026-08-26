@@ -43,6 +43,53 @@ class JobMatchingService
             }
         }
 
+        // Convert structured JSON resume into readable text if needed
+        if (is_array($resumeText) || (is_string($resumeText) && str_starts_with(trim((string)$resumeText), '{'))) {
+            $parsedJson = is_array($resumeText) ? $resumeText : json_decode((string)$resumeText, true);
+            if (is_array($parsedJson)) {
+                $lines = [];
+                $title = $parsedJson['basics']['headline'] ?? $parsedJson['basics']['title'] ?? '';
+                if (!empty($title)) {
+                    $lines[] = "Professional Headline/Title: " . $title;
+                }
+                if (!empty($parsedJson['basics']['summary'])) {
+                    $lines[] = "Summary: " . $parsedJson['basics']['summary'];
+                }
+                if (!empty($parsedJson['basics']['location'])) {
+                    $lines[] = "Location: " . $parsedJson['basics']['location'];
+                }
+                if (!empty($parsedJson['skill_groups'])) {
+                    $lines[] = "Skills & Technologies:";
+                    foreach ($parsedJson['skill_groups'] as $group) {
+                        $gName = $group['category'] ?? $group['name'] ?? 'Technical';
+                        $gSkills = implode(', ', (array) ($group['skills'] ?? []));
+                        $lines[] = "  - {$gName}: {$gSkills}";
+                    }
+                }
+                if (!empty($parsedJson['experience'])) {
+                    $lines[] = "Work Experience:";
+                    foreach ($parsedJson['experience'] as $exp) {
+                        $pos = $exp['position'] ?? 'Role';
+                        $comp = $exp['company'] ?? 'Company';
+                        $desc = $exp['description'] ?? '';
+                        $lines[] = "  - {$pos} at {$comp}: {$desc}";
+                    }
+                }
+                if (!empty($parsedJson['projects'])) {
+                    $lines[] = "Projects:";
+                    foreach ($parsedJson['projects'] as $proj) {
+                        $pName = $proj['name'] ?? 'Project';
+                        $pDesc = $proj['description'] ?? '';
+                        $pTech = implode(', ', (array) ($proj['technologies'] ?? []));
+                        $lines[] = "  - {$pName} ({$pTech}): {$pDesc}";
+                    }
+                }
+                if (!empty($lines)) {
+                    $resumeText = implode("\n", $lines);
+                }
+            }
+        }
+
         // Include candidate preferences if available
         $preferenceContext = '';
         $preference = $user->jobPreferences()->where('is_active', true)->first();
@@ -72,17 +119,16 @@ class JobMatchingService
                         '  "recommendation": "Emphasize your microservices projects and Docker experience."' . "\n" .
                         "}";
 
-        $jobDetails = json_encode([
-            'title' => $jobPosting->title,
-            'company' => $jobPosting->company,
-            'location' => $jobPosting->location,
-            'work_mode' => $jobPosting->work_mode,
-            'employment_type' => $jobPosting->employment_type,
-            'description' => substr((string)$jobPosting->description, 0, 2000),
-            'skills_required' => $jobPosting->skills_required,
-        ]);
+        $skillsReq = is_array($jobPosting->skills_required) ? implode(', ', $jobPosting->skills_required) : (string) $jobPosting->skills_required;
+        $jobText = "Title: {$jobPosting->title}\n" .
+                   "Company: {$jobPosting->company}\n" .
+                   "Location: {$jobPosting->location}\n" .
+                   "Work Mode: {$jobPosting->work_mode}\n" .
+                   "Employment Type: {$jobPosting->employment_type}\n" .
+                   ($skillsReq ? "Required Skills: {$skillsReq}\n\n" : "\n") .
+                   "Job Description:\n" . substr((string)$jobPosting->description, 0, 2500);
 
-        $userPrompt = "Candidate Profile:\n{$sanitizedResume}{$preferenceContext}\n\nTarget Job Posting:\n{$jobDetails}";
+        $userPrompt = "Candidate Profile:\n{$sanitizedResume}{$preferenceContext}\n\nTarget Job Posting:\n{$jobText}";
 
         $request = new AIRequest(
             userPrompt: $userPrompt,
@@ -108,9 +154,38 @@ class JobMatchingService
             }
         } catch (\Exception $e) {
             Log::error('AI Job Matching failed', ['error' => $e->getMessage()]);
-            // Heuristic keyword fallback
-            $score = 65;
-            $reasoning = 'Automated keyword-based match calculation: ' . $e->getMessage();
+            // Intelligent heuristic fallback
+            $resumeLower = strtolower((string)$resumeText);
+            $jobSkills = is_array($jobPosting->skills_required) ? $jobPosting->skills_required : [];
+            $matched = [];
+            $missing = [];
+            foreach ($jobSkills as $js) {
+                $jsTrim = trim((string)$js);
+                if (empty($jsTrim)) continue;
+                if (stripos($resumeLower, strtolower($jsTrim)) !== false) {
+                    $matched[] = $jsTrim;
+                } else {
+                    $missing[] = $jsTrim;
+                }
+            }
+            $total = count($jobSkills);
+            if ($total > 0) {
+                $score = (int) round((count($matched) / $total) * 100);
+            } else {
+                // Check title keywords
+                $titleWords = array_filter(explode(' ', strtolower($jobPosting->title)));
+                $titleMatches = 0;
+                foreach ($titleWords as $tw) {
+                    if (strlen($tw) > 3 && stripos($resumeLower, $tw) !== false) {
+                        $titleMatches++;
+                    }
+                }
+                $score = $titleMatches > 0 ? 70 : 40;
+            }
+            $score = max(15, min(95, $score));
+            $matchedSkills = $matched;
+            $missingSkills = $missing;
+            $reasoning = "Compatibility evaluation: Found " . count($matched) . " matching competencies (" . implode(', ', array_slice($matched, 0, 4)) . ") relevant to this role.";
         }
 
         $match = JobMatch::updateOrCreate(

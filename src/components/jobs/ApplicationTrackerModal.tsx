@@ -138,7 +138,9 @@ export function ApplicationTrackerModal({
             <Label htmlFor="app-date">Date Applied</Label>
             <Input
               id="app-date"
+              name="applied_at"
               type="date"
+              aria-label="Date Applied"
               value={appliedAt}
               onChange={(e) => setAppliedAt(e.target.value)}
             />
@@ -148,6 +150,8 @@ export function ApplicationTrackerModal({
             <Label htmlFor="app-notes">Notes & Key Contacts</Label>
             <Textarea
               id="app-notes"
+              name="notes"
+              aria-label="Notes and Key Contacts"
               placeholder="e.g., Interviewed with hiring manager Sarah on Zoom. Follow-up next Tuesday."
               value={notes}
               onChange={(e) => setNotes(e.target.value)}

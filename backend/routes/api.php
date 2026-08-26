@@ -89,6 +89,12 @@ Route::middleware(['auth:sanctum', 'user.active'])->group(function () {
     Route::post('/notifications/{id}/read', [\App\Http\Controllers\NotificationController::class, 'markAsRead']);
     Route::post('/notifications/read-all', [\App\Http\Controllers\NotificationController::class, 'markAllAsRead']);
 
+    // ── Resume Upload / Import ────────────────────────────────────────────
+    Route::post('/resumes/import', [\App\Http\Controllers\ResumeUploadController::class, 'upload'])->middleware('throttle:10,1');
+    Route::get('/resumes/import/{import}', [\App\Http\Controllers\ResumeUploadController::class, 'status']);
+    Route::post('/resumes/import/{import}/confirm', [\App\Http\Controllers\ResumeUploadController::class, 'confirm']);
+    Route::delete('/resumes/import/{import}', [\App\Http\Controllers\ResumeUploadController::class, 'cancel']);
+
     // ── Resumes ───────────────────────────────────────────────────────────
     Route::get('/resumes', [\App\Http\Controllers\ResumeController::class, 'index']);
     Route::post('/resumes', [\App\Http\Controllers\ResumeController::class, 'store']);

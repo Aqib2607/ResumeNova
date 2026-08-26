@@ -40,6 +40,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { useDebounce } from "@/hooks/use-debounce";
+import { getJobApplyUrl } from "@/lib/utils";
 import { toast } from "sonner";
 import type { Job, JobApplication, JobMatch, SavedJob } from "@/types";
 
@@ -65,7 +66,11 @@ function JobsPage() {
   const [debouncedLocation] = useDebounce(locationFilter, 400);
 
   // Queries
-  const { data: jobsData, isLoading: isLoadingJobs, isFetching: isFetchingJobs } = useJobs({
+  const {
+    data: jobsData,
+    isLoading: isLoadingJobs,
+    isFetching: isFetchingJobs,
+  } = useJobs({
     q: debouncedSearch || undefined,
     location: debouncedLocation || undefined,
     work_mode: workModeFilter !== "all" ? workModeFilter : undefined,
@@ -100,10 +105,9 @@ function JobsPage() {
         location: debouncedLocation || undefined,
       });
 
-      toast.success(
-        `Discovered ${result.new_jobs_count ?? 0} active live job opportunities!`,
-        { id: "job-discovery" },
-      );
+      toast.success(`Discovered ${result.new_jobs_count ?? 0} active live job opportunities!`, {
+        id: "job-discovery",
+      });
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Live discovery failed.";
       toast.error(message, { id: "job-discovery" });
@@ -139,12 +143,16 @@ function JobsPage() {
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
               AI Job Discovery & Smart Match
             </h1>
-            <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 text-xs">
+            <Badge
+              variant="outline"
+              className="bg-primary/5 text-primary border-primary/20 text-xs"
+            >
               Live Feed
             </Badge>
           </div>
           <p className="text-muted-foreground mt-1 text-sm">
-            Search real-time job openings from verified public sources and evaluate match fitness using Groq AI.
+            Search real-time job openings from verified public sources and evaluate match fitness
+            using Groq AI.
           </p>
         </div>
 
@@ -200,7 +208,10 @@ function JobsPage() {
             )}
           </TabsTrigger>
 
-          <TabsTrigger value="applications" className="flex items-center gap-1.5 text-xs sm:text-sm">
+          <TabsTrigger
+            value="applications"
+            className="flex items-center gap-1.5 text-xs sm:text-sm"
+          >
             <Briefcase className="h-3.5 w-3.5 text-emerald-500" />
             Tracker
             {applications.length > 0 && (
@@ -218,6 +229,9 @@ function JobsPage() {
             <div className="relative">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
+                id="jobs-search-input"
+                name="search_query"
+                aria-label="Search jobs by title, skills, or keywords"
                 placeholder="Title, skills, keywords..."
                 value={searchTerm}
                 onChange={(e) => {
@@ -231,6 +245,9 @@ function JobsPage() {
             <div className="relative">
               <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
+                id="jobs-location-filter"
+                name="location_query"
+                aria-label="Filter jobs by location"
                 placeholder="Location (e.g. Remote, US, Worldwide)..."
                 value={locationFilter}
                 onChange={(e) => {
@@ -249,7 +266,7 @@ function JobsPage() {
                   setPage(1);
                 }}
               >
-                <SelectTrigger>
+                <SelectTrigger id="jobs-work-mode-select" aria-label="Filter by work mode">
                   <SelectValue placeholder="Work Mode" />
                 </SelectTrigger>
                 <SelectContent>
@@ -269,7 +286,7 @@ function JobsPage() {
                   setPage(1);
                 }}
               >
-                <SelectTrigger>
+                <SelectTrigger id="jobs-employment-type-select" aria-label="Filter by employment type">
                   <SelectValue placeholder="Employment Type" />
                 </SelectTrigger>
                 <SelectContent>
@@ -296,9 +313,14 @@ function JobsPage() {
               </div>
               <h3 className="font-semibold text-base">No matching jobs found</h3>
               <p className="text-sm text-muted-foreground max-w-md">
-                Try clearing search filters or click <strong>Discover Live Jobs</strong> to fetch fresh openings from verified public sources.
+                Try clearing search filters or click <strong>Discover Live Jobs</strong> to fetch
+                fresh openings from verified public sources.
               </p>
-              <Button onClick={handleDiscover} disabled={discoverMutation.isPending} className="mt-2">
+              <Button
+                onClick={handleDiscover}
+                disabled={discoverMutation.isPending}
+                className="mt-2"
+              >
                 {discoverMutation.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Discover Now
               </Button>
@@ -361,15 +383,18 @@ function JobsPage() {
                   Your AI Tailored Opportunities
                 </h3>
                 <p className="text-xs text-muted-foreground">
-                  Groq AI evaluates live job requirements against your resume profile, surfacing high-probability matches with actionable advice.
+                  Groq AI evaluates live job requirements against your resume profile, surfacing
+                  high-probability matches with actionable advice.
                 </p>
               </div>
-              <SmartMatchModal trigger={
-                <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shrink-0">
-                  <Sparkles className="mr-2 h-4 w-4" />
-                  Run New Match
-                </Button>
-              } />
+              <SmartMatchModal
+                trigger={
+                  <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shrink-0">
+                    <Sparkles className="mr-2 h-4 w-4" />
+                    Run New Match
+                  </Button>
+                }
+              />
             </div>
           </div>
 
@@ -493,9 +518,9 @@ function JobsPage() {
                             Track
                           </Button>
                         )}
-                        {job?.url && (
+                        {job && (
                           <Button asChild size="sm" className="h-7 text-xs">
-                            <a href={job.url} target="_blank" rel="noopener noreferrer">
+                            <a href={getJobApplyUrl(job)} target="_blank" rel="noopener noreferrer">
                               Apply <ExternalLink className="ml-1 h-3 w-3" />
                             </a>
                           </Button>
@@ -520,7 +545,8 @@ function JobsPage() {
               <Bookmark className="h-8 w-8 text-muted-foreground mx-auto" />
               <h4 className="font-semibold text-base">No saved jobs yet</h4>
               <p className="text-xs text-muted-foreground max-w-sm mx-auto">
-                Bookmark job listings from the <strong>All Jobs</strong> feed to keep track of opportunities you want to apply to later.
+                Bookmark job listings from the <strong>All Jobs</strong> feed to keep track of
+                opportunities you want to apply to later.
               </p>
             </div>
           ) : (
@@ -554,7 +580,8 @@ function JobsPage() {
               <Briefcase className="h-8 w-8 text-muted-foreground mx-auto" />
               <h4 className="font-semibold text-base">No tracked applications yet</h4>
               <p className="text-xs text-muted-foreground max-w-sm mx-auto">
-                Click <strong>Track</strong> on any job card to log your application status, interview notes, and timeline.
+                Click <strong>Track</strong> on any job card to log your application status,
+                interview notes, and timeline.
               </p>
             </div>
           ) : (
@@ -563,9 +590,12 @@ function JobsPage() {
                 const job = app.job || app.posting;
                 const statusColors: Record<string, string> = {
                   applied: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20",
-                  screening: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20",
-                  interviewing: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20",
-                  offered: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
+                  screening:
+                    "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20",
+                  interviewing:
+                    "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20",
+                  offered:
+                    "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
                   rejected: "bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20",
                   withdrawn: "bg-muted text-muted-foreground border-border",
                 };
@@ -628,9 +658,9 @@ function JobsPage() {
                         Update Status
                       </Button>
 
-                      {job?.url && (
+                      {job && (
                         <Button asChild variant="ghost" size="sm" className="h-7 text-xs">
-                          <a href={job.url} target="_blank" rel="noopener noreferrer">
+                          <a href={getJobApplyUrl(job)} target="_blank" rel="noopener noreferrer">
                             Posting <ExternalLink className="ml-1 h-3 w-3" />
                           </a>
                         </Button>

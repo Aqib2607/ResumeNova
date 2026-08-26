@@ -8,6 +8,9 @@ use App\Contracts\SearchProviderInterface;
 use App\Models\JobLink;
 use App\Models\JobPosting;
 use App\Models\JobSource;
+use App\Services\Search\Providers\ArbeitnowJobProvider;
+use App\Services\Search\Providers\BangladeshJobProvider;
+use App\Services\Search\Providers\JobicyJobProvider;
 use App\Services\Search\Providers\PublicRssJobProvider;
 use App\Services\Search\Providers\RemotiveJobProvider;
 use Illuminate\Support\Facades\Log;
@@ -20,8 +23,11 @@ class JobDiscoveryService
     public function __construct(
         JobExtractionService $extractor
     ) {
+        $this->registerProvider(new BangladeshJobProvider($extractor));
+        $this->registerProvider(new JobicyJobProvider($extractor));
         $this->registerProvider(new RemotiveJobProvider($extractor));
         $this->registerProvider(new PublicRssJobProvider($extractor));
+        $this->registerProvider(new ArbeitnowJobProvider($extractor));
     }
 
     public function registerProvider(SearchProviderInterface $provider): void

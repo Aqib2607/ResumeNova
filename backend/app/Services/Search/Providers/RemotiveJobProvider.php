@@ -26,14 +26,27 @@ class RemotiveJobProvider implements SearchProviderInterface
         $jobs = [];
         $searchQuery = implode(' ', array_slice($keywords, 0, 5));
         
+        $userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
         $url = 'https://remotive.com/api/remote-jobs';
-        $params = ['limit' => 30];
+        
+        $params = ['limit' => 50];
         if (!empty($searchQuery)) {
             $params['search'] = $searchQuery;
         }
 
         try {
-            $response = Http::timeout(10)->get($url, $params);
+            $response = Http::timeout(15)
+                ->withoutVerifying()
+                ->withHeaders(['User-Agent' => $userAgent])
+                ->get($url, $params);
+
+            if (!$response->successful() || empty($response->json()['jobs'])) {
+                // Fall back to general software-dev category if query returned no results
+                $response = Http::timeout(15)
+                    ->withoutVerifying()
+                    ->withHeaders(['User-Agent' => $userAgent])
+                    ->get($url, ['category' => 'software-dev', 'limit' => 50]);
+            }
 
             if (!$response->successful()) {
                 Log::warning("RemotiveJobProvider failed to fetch: HTTP " . $response->status());

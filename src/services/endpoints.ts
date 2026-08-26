@@ -21,6 +21,12 @@ import type {
   Notification,
   Paginated,
   Resume,
+  ResumeBasics,
+  ResumeEducation,
+  ResumeExperience,
+  ResumeImport,
+  ResumeProject,
+  ResumeSkillGroup,
   ResumeVersion,
   User,
   Job,
@@ -83,6 +89,44 @@ export const ResumesService = {
   versions: (id: string | number) => api.get<ResumeVersion[]>(`/resumes/${id}/versions`),
   restoreVersion: (resumeId: string | number, versionId: string | number) =>
     api.post<Resume>(`/resumes/${resumeId}/versions/${versionId}/restore`),
+};
+
+// ---------- Resume Imports ----------
+export const ImportsService = {
+  upload: (file: File) => {
+    const form = new FormData();
+    form.append("file", file);
+    return api.post<{
+      import_id: number;
+      status: string;
+      original_filename: string;
+      expires_at: string;
+    }>("/resumes/import", form);
+  },
+  status: (importId: number | string) => api.get<ResumeImport>(`/resumes/import/${importId}`),
+  confirm: async (
+    importId: number | string,
+    payload: {
+      title: string;
+      template?: string;
+      status?: string;
+      language?: string;
+      basics?: ResumeBasics;
+      experiences?: ResumeExperience[];
+      education?: ResumeEducation[];
+      projects?: ResumeProject[];
+      skill_groups?: ResumeSkillGroup[];
+      content?: Record<string, unknown>;
+    },
+  ): Promise<Resume> => {
+    const res = await api.post<{ data: Resume } | Resume>(
+      `/resumes/import/${importId}/confirm`,
+      payload,
+    );
+    return "data" in res && res.data && typeof res.data === "object" ? res.data : (res as Resume);
+  },
+  cancel: (importId: number | string) =>
+    api.delete<{ message: string }>(`/resumes/import/${importId}`),
 };
 
 // ---------- AI Resume Builder Service ----------
@@ -287,8 +331,7 @@ export const JobsService = {
   saveJob: (payload: { job_posting_id: string | number; notes?: string }) =>
     api.post<SavedJob>("/saved-jobs", payload),
 
-  removeSavedJob: (id: string | number) =>
-    api.delete<{ message: string }>(`/saved-jobs/${id}`),
+  removeSavedJob: (id: string | number) => api.delete<{ message: string }>(`/saved-jobs/${id}`),
 
   getApplications: () => api.get<JobApplication[]>("/job-applications"),
 

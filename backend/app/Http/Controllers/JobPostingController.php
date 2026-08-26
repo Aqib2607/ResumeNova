@@ -17,6 +17,14 @@ class JobPostingController extends Controller
 
     public function index(Request $request): JsonResponse
     {
+        if (JobPosting::where('is_active', true)->count() === 0) {
+            try {
+                $this->discoveryService->discoverAndSaveJobs(['developer', 'software', 'engineer', 'full stack']);
+            } catch (\Exception $e) {
+                // Silently continue if discovery encounters a temporary network glitch
+            }
+        }
+
         $query = JobPosting::with(['links'])
             ->where('is_active', true);
 
@@ -42,9 +50,34 @@ class JobPostingController extends Controller
             $query->where('employment_type', $request->query('employment_type'));
         }
 
-        // If user is authenticated, we can eager load their match and saved state
+        // Determine user location priority (City & Country)
+        $userCity = 'Khulna';
+        $userCountry = 'Bangladesh';
+
         $user = $request->user();
         if ($user) {
+            $latestResume = $user->resumes()->latest()->first();
+            if ($latestResume && !empty($latestResume->content['basics']['location'])) {
+                $locStr = (string) $latestResume->content['basics']['location'];
+                $parts = array_map('trim', explode(',', $locStr));
+                if (count($parts) >= 2) {
+                    $userCity = $parts[0];
+                    $userCountry = $parts[count($parts) - 1];
+                } else {
+                    $userCity = $locStr;
+                    $userCountry = $locStr;
+                }
+            } elseif ($user->profile && !empty($user->profile->location)) {
+                $locStr = (string) $user->profile->location;
+                $parts = array_map('trim', explode(',', $locStr));
+                if (count($parts) >= 2) {
+                    $userCity = $parts[0];
+                    $userCountry = $parts[count($parts) - 1];
+                } else {
+                    $userCity = $locStr;
+                }
+            }
+
             $query->with([
                 'matches' => function ($m) use ($user) {
                     $m->where('user_id', $user->id);
@@ -59,7 +92,28 @@ class JobPostingController extends Controller
         }
 
         $perPage = min(50, max(5, (int) $request->query('per_page', 20)));
-        $postings = $query->orderBy('posted_at', 'desc')->paginate($perPage);
+
+        // If user typed an explicit location query, sort directly by posted_at
+        if ($request->filled('location')) {
+            $postings = $query->orderBy('posted_at', 'desc')->paginate($perPage);
+        } else {
+            // Location Priority:
+            // 1. User's exact local city (e.g. Khulna)
+            // 2. User's country / Bangladesh / major hubs (Bangladesh, Dhaka, Chittagong, etc.)
+            // 3. Worldwide & Remote opportunities (work_mode=remote, Anywhere in the World, Global, etc.)
+            // 4. Other locations
+            $cityEsc = addslashes($userCity ?: 'Khulna');
+            $countryEsc = addslashes($userCountry ?: 'Bangladesh');
+
+            $postings = $query->orderByRaw("
+                CASE 
+                    WHEN location LIKE '%{$cityEsc}%' THEN 1
+                    WHEN location LIKE '%{$countryEsc}%' OR location LIKE '%BD%' OR location LIKE '%Dhaka%' OR location LIKE '%Chittagong%' THEN 2
+                    WHEN work_mode = 'remote' OR location LIKE '%Remote%' OR location LIKE '%Worldwide%' OR location LIKE '%Anywhere%' OR location LIKE '%Global%' THEN 3
+                    ELSE 4
+                END ASC, posted_at DESC
+            ")->paginate($perPage);
+        }
 
         return response()->json($postings);
     }

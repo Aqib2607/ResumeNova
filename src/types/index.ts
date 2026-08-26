@@ -107,6 +107,29 @@ export interface Resume {
   created_at: string;
 }
 
+export type ResumeImportStatus =
+  "pending" | "processing" | "ready" | "failed" | "completed" | "expired";
+
+export interface ResumeImportContent {
+  basics: ResumeBasics;
+  experiences: ResumeExperience[];
+  education: ResumeEducation[];
+  projects: ResumeProject[];
+  skill_groups: ResumeSkillGroup[];
+}
+
+export interface ResumeImport {
+  id: number | string;
+  user_id?: string;
+  original_filename: string;
+  status: ResumeImportStatus;
+  parsed_content: ResumeImportContent | null;
+  error_message?: string | null;
+  expires_at?: string | null;
+  created_at?: string;
+  updated_at?: string;
+}
+
 // ---------- ATS ----------
 export interface AtsKeyword {
   keyword: string;

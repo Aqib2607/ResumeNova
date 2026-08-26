@@ -45,15 +45,34 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
   // Use explicitly-passed token, then fall back to the stored auth token.
   const resolvedToken = token ?? localStorage.getItem("auth_token");
 
+  const isFormData = typeof FormData !== "undefined" && body instanceof FormData;
+
+  const defaultHeaders: Record<string, string> = {
+    Accept: "application/json",
+    ...(resolvedToken ? { Authorization: `Bearer ${resolvedToken}` } : {}),
+  };
+
+  if (!isFormData) {
+    defaultHeaders["Content-Type"] = "application/json";
+  }
+
+  const mergedHeaders: Record<string, string> = {
+    ...defaultHeaders,
+    ...(headers as Record<string, string> | undefined),
+  };
+
+  if (isFormData) {
+    Object.keys(mergedHeaders).forEach((key) => {
+      if (key.toLowerCase() === "content-type") {
+        delete mergedHeaders[key];
+      }
+    });
+  }
+
   const res = await fetch(url, {
     ...rest,
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      ...(resolvedToken ? { Authorization: `Bearer ${resolvedToken}` } : {}),
-      ...headers,
-    },
-    body: body !== undefined ? JSON.stringify(body) : undefined,
+    headers: mergedHeaders,
+    body: isFormData ? (body as FormData) : body !== undefined ? JSON.stringify(body) : undefined,
   });
 
   const isJson = res.headers.get("content-type")?.includes("application/json");
